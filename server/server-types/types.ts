@@ -1,12 +1,23 @@
-<<<<<<< HEAD
 interface rating {
     raterId: Number,
     entryId: Number,
     value: Number
 }
-
 interface entry {
+  id: number,
+  placeId: number,
+  authorId: number,
+  title: string,
+  content: string,
+  creation_date: Date,
+  tags: string[]
+}
 
+interface newEntry {
+  placeId: number,
+  authorId: number,
+  title: string,
+  content: string,
 }
 
 interface Place {
@@ -16,9 +27,6 @@ interface Place {
     name: string,
     city: string
 }
-
-export type {rating, Place, entry}
-=======
 interface Comment {
   commenterId: number,
   content: string
@@ -47,5 +55,4 @@ interface LastVisited {
   visit_time: Date;
 }
 
-export type {Comment, Place, UserType, LastVisited };
->>>>>>> dev
+export type {Comment, Place, UserType, LastVisited, rating, entry, newEntry};

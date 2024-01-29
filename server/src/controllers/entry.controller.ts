@@ -1,13 +1,13 @@
 import prisma from '../models/db'
 import Koa from 'koa'
 
-import { Place, entry } from '../../server-types/types'
+import { Place, entry, newEntry } from '../../server-types/types'
 
 const postEntry = async (ctx : Koa.Context) => {
     console.log(ctx.request.body)
     try {
         const newEntry = <entry> await prisma.entry.create({
-            data: <entry> ctx.request.body,
+            data: <newEntry> ctx.request.body,
         });
     
         ctx.body = newEntry;
