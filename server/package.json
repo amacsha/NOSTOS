@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=test node ./dist/index.js",
+    "start": "node ./dist/index.js",
     "tsc": "tsc",
-    "dev": "ts-node-dev --respawn --pretty --transpile-only ./src/index.ts"
+    "dev": "ENV=test ts-node-dev --respawn --pretty --transpile-only ./src/index.ts"
   },
   "author": "",
   "license": "ISC",

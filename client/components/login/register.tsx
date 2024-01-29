@@ -1,12 +1,17 @@
 import { useState } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
 import registerService from "./registerService";
 import { RegisterValues } from "../../client-types/RegisterValues";
-
+import { useNavigate } from 'react-router-dom'
+import { useAppDispatch } from '../../hooks';
+import { setAuth, initialState } from '../../slices/authSlice';
 
 const Register: React.FC = () => {
   const [registerForm, setRegisterForm] = useState<RegisterValues>({ username: '', email: '', password: '' })
   const [error, setError] = useState<RegisterValues>({ username: '', email: '', password: '' })
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleChange = (name: keyof typeof registerForm, value: string) => {
     setRegisterForm({ ...registerForm, [name]: value })
@@ -21,7 +26,16 @@ const Register: React.FC = () => {
 
     setError(newError)
     if (Object.values(newError).every(err => err === '')) {
-      registerService(registerForm);
+      const res: any = registerService(registerForm);
+      if (res.staus === 409) {
+        Alert.alert(`${res.message}`);
+        console.log('registration error', error)
+        dispatch(setAuth(initialState));
+      } else {
+        const token = res;
+        dispatch(setAuth({ isAuthenticated: true, token: token }))
+        navigate("/dashboard")
+      }
     }
   }
 
