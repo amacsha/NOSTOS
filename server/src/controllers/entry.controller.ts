@@ -6,7 +6,7 @@ import { Place, entry, newEntry, SmallEntry } from '../../server-types/types'
 const postEntry = async (ctx : Koa.Context) => {
     console.log(ctx.request.body)
     try {
-        const newEntry = <entry> await prisma.entry.create({
+        const newEntry = await prisma.entry.create({
             data: <newEntry> ctx.request.body,
         });
     
@@ -20,7 +20,7 @@ const postEntry = async (ctx : Koa.Context) => {
 
 const getEntry= async (ctx : Koa.Context) => {
     try {
-        const entry = <entry> await prisma.Entry.findUnique({
+        const entry = await prisma.entry.findUnique({
             where: {
               id: Number(ctx.params.entryID),
             },

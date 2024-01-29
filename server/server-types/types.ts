@@ -29,7 +29,7 @@ interface SmallEntry {
 }
 
 interface Place {
-    id?: number
+    id: number
     lat: number,
     lng: number,
     name: string,
