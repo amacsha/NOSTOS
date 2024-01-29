@@ -1,12 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { StyleSheet } from 'react-native';
+
+import login from './components/login/login';
+import Login from "./components/login/login";
+import Register from "./components/login/register";
+
 
 export default function App() {
+
   return (
-    <View style={styles.container}>
-      <Text>Suuuuiii</Text>
-      <StatusBar style="auto" />
-    </View>
+    <div id="app">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          {/* <Route path="/profile" element={<Profile />} /> */}
+          {/* <Route path="*" element={<NotFound />} /> */}
+        </Routes>
+      </BrowserRouter>
+    </div>
+
   );
 }
 
