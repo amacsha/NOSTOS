@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Router = require('@koa/router');
+const router = new Router();
+const place_controller_1 = require("./controllers/place.controller");
+const comment_controller_1 = require("./controllers/comment.controller");
+router.post('/place/addNew', place_controller_1.addNewPlace);
+router.post('/comment/addNew', comment_controller_1.addNewComment);
+router.get('/place/getAll', place_controller_1.getAllPlaces);
+router.get('/comment/getAll/:entryId', comment_controller_1.getAllCommentsByEntry);
+router.delete('/comment/delete/byAuthor/:commenterId/forEntry/:entryId', comment_controller_1.deleteComment);
+module.exports = router;
