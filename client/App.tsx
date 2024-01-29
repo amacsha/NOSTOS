@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { StyleSheet } from 'react-native';
 
-import login from './components/login/login';
 import Login from "./components/login/login";
 import Register from "./components/login/register";
 
