@@ -1,16 +1,21 @@
 import axios from 'axios';
-import { RegisterValues } from './register';
+import { useNavigate } from 'react-router-dom'
+import { RegisterValues } from '../../client-types/RegisterValues';
+import { useAppDispatch } from '../../hooks';
+import { setAuth } from '../../slices/authSlice';
 
-const registerService = async (registerValues: RegisterValues): Promise<boolean> => {
+const registerService = async (registerValues: RegisterValues) => {
     const url = '/auth'
-    try {
-        const response = await axios.post(url, registerValues)
-        if (response.status === 200) return true
-        return false
-    } catch (error) {
-        console.log('register error', error)
-        return false
-    }
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
+    const response = await axios.post(url, registerValues)
+        .then(res => {
+            if (res.status === 200) dispatch(setAuth(res.data))
+            navigate("/dashboard")
+        })
+        .catch(error => console.log('register error', error))
+
 }
 
 export default registerService;

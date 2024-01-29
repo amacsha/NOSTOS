@@ -11,6 +11,7 @@ const Login: React.FC = () => {
   const [loginForm, setLoginForm] = useState<LoginValues>({ username: "", password: "" })
   const [error, setError] = useState<LoginValues>({ username: "", password: "" })
 
+
   const handleChange = (name: keyof typeof loginForm, value: string) => {
     setLoginForm({ ...loginForm, [name]: value })
   }
@@ -20,8 +21,10 @@ const Login: React.FC = () => {
     !loginForm.username ? newError.username = "Username is required" : newError.username = "";
     !loginForm.password ? newError.password = "Password is required" : newError.password = "";
     setError(newError)
+
     if (Object.values(newError).every(err => err === "")) {
       loginService(loginForm)
+
     }
   }
 

@@ -1,12 +1,8 @@
 import { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import registerService from "./registerService";
+import { RegisterValues } from "../../client-types/RegisterValues";
 
-export interface RegisterValues {
-  username?: string;
-  email?: string;
-  password?: string;
-}
 
 const Register: React.FC = () => {
   const [registerForm, setRegisterForm] = useState<RegisterValues>({ username: '', email: '', password: '' })
