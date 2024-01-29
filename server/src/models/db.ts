@@ -12,19 +12,4 @@ const prisma = new PrismaClient({
   }
 });
 
-// Run inside `async` function
-
-async function test() {
-  const user = await prisma.User.create({
-    data: {
-      username: 'Alice',
-      email: 'alice@prisma.io',
-      password: 'secret',
-      filter_preference: 'top rated'
-    },
-  })
-
-  console.log(user)
-}
-
-module.exports = test
+module.exports = prisma
