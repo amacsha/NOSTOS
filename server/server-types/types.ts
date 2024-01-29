@@ -35,10 +35,16 @@ interface Place {
     name: string,
     city: string
 }
+interface NewPlace {
+    lat: number,
+    lng: number,
+    name: string,
+    city: string
+}
 interface Comment {
   commenterId: number,
   content: string
-  creation_date: Date
+  creation_date?: Date
   entryId: number
 }
 
@@ -63,4 +69,4 @@ interface LastVisited {
   visit_time: Date;
 }
 
-export type {Comment, Place, UserType, LastVisited, rating, entry, newEntry, SmallEntry};
+export type {Comment, NewPlace, Place, UserType, LastVisited, rating, entry, newEntry, SmallEntry};

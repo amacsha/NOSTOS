@@ -110,16 +110,3 @@ const getUserFilterPreference = (ctx) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.getUserFilterPreference = getUserFilterPreference;
-const logout = (ctx) => {
-    ctx.session.destroy(error => {
-        if (error) {
-            res
-                .status(500)
-                .send({ error, message: 'Could not log out, please try again' });
-        }
-        else {
-            res.clearCookie('sid');
-            res.status(200).send({ message: 'Logout successful' });
-        }
-    });
-};
