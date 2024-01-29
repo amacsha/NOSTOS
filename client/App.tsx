@@ -2,10 +2,11 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import login from './components/login/login';
+import Login from './components/login/login';
+import Register from './components/login/register';
 
 const Stack = createNativeStackNavigator();
-const getIsSignedIn = () => true;
+const getIsSignedIn = () => false;
 
 export default function App() {
   const isSignedIn = getIsSignedIn();
@@ -22,7 +23,8 @@ export default function App() {
           </>
         ) : (
           <>
-            <Stack.Screen name="login" component={login} />
+            <Stack.Screen name="login" component={Login} />
+            <Stack.Screen name="register" component={Register} />
           </>
         )}
       </Stack.Navigator>
