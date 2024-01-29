@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Router = require('@koa/router');
+const router = new Router();
+const entry_controller_1 = require("./controllers/entry.controller");
+const rating_controller_1 = require("./controllers/rating.controller");
+router.post('/entry/addOne', entry_controller_1.postEntry);
+router.get('/entry/getOne/:entryID', entry_controller_1.getEntry);
+router.get('/entry/getMany/byPlace/:placeID', entry_controller_1.getPlaceEntries);
+router.get('/entry/getMany/byCity/:cityName', entry_controller_1.getCityEntries);
+router.post('/rating/setUserRating', rating_controller_1.setUserRating);
+router.get('/rating/onEntry/:entryID/byUser/:userID', rating_controller_1.getUserRating);
+router.get('/rating/AverageEntryRating/:entryID', rating_controller_1.getAvgEntryRating);
+module.exports = router;
