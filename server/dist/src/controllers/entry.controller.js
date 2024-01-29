@@ -55,7 +55,8 @@ const getPlaceEntries = (ctx) => __awaiter(void 0, void 0, void 0, function* () 
                 "authorId": true,
                 "title": true,
                 "creation_date": true,
-                "tag": true
+                "tag": true,
+                "id": true,
             }
         });
         ctx.body = entries;
@@ -85,7 +86,8 @@ const getCityEntries = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
                 "authorId": true,
                 "title": true,
                 "creation_date": true,
-                "tag": true
+                "tag": true,
+                "id": true,
             }
         });
         ctx.body = entry;

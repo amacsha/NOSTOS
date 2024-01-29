@@ -20,6 +20,14 @@ interface newEntry {
   content: string,
 }
 
+interface SmallEntry {
+  "authorId": number,
+  "title": string,
+  "creation_date": Date,
+  "tag": string[],
+  "id": number,
+}
+
 interface Place {
     id?: number
     lat: number,
@@ -55,4 +63,4 @@ interface LastVisited {
   visit_time: Date;
 }
 
-export type {Comment, Place, UserType, LastVisited, rating, entry, newEntry};
+export type {Comment, Place, UserType, LastVisited, rating, entry, newEntry, SmallEntry};
