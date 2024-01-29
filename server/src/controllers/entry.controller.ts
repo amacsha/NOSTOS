@@ -1,7 +1,7 @@
 import prisma from '../models/db'
 import Koa from 'koa'
 
-import { Place, entry, newEntry } from '../../server-types/types'
+import { Place, entry, newEntry, SmallEntry } from '../../server-types/types'
 
 const postEntry = async (ctx : Koa.Context) => {
     console.log(ctx.request.body)
@@ -36,7 +36,7 @@ const getEntry= async (ctx : Koa.Context) => {
 
 const getPlaceEntries= async (ctx : Koa.Context) => {
     try {
-        const entries = <entry[]> await prisma.entry.findMany({
+        const entries = <SmallEntry[]> await prisma.entry.findMany({
             where: {
               placeId: Number(ctx.params.placeID),
             },
@@ -44,7 +44,8 @@ const getPlaceEntries= async (ctx : Koa.Context) => {
                 "authorId": true,
                 "title": true,
                 "creation_date": true,
-                "tag": true
+                "tag": true,
+                "id": true,
             }
         });
         ctx.body = entries;
@@ -65,7 +66,7 @@ const getCityEntries= async (ctx : Koa.Context) => {
         });
         const placesIds = cityPlaces.map((place: Place) => place.id)
 
-        const entry = <entry> await prisma.entry.findMany({
+        const entry = <SmallEntry[]> await prisma.entry.findMany({
             where: {
                 placeId: {
                     in : placesIds
@@ -75,7 +76,8 @@ const getCityEntries= async (ctx : Koa.Context) => {
                 "authorId": true,
                 "title": true,
                 "creation_date": true,
-                "tag": true
+                "tag": true,
+                "id": true,
             }
         });
         ctx.body = entry;

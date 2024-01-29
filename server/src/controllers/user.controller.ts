@@ -32,7 +32,7 @@ const createOneUser = async (ctx: Koa.Context) => {
 };
 
 const loginUser = async (ctx: Koa.Context) => {
-    
+
 }
 
 const getOneUser = async (ctx: Koa.Context) => {
@@ -94,18 +94,18 @@ const getUserFilterPreference = async (ctx: Koa.Context) => {
   }
 };
 
-const logout = (ctx: Koa.Context) => {
-  ctx.session.destroy(error => {
-    if (error) {
-      res
-        .status(500)
-        .send({ error, message: 'Could not log out, please try again' });
-    } else {
-      res.clearCookie('sid');
-      res.status(200).send({ message: 'Logout successful' });
-    }
-  });
-};
+// const logout = (ctx: Koa.Context) => {
+//   ctx.session.destroy(error => {
+//     if (error) {
+//       res
+//         .status(500)
+//         .send({ error, message: 'Could not log out, please try again' });
+//     } else {
+//       res.clearCookie('sid');
+//       res.status(200).send({ message: 'Logout successful' });
+//     }
+//   });
+// };
 
 export {
   createOneUser,
