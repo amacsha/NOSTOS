@@ -32,6 +32,7 @@ const getAvgEntryRating = async (ctx : Koa.Context) => {
                 value: true
             }
         })
+
         ctx.body = avg
 
     } catch (err) {
