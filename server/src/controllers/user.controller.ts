@@ -27,7 +27,6 @@ const createOneUser = async (ctx: Koa.Context) => {
 
     const user: UserType = await user_client.user.create({
       data: {
-        id: body.id,
         email: body.email,
         username: body.username,
         password: hash,
