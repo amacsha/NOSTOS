@@ -11,12 +11,14 @@ import { addNewComment, getAllCommentsByEntry } from './controllers/comment.cont
 
 router.post('/entry/addOne', postEntry)
 router.get('/entry/getOne/:entryID', getEntry)
-router.get('/entry/getMany/byPlace/:placeID', getPlaceEntries)
-router.get('/entry/getMany/byCity/:cityName', getCityEntries)
+router.get('/entry/getMany/byPlace/:placeID/sortBy/:sortPrefrence', getPlaceEntries)
+router.get('/entry/getMany/byCity/:cityName/sortBy/:sortPrefrence', getCityEntries)
+router.delete('/entry/delete')
 
 router.post('/rating/setUserRating', setUserRating)
 router.get('/rating/onEntry/:entryID/byUser/:userID', getUserRating)
 router.get('/rating/AverageEntryRating/:entryID', getAvgEntryRating)
+
 router.post('/user/createOneUser', createOneUser);
 router.get('/user/getOneUser/:id', getOneUser);
 router.delete('/user/deleteUser/:id', deleteUser);
@@ -33,6 +35,7 @@ router.get('/last-visited/getLastVisits/:id', getLastVisits);
 
 router.post('/place/addNew', addNewPlace);
 router.get('/place/getAll', getAllPlaces);
+
 router.post('/comment/addNew', addNewComment);
 router.get('/comment/getAll/:entryId', getAllCommentsByEntry);
 router.delete('/comment/delete/byAuthor/:commenterId/forEntry/:entryId');

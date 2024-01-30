@@ -1,13 +1,13 @@
 import prisma from '../models/db'
 import Koa from 'koa'
 
-import { Place, entry, newEntry, SmallEntry } from '../../server-types/types'
+import { Place, newEntry, SmallEntry } from '../../server-types/types'
 
 const postEntry = async (ctx : Koa.Context) => {
     console.log(ctx.request.body)
     try {
         const newEntry = await prisma.entry.create({
-            data: <newEntry> ctx.request.body,
+            data : <newEntry> ctx.request.body,
         });
     
         ctx.body = newEntry;
@@ -20,7 +20,7 @@ const postEntry = async (ctx : Koa.Context) => {
 
 const getEntry= async (ctx : Koa.Context) => {
     try {
-        const entry = await prisma.entry.findUnique({
+        const entry =  await prisma.entry.findUnique({
             where: {
               id: Number(ctx.params.entryID),
             },
@@ -33,6 +33,8 @@ const getEntry= async (ctx : Koa.Context) => {
         ctx.body = 'Error: could find entry'
     }
 }
+
+
 
 const getPlaceEntries= async (ctx : Koa.Context) => {
     try {
@@ -89,4 +91,8 @@ const getCityEntries= async (ctx : Koa.Context) => {
     }
 }
 
-export {getEntry, postEntry, getCityEntries, getPlaceEntries}
+const deleteEntry = async () => {
+
+}
+
+export {getEntry, postEntry, getCityEntries, getPlaceEntries, deleteEntry}
