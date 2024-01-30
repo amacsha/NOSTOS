@@ -1,25 +1,34 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React from 'react';
 import { StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Login from './components/login/login';
+import Register from './components/login/register';
+import store from './store';
+import { Provider } from 'react-redux';
 
-import login from './components/login/login';
-import Login from "./components/login/login";
-import Register from "./components/login/register";
-
+const Stack = createNativeStackNavigator();
+const getIsSignedIn = () => true;
 
 export default function App() {
+  const isSignedIn = getIsSignedIn();
 
   return (
-    <div id="app">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          {/* <Route path="/profile" element={<Profile />} /> */}
-          {/* <Route path="*" element={<NotFound />} /> */}
-        </Routes>
-      </BrowserRouter>
-    </div>
-
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          {isSignedIn ? (
+            <>
+              <Stack.Screen name="register" component={Register} />
+            </>
+          ) : (
+            <>
+              <Stack.Screen name="login" component={Login} />
+            </>
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

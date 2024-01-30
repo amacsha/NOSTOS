@@ -2,28 +2,43 @@ import Koa from 'koa';
 const user_client = require('../models/db');
 import { UserType } from '../../server-types/types';
 import bcrypt from 'bcrypt';
+import jwt from "jsonwebtoken";
 
 const createOneUser = async (ctx: Koa.Context) => {
   const body = <UserType>ctx.request.body;
-  const userFromDB = await user_client.user.findUnique({ where: {email: body.email} });
-  if (userFromDB) {
+
+  const existingUserByEmail = await user_client.user.findUnique({
+    where: { email: body.email },
+  });
+
+//   const existingUserByUsername = await user_client.user.findUnique({
+//     where: { username: body.username },
+//   })
+
+  if (existingUserByEmail) {
     ctx.status = 409;
     ctx.body = { error: '409', message: 'User already exists' };
   }
+
   try {
-    if (body.password === "") throw new Error();
+    if (body.password === '') throw new Error('Password cannot be empty');
+
     const hash = await bcrypt.hash(body.password, 10);
+
     const user: UserType = await user_client.user.create({
       data: {
         id: body.id,
         email: body.email,
         username: body.username,
         password: hash,
-        filter_preference: body.filter_preference,
+        filter_preference: 'top rated',
       },
     });
+
+    const accessToken = jwt.sign(user, process.env.SECRET_KEY!);
+
     ctx.status = 201;
-    ctx.body = user;
+    ctx.body = accessToken;
   } catch (error) {
     console.error(error);
     ctx.status = 500;
@@ -32,8 +47,23 @@ const createOneUser = async (ctx: Koa.Context) => {
 };
 
 const loginUser = async (ctx: Koa.Context) => {
+    const body = <UserType>ctx.request.body;
 
-}
+  try {
+    const user = await user_client.user.findUnique({
+        where: {email: body.email}
+    });
+    const validatedPass = await bcrypt.compare(body.password, user.password);
+    if (!validatedPass) throw new Error();
+    const accessToken = jwt.sign(user, process.env.SECRET_KEY!);
+    ctx.status = 200;
+    ctx.body = accessToken;
+  } catch (error) {
+    console.error(error);
+    ctx.status = 404;
+    ctx.body = { error: 'User not found' };
+  }
+};
 
 const getOneUser = async (ctx: Koa.Context) => {
   try {
@@ -94,18 +124,10 @@ const getUserFilterPreference = async (ctx: Koa.Context) => {
   }
 };
 
-// const logout = (ctx: Koa.Context) => {
-//   ctx.session.destroy(error => {
-//     if (error) {
-//       res
-//         .status(500)
-//         .send({ error, message: 'Could not log out, please try again' });
-//     } else {
-//       res.clearCookie('sid');
-//       res.status(200).send({ message: 'Logout successful' });
-//     }
-//   });
-// };
+const logoutUser = (ctx: Koa.Context) => {
+    ctx.status = 200;
+    ctx.body = {accesToken: null};
+};
 
 export {
   createOneUser,
@@ -113,4 +135,6 @@ export {
   setUserFilterPreference,
   getUserFilterPreference,
   deleteUser,
+  loginUser,
+  logoutUser
 };
