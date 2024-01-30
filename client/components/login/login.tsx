@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import store from "../../store";
 import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
 import loginService from "./loginService";
 import { LoginValues } from "../../client-types/LoginValues";
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../hooks';
 import { setAuth, initialState } from '../../slices/authSlice';
+
 
 
 
@@ -13,7 +15,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState<LoginValues>({ username: "", password: "" })
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
 
   const handleChange = (name: keyof typeof loginForm, value: string) => {
@@ -35,30 +37,28 @@ const Login: React.FC = () => {
       } else {
         const token = res;
         dispatch(setAuth({ isAuthenticated: true, token: token }))
-        navigate("/dashboard")
+        // navigate("/dashboard")
       }
     }
   }
 
   return (
-    <>
-      <View style={styles.container}>
-        <Text style={styles.head}>Login</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="username"
-          onChange={(event) => handleChange("username", event.nativeEvent.text)}
-        />
-        {error.username !== "" && <Text style={styles.error}>{error.username}</Text>}
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          onChange={(event) => handleChange("password", event.nativeEvent.text)}
-        />
-        {error.password !== "" && <Text style={styles.error}>{error.password}</Text>}
-        <Button title="Login" onPress={handleSubmit} />
-      </View>
-    </>
+    <View style={styles.container}>
+      <Text style={styles.head}>Login</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="username"
+        onChange={(event) => handleChange("username", event.nativeEvent.text)}
+      />
+      {error.username !== "" && <Text style={styles.error}>{error.username}</Text>}
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        onChange={(event) => handleChange("password", event.nativeEvent.text)}
+      />
+      {error.password !== "" && <Text style={styles.error}>{error.password}</Text>}
+      <Button title="Login" onPress={handleSubmit} />
+    </View>
   )
 }
 
