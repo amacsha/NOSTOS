@@ -1,13 +1,20 @@
-const request = require('supertest');
-const app = require('../src/index');
-const {describe, it, test, expect, beforeEach, beforeAll, afterAll} = require('@jest/globals')
+const supertest = require('supertest');
+const Koa = require('koa');
+const {bodyParser} = require('@koa/bodyparser');
+const {default: router} = require('../src/router')
 
+const {describe, it, test, expect, beforeEach, beforeAll, afterAll} = require('@jest/globals')
 const {prisma} = require('../src/models/db')
 
 describe('Entry', () => {
+  const app = new Koa();
+  app.use(bodyParser());
+  app.use(router.routes());
+  const request = supertest.agent(app.callback())
+
   let users = []
   let place = {}
-  let entries = {}
+  let entry = {}
   beforeAll(async () => {
     // The order is important! Do not change!
     await prisma.comment.deleteMany({});
@@ -51,11 +58,11 @@ describe('Entry', () => {
   })
 
   it('should create new rating at first', async () => {
-    const response1 = await request(app.callback())
+    const response1 = await request
     .post('/rating/setUserRating')
     .send({raterId: users[0].id, entryId: entry.id, value: 5});
 
-    const response2 = await request(app.callback())
+    const response2 = await request
     .post('/rating/setUserRating')
     .send({raterId: users[1].id, entryId: entry.id, value: 2});
 
@@ -73,7 +80,7 @@ describe('Entry', () => {
   })
 
   it('should update a rating if one exists', async () => {
-    const response = await request(app.callback())
+    const response = await request
     .post('/rating/setUserRating')
     .send({raterId: users[0].id, entryId: entry.id, value: 4});
     
@@ -90,7 +97,7 @@ describe('Entry', () => {
   })
 
   it('should get a rating given user and entry', async () => {
-    const response = await request(app.callback())
+    const response = await request
     .get(`/rating/onEntry/${entry.id}/byUser/${users[1].id}`)
 
     expect(response.status).toBe(200);
@@ -98,7 +105,7 @@ describe('Entry', () => {
   })
 
   it('should return avg rating for an entry', async () => {
-    const response = await request(app.callback())
+    const response = await request
     .get(`/rating/AverageEntryRating/${entry.id}`)
     expect(response.body._avg.value).toEqual(3);
   })

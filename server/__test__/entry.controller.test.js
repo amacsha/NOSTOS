@@ -1,10 +1,17 @@
-const request = require('supertest');
-const app = require('../src/index');
-const {describe, it, test, expect, beforeEach, beforeAll, afterAll} = require('@jest/globals')
+const supertest = require('supertest');
+const Koa = require('koa');
+const {bodyParser} = require('@koa/bodyparser');
+const {default: router} = require('../src/router')
 
+const {describe, it, test, expect, beforeEach, beforeAll, afterAll} = require('@jest/globals')
 const {prisma} = require('../src/models/db')
 
 describe('Entry', () => {
+  const app = new Koa();
+  app.use(bodyParser());
+  app.use(router.routes());
+  const request = supertest.agent(app.callback())
+
   let users = []
   let places = []
   let entries = []
@@ -46,7 +53,7 @@ describe('Entry', () => {
   })
 
   it('should create new entry', async () => {
-    const response1 = await request(app.callback())
+    const response1 = await request
     .post('/entry/addOne')
     .send({
       placeId: places[0].id,
@@ -55,7 +62,7 @@ describe('Entry', () => {
       content: "it was super cool, people from all over just gave stuff for this museonm!",
     });
 
-    const response2 = await request(app.callback())
+    const response2 = await request
     .post('/entry/addOne')
     .send({
       placeId: places[0].id,
@@ -64,7 +71,7 @@ describe('Entry', () => {
       content: "it's fine.",
     });
 
-    const response3 = await request(app.callback())
+    const response3 = await request
     .post('/entry/addOne')
     .send({
       placeId: places[1].id,
@@ -80,28 +87,28 @@ describe('Entry', () => {
   })
 
   it('should get entry by ID', async () => {
-    const response = await request(app.callback())
+    const response = await request
     .get(`/entry/getOne/${entries[0].id}`)
 
     expect(response.body.title).toEqual(entries[0].title);
   })
 
   it('should get all entries in a place', async () => {
-    const response = await request(app.callback())
+    const response = await request
     .get(`/entry/getMany/byPlace/${places[0].id}/`)
 
     expect(response.body.length).toBe(2);
   })
 
   it('should get all entries in a city', async () => {
-    const response = await request(app.callback())
+    const response = await request
     .get(`/entry/getMany/byCity/London/`)
 
     expect(response.body.length).toBe(3);
   })
 
   it ('should optionally sort by date', async () => {
-    const response = await request(app.callback())
+    const response = await request
     .get(`/entry/getMany/byCity/London/sortBy/recent`)
 
     expect(response.body[0].id).toEqual(entries[2].id);
@@ -109,7 +116,7 @@ describe('Entry', () => {
 
   it ('should optionally sort by rating', async () => {
     await prisma.rating.create({data: {raterId: users[0].id, entryId: entries[1].id, value: 5}})
-    const response = await request(app.callback())
+    const response = await request
     .get(`/entry/getMany/byCity/London/sortBy/top-rated`)
     expect(response.body[0].id).toEqual(entries[1].id);
   })
