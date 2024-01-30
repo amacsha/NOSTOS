@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "ENV=test jest",
+    "test": "ENV=test jest --runInBand",
+    "test-win": "set ENV=test&&jest --runInBand",
     "start": "node ./dist/index.js",
     "tsc": "tsc",
     "dev": "ENV=test ts-node-dev --respawn --pretty --transpile-only ./src/index.ts",

@@ -28,13 +28,6 @@ interface SmallEntry {
   "id": number,
 }
 
-interface Place {
-    id: number
-    lat: number,
-    lng: number,
-    name: string,
-    city: string
-}
 interface NewPlace {
     lat: number,
     lng: number,
@@ -52,7 +45,8 @@ interface Place {
   lat: number,
   lng: number,
   name: string,
-  city: string
+  city: string,
+  id: number,
 }
 
 interface UserType {
