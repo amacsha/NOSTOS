@@ -1,13 +1,17 @@
-const request = require('supertest');
-const app = require('../src/index');
-const {describe, it, test, expect, beforeEach, beforeAll, afterAll} = require('@jest/globals')
+const supertest = require('supertest');
+const Koa = require('koa');
+const {bodyParser} = require('@koa/bodyparser');
+const {default: router} = require('../src/router')
 
+const {describe, it, test, expect, beforeEach, beforeAll, afterAll} = require('@jest/globals')
 const {prisma} = require('../src/models/db')
 
-// const {PrismaClient} = require('@prisma/client');
-// const prisma = new PrismaClient();
-
 describe('Place', () => {
+  const app = new Koa();
+  app.use(bodyParser());
+  app.use(router.routes());
+  const request = supertest.agent(app.callback())
+
   beforeAll(async () => {
     // The order is important! Do not change!
     await prisma.comment.deleteMany({});
@@ -22,18 +26,13 @@ describe('Place', () => {
     prisma.$disconnect();
   })
 
-  it('should add new places to the database', async () => {
-    const data = {
-      lat: 100,
-      lng: 100,
-      name: 'Great spot',
-      city: 'London'
-    }
+  it('should add a new place to the database', async () => {
+    const data = {lat: 50, lng: 50, name: 'The Cenotaph', city: 'London'}
+    const response = await request.post('/place/addNew').send(data);
+    const result = await prisma.place.findMany({});
 
-    const response = await request(app.callback()).post('/place/addNew').send(data);
-    const db = await prisma.place.findMany({});
     expect(response.status).toBe(201);
-    expect(db.length).toBeGreaterThan(0);
+    expect(result.length).toBeGreaterThan(0);
   })
 
   it('should add multiple places to the database', async () => {
@@ -42,16 +41,31 @@ describe('Place', () => {
       {lat: 600, lng: 600, name: 'Godzilla', city: 'Tokyo'},
       {lat: 900, lng: 900, name: 'Tapas Bar', city: 'Madrid'}
     ];
-
-    const response = await request(app.callback()).post('/place/addMany').send(data);
+    const response = await request.post('/place/addMany').send(data);
     const results = await prisma.place.findMany({});
+
     expect(response.status).toBe(201);
     expect(results.length).toBe(4);
   })
 
   it('should retrieve all places in the database', async () => {
-    const response = await request(app.callback()).get('/place/getByCity/London');
-    console.log()
-    expect(response.body.length).toBeGreaterThan(0);
+    const response = await request.get('/place/getAll');
+    const results = await prisma.place.findMany({});
+
+    expect(response.status).toBe(200);
+    expect(response.body.length).toBe(4);
+    expect(results[0].name).toBe('The Cenotaph')
+    expect(results[3].name).toBe('Tapas Bar')
+  })
+
+  it('should retrieve all places in the database for a particular city', async () => {
+    const response = await request.get('/place/getByCity/London');
+    const results = await prisma.place.findMany({
+      where: {city: 'London'}
+    });
+
+    expect(response.status).toBe(200);
+    expect(response.body.length).toBe(2);
+    expect(results.length).toBe(2);
   })
 })
