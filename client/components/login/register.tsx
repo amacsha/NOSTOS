@@ -2,42 +2,41 @@ import { useState } from "react";
 import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
 import registerService from "./registerService";
 import { RegisterValues } from "../../client-types/RegisterValues";
-// import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../hooks';
 import { setAuth, initialState } from '../../slices/authSlice';
+import { save } from "../../utils/secureStorage";
+
+
 
 const Register: React.FC = () => {
   const [registerForm, setRegisterForm] = useState<RegisterValues>({ username: '', email: '', password: '' })
   const [error, setError] = useState<RegisterValues>({ username: '', email: '', password: '' })
 
   const dispatch = useAppDispatch();
-  // const navigate = useNavigate();
 
   const handleChange = (name: keyof typeof registerForm, value: string) => {
     setRegisterForm({ ...registerForm, [name]: value })
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     let newError: RegisterValues = { ...error }
     !registerForm.username ? newError.username = 'Username is required' : newError.username = '';
     !registerForm.email ? newError.email = 'Email is required' : newError.email = '';
     !registerForm.password ? newError.password = 'Password is required' :
       registerForm.password.length < 6 ? newError.password = 'Password must be at least 6 characters' : newError.password = '';
-
     setError(newError)
+
     if (Object.values(newError).every(err => err === '')) {
-      try {
-        const res: any = registerService(registerForm);
-        if (res.staus === 409) {
-          Alert.alert(`${res.message}`);
-          console.log('registration error', error)
-          dispatch(setAuth(initialState));
-        } else {
-          dispatch(setAuth({ isAuthenticated: true, token: res }))
-          console.log(res)
-          // navigate("/dashboard")
-        }
-      } catch (error) { console.log(error) }
+      const res: any = await registerService(registerForm)
+      // console.log('axios res', res)
+      if (res.message) {
+        // console.log('registration error', res.message)
+        Alert.alert(`${res.message}`);
+        dispatch(setAuth(initialState));
+      } else {
+        dispatch(setAuth({ isAuthenticated: true, token: res.data }))
+        save('accessToken', res.data);
+      }
     }
   }
 

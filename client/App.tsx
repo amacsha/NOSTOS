@@ -6,12 +6,13 @@ import Login from './components/login/login';
 import Register from './components/login/register';
 import store from './store';
 import { Provider } from 'react-redux';
+import { getValueFor } from './utils/secureStorage';
 
 const Stack = createNativeStackNavigator();
-const getIsSignedIn = () => true;
 
 export default function App() {
-  const isSignedIn = getIsSignedIn();
+  // const isSignedIn = getValueFor('accessToken') = true;
+  const isSignedIn = true;
 
   return (
     <Provider store={store}>

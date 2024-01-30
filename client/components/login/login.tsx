@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import store from "../../store";
 import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
 import loginService from "./loginService";
 import { LoginValues } from "../../client-types/LoginValues";
-// import { useNavigate } from 'react-router-dom'
 import { useAppDispatch } from '../../hooks';
 import { setAuth, initialState } from '../../slices/authSlice';
+import { save } from "../../utils/secureStorage";
 
 
 
@@ -15,8 +14,6 @@ const Login: React.FC = () => {
   const [error, setError] = useState<LoginValues>({ username: "", password: "" })
 
   const dispatch = useAppDispatch();
-  // const navigate = useNavigate();
-
 
   const handleChange = (name: keyof typeof loginForm, value: string) => {
     setLoginForm({ ...loginForm, [name]: value })
@@ -30,14 +27,13 @@ const Login: React.FC = () => {
 
     if (Object.values(newError).every(err => err === "")) {
       const res: any = await loginService(loginForm)
-      if (res.staus === 409) {
+      if (res.message) {
         Alert.alert(`${res.message}`);
-        console.log('login error', error)
+        // console.log('login error', error)
         dispatch(setAuth(initialState));
       } else {
-        const token = res;
-        dispatch(setAuth({ isAuthenticated: true, token: token }))
-        // navigate("/dashboard")
+        dispatch(setAuth({ isAuthenticated: true, token: res.data }))
+        save('accessToken', res.data);
       }
     }
   }
