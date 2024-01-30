@@ -46,9 +46,8 @@ router.get('/place/getByCity/:cityName', getPlacesForCity);
 router.post('/place/addMany', addManyPlaces);
 
 // COMMENT
-router.post('/comment/addNew', addNewComment);
+router.post('/comment/addNew/:entryId', addNewComment);
 router.get('/comment/getAll/:entryId', getAllCommentsByEntry);
 router.delete('/comment/delete/byAuthor/:commenterId/forEntry/:entryId');
-
 
 export default router;
