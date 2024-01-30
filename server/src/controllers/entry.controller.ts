@@ -30,15 +30,25 @@ const getEntry= async (ctx : Koa.Context) => {
     } catch (err) {
         console.log(err)
         ctx.status = 400
-        ctx.body = 'Error: could find entry'
+        ctx.body = 'Error: could not find entry'
     }
 }
 
-
+const sortByRatings = async (entries: SmallEntry[]) => {
+    const ratings = await prisma.rating.groupBy({
+        by: ['entryId'],
+        _avg: {
+            value: true
+        }
+    })
+    return entries.sort((a, b) => {
+        return (ratings.find(rating => rating.entryId == b.id)?._avg.value || 0) - (ratings.find(rating => rating.entryId == a.id)?._avg.value || 0)
+    })
+}
 
 const getPlaceEntries= async (ctx : Koa.Context) => {
     try {
-        const entries = <SmallEntry[]> await prisma.entry.findMany({
+        let entries = <SmallEntry[]> await prisma.entry.findMany({
             where: {
               placeId: Number(ctx.params.placeID),
             },
@@ -48,14 +58,16 @@ const getPlaceEntries= async (ctx : Koa.Context) => {
                 "creation_date": true,
                 "tag": true,
                 "id": true,
-            }
-        });
-        ctx.body = entries;
+            },
+            orderBy: ctx.params.sortPrefrence == 'recent'? {creation_date: 'desc'} : undefined
+        })
+
+        ctx.body = ctx.params.sortPrefrence == 'top-rated'? sortByRatings(entries) : entries;
 
     } catch (err) {
         console.log(err)
         ctx.status = 400
-        ctx.body = 'Error: could find entry'
+        ctx.body = 'Error: could not find entry'
     }
 }
 
@@ -68,7 +80,7 @@ const getCityEntries= async (ctx : Koa.Context) => {
         });
         const placesIds = cityPlaces.map((place: Place) => place.id)
 
-        const entry = <SmallEntry[]> await prisma.entry.findMany({
+        const entries = <SmallEntry[]> await prisma.entry.findMany({
             where: {
                 placeId: {
                     in : placesIds
@@ -80,19 +92,31 @@ const getCityEntries= async (ctx : Koa.Context) => {
                 "creation_date": true,
                 "tag": true,
                 "id": true,
-            }
+            },
+            orderBy: ctx.params.sortPrefrence == 'recent'? {creation_date: 'desc'} : undefined
         });
-        ctx.body = entry;
+        ctx.body = ctx.params.sortPrefrence == 'top-rated'? sortByRatings(entries) : entries;
 
     } catch (err) {
         console.log(err)
         ctx.status = 400
-        ctx.body = 'Error: could find entry'
+        ctx.body = 'Error: could not find entry'
     }
 }
 
-const deleteEntry = async () => {
-
+const deleteEntry = async (ctx: Koa.Context) => {
+    try {    
+        const deleteEntry = await prisma.entry.delete({
+            where: {
+            id: ctx.params.entryID,
+            },
+        })
+        ctx.body = deleteEntry;
+    } catch (err) {
+        console.log(err)
+        ctx.status = 400
+        ctx.body = 'Error: could not delete entry'
+    }
 }
 
 export {getEntry, postEntry, getCityEntries, getPlaceEntries, deleteEntry}
