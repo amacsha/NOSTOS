@@ -1,23 +1,24 @@
 import Koa from 'koa';
-const user_client = require('../models/db');
+import prisma from '../models/db';
 import { UserType } from '../../server-types/types';
 import bcrypt from 'bcrypt';
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
 const createOneUser = async (ctx: Koa.Context) => {
   const body = <UserType>ctx.request.body;
 
-  const existingUserByEmail = await user_client.user.findUnique({
+  const existingUserByEmail = await prisma.user.findUnique({
     where: { email: body.email },
   });
 
-//   const existingUserByUsername = await user_client.user.findUnique({
-//     where: { username: body.username },
-//   })
+  const existingUserByUsername = await prisma.user.findUnique({
+    where: { username: body.username },
+  });
 
-  if (existingUserByEmail) {
+  if (existingUserByEmail || existingUserByUsername) {
     ctx.status = 409;
     ctx.body = { error: '409', message: 'User already exists' };
+    return;
   }
 
   try {
@@ -25,9 +26,8 @@ const createOneUser = async (ctx: Koa.Context) => {
 
     const hash = await bcrypt.hash(body.password, 10);
 
-    const user: UserType = await user_client.user.create({
+    const user: UserType = await prisma.user.create({
       data: {
-        id: body.id,
         email: body.email,
         username: body.username,
         password: hash,
@@ -47,12 +47,17 @@ const createOneUser = async (ctx: Koa.Context) => {
 };
 
 const loginUser = async (ctx: Koa.Context) => {
-    const body = <UserType>ctx.request.body;
+  const body = <UserType>ctx.request.body;
 
   try {
-    const user = await user_client.user.findUnique({
-        where: {email: body.email}
+    const user: UserType | null = await prisma.user.findUnique({
+      where: { email: body.email },
     });
+    if (!user) {
+      ctx.status = 404;
+      ctx.body = { error: 'User not found' };
+      return;
+    }
     const validatedPass = await bcrypt.compare(body.password, user.password);
     if (!validatedPass) throw new Error();
     const accessToken = jwt.sign(user, process.env.SECRET_KEY!);
@@ -67,7 +72,7 @@ const loginUser = async (ctx: Koa.Context) => {
 
 const getOneUser = async (ctx: Koa.Context) => {
   try {
-    const user = await user_client.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: Number(ctx.params.id) },
     });
     ctx.status = 200;
@@ -81,7 +86,7 @@ const getOneUser = async (ctx: Koa.Context) => {
 
 const deleteUser = async (ctx: Koa.Context) => {
   try {
-    const user = await user_client.user.delete({
+    const user = await prisma.user.delete({
       where: { id: Number(ctx.params.id) },
     });
     ctx.status = 200;
@@ -96,7 +101,7 @@ const deleteUser = async (ctx: Koa.Context) => {
 const setUserFilterPreference = async (ctx: Koa.Context) => {
   const body = <UserType>ctx.request.body;
   try {
-    const preference = await user_client.user.update({
+    const preference = await prisma.user.update({
       where: { id: Number(ctx.params.id) },
       data: { filter_preference: body.filter_preference },
     });
@@ -111,7 +116,7 @@ const setUserFilterPreference = async (ctx: Koa.Context) => {
 
 const getUserFilterPreference = async (ctx: Koa.Context) => {
   try {
-    const user = await user_client.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: Number(ctx.params.id) },
       select: { filter_preference: true },
     });
@@ -125,8 +130,8 @@ const getUserFilterPreference = async (ctx: Koa.Context) => {
 };
 
 const logoutUser = (ctx: Koa.Context) => {
-    ctx.status = 200;
-    ctx.body = {accesToken: null};
+  ctx.status = 200;
+  ctx.body = { accesToken: null };
 };
 
 export {
@@ -136,5 +141,5 @@ export {
   getUserFilterPreference,
   deleteUser,
   loginUser,
-  logoutUser
+  logoutUser,
 };
