@@ -1,0 +1,15 @@
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
+import { useAppDispatch } from '../../hooks';
+import { setAuth, initialState } from '../../slices/authSlice';
+
+
+const logoutService = async () => {
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate()
+
+    dispatch(setAuth(initialState));
+    navigate("/")
+}
+
+export default logoutService;
