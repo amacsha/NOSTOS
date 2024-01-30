@@ -12,7 +12,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   // const isSignedIn = getValueFor('accessToken') = true;
-  const isSignedIn = true;
+  const isSignedIn = false;
 
   return (
     <Provider store={store}>

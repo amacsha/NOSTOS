@@ -7,7 +7,7 @@
     "test": "ENV=test jest",
     "start": "node ./dist/index.js",
     "tsc": "tsc",
-    "dev": "ENV=test ts-node-dev --respawn --pretty --transpile-only ./src/index.ts",
+    "dev": "ts-node-dev --respawn --pretty --transpile-only ./src/index.ts",
     "dev-win": "set ENV=test&&ts-node-dev --respawn --pretty --transpile-only ./src/index.ts"
   },
   "author": "",

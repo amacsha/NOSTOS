@@ -1,4 +1,4 @@
 export interface LoginValues {
-    username?: string;
+    email?: string;
     password?: string;
 }
