@@ -1,7 +1,7 @@
 interface rating {
-    raterId: Number,
-    entryId: Number,
-    value: Number
+    raterId: number,
+    entryId: number,
+    value: number
 }
 interface entry {
   id: number,
