@@ -24,7 +24,7 @@ const getUserRating = async (ctx : Koa.Context) => {
 
 const getAvgEntryRating = async (ctx : Koa.Context) => {
     try {
-        const avg =  <number> await prisma.rating.aggregate({
+        const avg =  await prisma.rating.aggregate({
             where: {
                 entryId: Number(ctx.params.entryID)
             }, 
