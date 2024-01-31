@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './components/login/login';
 import Register from './components/login/register';
 import store from './store';
+import Main from './components/dashboard/Main';
 import { Provider } from 'react-redux';
 import { getValueFor } from './utils/secureStorage';
 
@@ -17,7 +18,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator>
+        {/* <Stack.Navigator>
           {isSignedIn ? (
             <>
               <Stack.Screen name="register" component={Register} />
@@ -27,7 +28,9 @@ export default function App() {
               <Stack.Screen name="login" component={Login} />
             </>
           )}
-        </Stack.Navigator>
+        </Stack.Navigator> */}
+        <Main />
+
       </NavigationContainer>
     </Provider>
   );
