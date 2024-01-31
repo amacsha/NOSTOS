@@ -1,15 +1,15 @@
-const Koa = require('koa');
+import Koa from 'koa';
+const app = new Koa();
 
 const cors = require('@koa/cors');
 const { bodyParser } = require('@koa/bodyparser');
 const koaRouter = require('./router');
 
-const app = new Koa();
-
 app.use(cors())
    .use(bodyParser())
    .use(koaRouter.routes())
    .use(koaRouter.allowedMethods());
+
 
 const port = 3000;
 

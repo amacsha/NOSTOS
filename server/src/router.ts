@@ -1,4 +1,5 @@
-const Router = require('@koa/router');
+// const Router = require('@koa/router');
+import Router from '@koa/router';
 const router = new Router();
 import { getLastVisits, setLastVisit } from './controllers/lastVisited.controller';
 import {createOneUser, deleteUser, getOneUser, getUserFilterPreference, loginUser, logoutUser, setUserFilterPreference} from './controllers/user.controller';
@@ -45,9 +46,8 @@ router.get('/place/getByCity/:cityName', getPlacesForCity);
 router.post('/place/addMany', addManyPlaces);
 
 // COMMENT
-router.post('/comment/addNew', addNewComment);
+router.post('/comment/addNew/:entryId', addNewComment);
 router.get('/comment/getAll/:entryId', getAllCommentsByEntry);
 router.delete('/comment/delete/byAuthor/:commenterId/forEntry/:entryId');
 
-
-module.exports = router;
+export default router;

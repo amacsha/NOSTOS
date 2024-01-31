@@ -24,7 +24,8 @@
     "react-native-safe-area-context": "4.8.2",
     "react-native-screens": "~3.29.0",
     "react-redux": "^9.1.0",
-    "react-router-dom": "^6.21.3"
+    "react-router-dom": "^6.21.3",
+    "expo-location": "~16.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

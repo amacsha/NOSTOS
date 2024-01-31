@@ -4,7 +4,6 @@ import Koa from 'koa'
 import { Place, newEntry, SmallEntry } from '../../server-types/types'
 
 const postEntry = async (ctx : Koa.Context) => {
-    console.log(ctx.request.body)
     try {
         const newEntry = await prisma.entry.create({
             data : <newEntry> ctx.request.body,
@@ -62,7 +61,7 @@ const getPlaceEntries= async (ctx : Koa.Context) => {
             orderBy: ctx.params.sortPrefrence == 'recent'? {creation_date: 'desc'} : undefined
         })
 
-        ctx.body = ctx.params.sortPrefrence == 'top-rated'? sortByRatings(entries) : entries;
+        ctx.body = ctx.params.sortPrefrence == 'top-rated'? await sortByRatings(entries) : entries;
 
     } catch (err) {
         console.log(err)
@@ -79,7 +78,6 @@ const getCityEntries= async (ctx : Koa.Context) => {
             }
         });
         const placesIds = cityPlaces.map((place: Place) => place.id)
-
         const entries = <SmallEntry[]> await prisma.entry.findMany({
             where: {
                 placeId: {
@@ -95,7 +93,7 @@ const getCityEntries= async (ctx : Koa.Context) => {
             },
             orderBy: ctx.params.sortPrefrence == 'recent'? {creation_date: 'desc'} : undefined
         });
-        ctx.body = ctx.params.sortPrefrence == 'top-rated'? sortByRatings(entries) : entries;
+        ctx.body = ctx.params.sortPrefrence == 'top-rated' ? await sortByRatings(entries) : entries;
 
     } catch (err) {
         console.log(err)
