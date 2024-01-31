@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./Login";
@@ -18,8 +18,6 @@ export default function UserStart() {
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
-
-  console.log("isAuthenticated:", isAuthenticated);
 
   return (
     <NavigationContainer>

@@ -3,8 +3,7 @@ import { RegisterValues } from '../../client-types/RegisterValues';
 
 const IP: string | undefined = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
-const registerService = (registerForm: RegisterValues) => {
-    console.log(IP)
+const RegisterService = (registerForm: RegisterValues) => {
     const url: string = `http://${IP}:3000/user/createOneUser`
     return axios.post(url, registerForm)
         .catch(error => {
@@ -15,4 +14,4 @@ const registerService = (registerForm: RegisterValues) => {
         });
 }
 
-export default registerService;
+export default RegisterService;

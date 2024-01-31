@@ -7,6 +7,7 @@ const initialState: UserState = {
   username: null,
   filter_preference: null,
   isAuthenticated: false,
+  firstLogin: true,
   entryIds: [],
   ratingIds: [],
   commentIds: [],
@@ -44,10 +45,13 @@ export const userSlice = createSlice({
     updateLastVisitedIds: (state, action: PayloadAction<number[]>) => {
       state.lastVisitedIds = action.payload;
     },
+    updateFirstLogin: (state) => {
+      state.firstLogin = false;
+    }
   },
 });
 
-export const { login, logout, updateUserDetails, updateFilterPreference } =
+export const { login, logout, updateUserDetails, updateFilterPreference, updateFirstLogin } =
   userSlice.actions;
 
 export default userSlice.reducer;
