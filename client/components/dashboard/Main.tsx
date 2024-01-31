@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button, GestureResponderEvent } from 'react-native';
 import GeoLocation from './GeoLocation';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
 
-const Main: React.FC = () => {
+const Main: React.FC = ({navigation}: any) => {
   const fetchLocation = GeoLocation();
   const location = useSelector((state: RootState) => state.location);
 
@@ -23,6 +23,7 @@ const Main: React.FC = () => {
         <Text style={styles.fetchingText}>Fetching location...</Text>
       )}
       <Text>Main Component</Text>
+      <Button title='Go to mission' onPress={(event: GestureResponderEvent) => navigation.navigate('Mission')} />
     </View>
   );
 };

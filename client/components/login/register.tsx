@@ -1,4 +1,4 @@
-import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Button, GestureResponderEvent, StyleSheet, Text, TextInput, View } from "react-native";
 import { Formik, useFormik } from "formik";
 import * as Yup from 'yup';
 import registerService from "./registerService";
@@ -8,7 +8,7 @@ import { setAuth, initialState } from '../../slices/authSlice';
 import { save } from "../../utils/secureStorage";
 
 
-const Register: React.FC = () => {
+const Register: React.FC = ({navigation}: any) => {
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .required('Username is required'),
@@ -76,7 +76,7 @@ const Register: React.FC = () => {
             {touched.password && errors.password && (
               <Text style={styles.error}>{errors.password}</Text>
             )}
-            <Button title="Register" onPress={handleSubmit} />
+            <Button title="Register" onPress={(event: GestureResponderEvent) => handleSubmit()} />
           </>
         )}
       </Formik>

@@ -6,6 +6,7 @@ import Register from "./Register";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
 import Main from "../dashboard/Main";
+import Mission from "../mission/Mission";
 import { NavigationContainer } from "@react-navigation/native";
 
 const Stack = createNativeStackNavigator();
@@ -15,13 +16,16 @@ export default function UserStart() {
     (state: RootState) => state.auth.isAuthenticated
   );
 
-  console.log(isAuthenticated);
+  console.log("isAuthenticated:", isAuthenticated);
 
   return (
     <NavigationContainer>
       <Stack.Navigator>
         {isAuthenticated ? (
-          <Stack.Screen name="Main" component={Main} />
+          <>
+            <Stack.Screen name="Main" component={Main} />
+            <Stack.Screen name="Mission" component={Mission} />
+          </>
         ) : (
           <>
             <Stack.Screen name="Login" component={Login} />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Button, GestureResponderEvent, StyleSheet, Text, TextInput, View } from "react-native";
 import { Formik, useFormik } from "formik";
 import * as Yup from 'yup';
 import loginService from "./loginService";
@@ -9,7 +9,7 @@ import { setAuth, initialState } from '../../slices/authSlice';
 import { save } from "../../utils/secureStorage";
 
 
-const Login: React.FC = () => {
+const Login: React.FC = ({navigation}: any) => {
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email('Invalid email')
@@ -63,7 +63,8 @@ const Login: React.FC = () => {
             {touched.password && errors.password && (
               <Text style={styles.error}>{errors.password}</Text>
             )}
-            <Button title="Login" onPress={handleSubmit} />
+            <Button title="Login" onPress={(event: GestureResponderEvent) => handleSubmit()} />
+            <Button title="Register" onPress={() => navigation.navigate('Register')} />
           </>
         )}
       </Formik>
