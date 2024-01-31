@@ -32,8 +32,10 @@ router.get('/user/getOneUser/:id', getOneUser);
 router.delete('/user/deleteUser/:id', deleteUser);
 router.put('/user/setUserFilterPreference/:id', setUserFilterPreference);
 router.get('/user/getUserFilterPreference/:id', getUserFilterPreference);
-router.get('/last-visited/getLastVisits/:id', getLastVisits);
-router.post('/last-visited/setLastVisit/:id', setLastVisit);
+
+// LAST-VISITED
+router.get('/last-visited/getLastUserPlaces/:userId', getLastVisits);
+router.post('/last-visited/setUserLastVisit', setLastVisit);
 
 // LOGIN
 router.post('/login', loginUser);

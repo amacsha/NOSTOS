@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { RegisterValues } from '../../client-types/RegisterValues';
-import { Alert } from 'react-native';
 
+const IP: string | undefined = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
 const registerService = (registerForm: RegisterValues) => {
-    const url: string = 'http://10.10.22.149:3000/user/createOneUser'
+    console.log(IP)
+    const url: string = `http://${IP}:3000/user/createOneUser`
     return axios.post(url, registerForm)
         .catch(error => {
             if (error.response.status !== 201) {

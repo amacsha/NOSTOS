@@ -1,34 +1,13 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from './components/login/login';
-import Register from './components/login/register';
-import store from './store';
-import { Provider } from 'react-redux';
-import { getValueFor } from './utils/secureStorage';
-
-const Stack = createNativeStackNavigator();
+import React from "react";
+import { StyleSheet } from "react-native";
+import UserStart from "./components/login/UserStart";
+import store from "./store";
+import { Provider } from "react-redux";
 
 export default function App() {
-  // const isSignedIn = getValueFor('accessToken') = true;
-  const isSignedIn = false;
-
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          {isSignedIn ? (
-            <>
-              <Stack.Screen name="register" component={Register} />
-            </>
-          ) : (
-            <>
-              <Stack.Screen name="login" component={Login} />
-            </>
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
+      <UserStart />
     </Provider>
   );
 }
@@ -36,8 +15,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
