@@ -6,7 +6,7 @@ import {createOneUser, deleteUser, getOneUser, getUserFilterPreference, loginUse
 import {authMiddleware} from './middlewares/auth'
 
 import {getEntry, postEntry, getCityEntries, getPlaceEntries} from './controllers/entry.controller'
-import {getAvgEntryRating, getUserRating, setUserRating} from './controllers/rating.controller'
+import {getAvgEntryRating, getNumberOfRatingsForAnEntry, getUserRating, setUserRating} from './controllers/rating.controller'
 import { addManyPlaces, addNewPlace, getAllPlaces, getPlacesForCity } from './controllers/place.controller';
 import { addNewComment, deleteComment, getAllCommentsByEntry } from './controllers/comment.controller';
 
@@ -25,6 +25,7 @@ router.delete('/entry/delete/:entryID')
 router.post('/rating/setUserRating', setUserRating)
 router.get('/rating/onEntry/:entryID/byUser/:userID', getUserRating)
 router.get('/rating/AverageEntryRating/:entryID', getAvgEntryRating)
+router.get('/rating/count/:entryID', getNumberOfRatingsForAnEntry)
 
 // USER
 router.post('/user/createOneUser', createOneUser);

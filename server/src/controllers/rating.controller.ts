@@ -22,6 +22,18 @@ const getUserRating = async (ctx : Koa.Context) => {
     }
 }
 
+const getNumberOfRatingsForAnEntry = async (ctx: Koa.Context) => {
+    try {
+        const count = await prisma.rating.count({where: {entryId: Number(ctx.params.entryID)}});
+        ctx.response.body = count;
+        ctx.status = 200;
+    } catch (error) {
+        console.log(error)
+        ctx.status = 400;
+        ctx.body = 'Error'
+    }
+}
+
 const getAvgEntryRating = async (ctx : Koa.Context) => {
     try {
         const avg = await prisma.rating.aggregate({
@@ -63,4 +75,4 @@ const setUserRating = async (ctx : Koa.Context) => {
     }
 }
 
-export {getAvgEntryRating, getUserRating, setUserRating}
+export {getAvgEntryRating, getUserRating, setUserRating, getNumberOfRatingsForAnEntry}

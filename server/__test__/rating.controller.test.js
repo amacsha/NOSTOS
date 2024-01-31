@@ -9,7 +9,7 @@ const {clearDatabase} = require('./helpers')
 const {prisma} = require('../src/models/db')
 
 
-
+//TODO update tests to account for count ratings controller
 describe('Rating', () => {
   const app = new Koa();
   app.use(bodyParser());

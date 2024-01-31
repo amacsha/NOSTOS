@@ -8,7 +8,7 @@ const postEntry = async (ctx : Koa.Context) => {
         const newEntry = await prisma.entry.create({
             data : <newEntry> ctx.request.body,
         });
-    
+
         ctx.body = newEntry;
     } catch (err) {
         console.log(err)
@@ -103,7 +103,7 @@ const getCityEntries= async (ctx : Koa.Context) => {
 }
 
 const deleteEntry = async (ctx: Koa.Context) => {
-    try {    
+    try {
         const deleteEntry = await prisma.entry.delete({
             where: {
             id: ctx.params.entryID,
