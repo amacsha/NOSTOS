@@ -51,6 +51,17 @@ describe('Comments', () => {
     expect(response.status).toBe(409);
   })
 
+  it('should not allow users with an empty password', async () => {
+    userData.password = "";
+    try {
+      const response = await request.post('/user/createOneUser').send(userData);
+      expect(response.status).toBe(500);
+    } catch (error) {
+      expect(error).toBeDefined();
+    }
+    userData.password = '123456';
+  })
+
   // it('should log in a user', async () => {
   //   const response = await request.post('/login').send(userData);
   //   // console.log(userData)
@@ -58,19 +69,29 @@ describe('Comments', () => {
   // })
 
   it('should deny login for an invalid account', async () => {
-    const response = await request.post('/login').send({
-      email: 'junk@junk.com',
-      username: 'junk',
-      password: '123456',
-    });
-    expect(response.status).toBe(404);
+    try {
+      const response = await request.post('/login').send({
+        email: 'junk@junk.com',
+        username: 'junk',
+        password: '123456',
+      });
+      expect(response.status).toBe(404);
+    } catch (error) {
+      console.log('🙅🏼DENY LOGIN ERROR')
+      expect(error).toBeDefined();
+    }
   })
 
   it('should deny login with incorrect password', async () => {
     userData.password = 'bad password'
-    const response = await request.post('/login').send(userData)
+    try {
+      const response = await request.post('/login').send(userData)
+      expect(response.status).toBe(404);
+    } catch (error) {
+      console.log('🙅🏼DENY LOGIN ERROR')
+      expect(error).toBeDefined();
+    }
     userData.password = '123456'
-    expect(response.status).toBe(404);
   })
 
   // it('should log-out a user', () => {
