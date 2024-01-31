@@ -8,7 +8,7 @@ import { setAuth, initialState } from '../../slices/authSlice';
 import { save } from "../../utils/secureStorage";
 
 
-const Register: React.FC = () => {
+const Register: React.FC = ({navigation}: any) => {
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .required('Username is required'),

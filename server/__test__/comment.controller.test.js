@@ -4,42 +4,33 @@ const {bodyParser} = require('@koa/bodyparser');
 const {default: router} = require('../src/router')
 
 const {describe, it, test, expect, beforeEach, beforeAll, afterAll} = require('@jest/globals')
+
+const {clearDatabase} = require('./helpers')
 const {prisma} = require('../src/models/db')
+
 
 describe('Comments', () => {
   const app = new Koa();
   app.use(bodyParser());
   app.use(router.routes());
   const request = supertest.agent(app.callback())
-
-  let tempUserIds = [];
-  let tempPlaceId = 0;
-  let tempEntryId = 0;
-
+  
   beforeAll(async () => {
-    // The order is important! Do not change!
-    await prisma.comment.deleteMany({});
-    await prisma.rating.deleteMany({});
-    await prisma.lastVisited.deleteMany({});
-    await prisma.entry.deleteMany({});
-    await prisma.user.deleteMany({});
-    await prisma.place.deleteMany({});
+    await clearDatabase();
 
     // Comments rely on a User and an Entry (which relies on a Place), so create one of each first.
-
-    // Because prisma autoincrements the id values and does not reset them when the
-    // database is cleared, we need to create the new rows and then query them
-    // to get the ids.
 
     await prisma.user.createMany({
       data: [
         {
+          id: 1,
           email: "test@test.com",
           username: 'test',
           password: 'test123456',
           filter_preference: 'top rated'
         },
         {
+          id: 2,
           email: "test2@test2.com",
           username: 'test2',
           password: 'test123456',
@@ -48,11 +39,10 @@ describe('Comments', () => {
       ]
     })
 
-    tempUserIds = (await prisma.user.findMany({})).map(user => user.id)
-
     await prisma.place.create({
       data:
       {
+        id: 1,
         lat: 100,
         lng: 100,
         name: 'Marble Arch',
@@ -60,18 +50,15 @@ describe('Comments', () => {
       }
     });
 
-    tempPlaceId = (await prisma.place.findFirst({where: {name: 'Marble Arch'}})).id;
-
     await prisma.entry.create({
       data: {
-        placeId: tempPlaceId,
-        authorId: tempUserIds[0],
+        id: 1,
+        placeId: 1,
+        authorId: 1,
         title: 'Mock Title',
         content: 'Mock Content'
       }
     })
-
-    tempEntryId = (await prisma.entry.findFirst({where: {title: 'Mock Title'}})).id;
   })
 
   afterAll(() => {
@@ -80,9 +67,9 @@ describe('Comments', () => {
 
   it('should add a new comment to an entry', async () => {
     const data = {
-      commenterId: tempUserIds[0], content: 'Great entry!'
+      commenterId: 1, content: 'Great entry!'
     }
-    const response = await request.post(`/comment/addNew/${tempEntryId}`).send(data);
+    const response = await request.post(`/comment/addNew/1`).send(data);
     const result = await prisma.comment.findMany({});
 
     expect(response.status).toBe(201);
@@ -90,19 +77,31 @@ describe('Comments', () => {
   })
 
   it('should retrieve all comments on an entry', async () => {
-    const data = {commenterId: tempUserIds[1], content: 'Wow!'};
-    await request.post(`/comment/addNew/${tempEntryId}`).send(data);
+    const data = {commenterId: 2, content: 'Wow!'};
+    await request.post(`/comment/addNew/1`).send(data);
 
-    const response = await request.get(`/comment/getAll/${tempEntryId}`);
+    const response = await request.get(`/comment/getAll/1`);
     const result = await prisma.comment.findMany({
-      where: {entryId: tempEntryId}
+      where: {entryId: 1}
     })
 
     expect(response.status).toBe(200);
     expect(result.length).toBe(2);
-
   })
-  // it('should delete a comment from an entry', async () => {
 
-  // })
+  it('should delete a comment from an entry', async () => {
+    const response = await request.delete(`/comment/delete/byAuthor/1/forEntry/1`);
+    await prisma.comment.delete({
+      where: {
+        commenterId_entryId: {
+          commenterId: 2,
+          entryId: 1
+        }
+      }
+    });
+
+    const result = await prisma.comment.findMany({});
+    expect(response.status).toBe(200);
+    expect(result.length).toBe(0)
+  })
 })

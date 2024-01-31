@@ -8,7 +8,7 @@ import {authMiddleware} from './middlewares/auth'
 import {getEntry, postEntry, getCityEntries, getPlaceEntries} from './controllers/entry.controller'
 import {getAvgEntryRating, getUserRating, setUserRating} from './controllers/rating.controller'
 import { addManyPlaces, addNewPlace, getAllPlaces, getPlacesForCity } from './controllers/place.controller';
-import { addNewComment, getAllCommentsByEntry } from './controllers/comment.controller';
+import { addNewComment, deleteComment, getAllCommentsByEntry } from './controllers/comment.controller';
 
 
 // ENTRY
@@ -48,8 +48,10 @@ router.get('/place/getByCity/:cityName', getPlacesForCity);
 router.post('/place/addMany', addManyPlaces);
 
 // COMMENT
+
+//TODO re-visit route structure
 router.post('/comment/addNew/:entryId', addNewComment);
 router.get('/comment/getAll/:entryId', getAllCommentsByEntry);
-router.delete('/comment/delete/byAuthor/:commenterId/forEntry/:entryId');
+router.delete('/comment/delete/byAuthor/:commenterId/forEntry/:entryId', deleteComment);
 
 export default router;

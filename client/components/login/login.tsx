@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Button, GestureResponderEvent, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Button, GestureResponderEvent, StyleSheet, Text, TextInput, View } from "react-native";
 import { Formik, useFormik } from "formik";
 import * as Yup from 'yup';
 import { AxiosResponse } from "axios";
@@ -65,7 +66,8 @@ const Login: React.FC = () => {
             {touched.password && errors.password && (
               <Text style={styles.error}>{errors.password}</Text>
             )}
-            <Button title="Login" onPress={() => handleSubmit()} />
+            <Button title="Login" onPress={(event: GestureResponderEvent) => handleSubmit()} />
+            <Button title="Register" onPress={() => navigation.navigate('Register')} />
           </>
         )}
       </Formik>

@@ -4,7 +4,10 @@ const {bodyParser} = require('@koa/bodyparser');
 const {default: router} = require('../src/router')
 
 const {describe, it, test, expect, beforeEach, beforeAll, afterAll} = require('@jest/globals')
+
+const {clearDatabase} = require('./helpers')
 const {prisma} = require('../src/models/db')
+
 
 describe('Entry', () => {
   const app = new Koa();
@@ -16,13 +19,7 @@ describe('Entry', () => {
   let places = []
   let entries = []
   beforeAll(async () => {
-    // The order is important! Do not change!
-    await prisma.comment.deleteMany({});
-    await prisma.rating.deleteMany({});
-    await prisma.lastVisited.deleteMany({});
-    await prisma.entry.deleteMany({});
-    await prisma.user.deleteMany({});
-    await prisma.place.deleteMany({});
+    await clearDatabase();
 
     //adding mock data
     await prisma.user.createMany({data: [
