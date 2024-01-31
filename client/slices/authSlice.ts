@@ -3,7 +3,7 @@ import { Auth } from "../client-types/Auth"
 
 export const initialState: Auth = {
   isAuthenticated: false,
-  token: null,
+  token: '',
 };
 
 export const authSlice = createSlice({
@@ -12,7 +12,7 @@ export const authSlice = createSlice({
   reducers: {
     setAuth: (
       state,
-      action: PayloadAction<{ isAuthenticated: boolean; token: string | null }>
+      action: PayloadAction<{ isAuthenticated: boolean; token: string }>
     ) => {
       state.isAuthenticated = action.payload.isAuthenticated;
       state.token = action.payload.token;
