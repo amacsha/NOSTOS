@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
 import loginService from "./loginService";
 import { LoginValues } from "../../client-types/LoginValues";
@@ -7,8 +7,7 @@ import { setAuth, initialState } from '../../slices/authSlice';
 import { save } from "../../utils/secureStorage";
 import LogoutService from "./logoutService";
 
-
-const Login: React.FC = () => {
+const Login = ({navigation}: any) => {
   const [loginForm, setLoginForm] = useState<LoginValues>({ email: "", password: "" })
   const [error, setError] = useState<LoginValues>({ email: "", password: "" })
 
@@ -17,6 +16,7 @@ const Login: React.FC = () => {
   const handleChange = (name: keyof typeof loginForm, value: string) => {
     setLoginForm({ ...loginForm, [name]: value })
   }
+
 
   const handleSubmit = async () => {
     let newError: LoginValues = { ...error }
@@ -54,6 +54,7 @@ const Login: React.FC = () => {
         />
         {error.password !== "" && <Text style={styles.error}>{error.password}</Text>}
         <Button title="Login" onPress={handleSubmit} />
+        <Button title="Register" onPress={navigation.navigate('Register')} />
       </View>
       <LogoutService />
     </>

@@ -6,9 +6,7 @@ import { useAppDispatch } from '../../hooks';
 import { setAuth, initialState } from '../../slices/authSlice';
 import { save } from "../../utils/secureStorage";
 
-
-
-const Register: React.FC = () => {
+const Register = ({navigation}: any) => {
   const [registerForm, setRegisterForm] = useState<RegisterValues>({ username: '', email: '', password: '' })
   const [error, setError] = useState<RegisterValues>({ username: '', email: '', password: '' })
 
@@ -63,6 +61,7 @@ const Register: React.FC = () => {
         />
         {error.password !== '' && <Text style={styles.error}>{error.password}</Text>}
         <Button title="Register" onPress={handleSubmit} />
+        <Button title="Sign In" onPress={() => {navigation.navigate('Login')}} />
       </View>
     </>
   )

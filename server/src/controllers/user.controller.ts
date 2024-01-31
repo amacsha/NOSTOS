@@ -11,11 +11,11 @@ const createOneUser = async (ctx: Koa.Context) => {
     where: { email: body.email },
   });
 
-  // const existingUserByUsername = await prisma.user.findUnique({
-  //   where: { username: body.username },
-  // });
+  const existingUserByUsername = await prisma.user.findUnique({
+    where: { username: body.username },
+  });
 
-  if (existingUserByEmail) {
+  if (existingUserByEmail || existingUserByUsername) {
     ctx.status = 409;
     ctx.body = { error: '409', message: 'User already exists' };
     return;
