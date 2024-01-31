@@ -1,15 +1,16 @@
 import axios from 'axios';
 import { LoginValues } from '../../client-types/LoginValues';
 
+const IP: string = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
 
 const loginService = (loginValues: LoginValues) => {
-    const url: string = 'http://10.10.22.149:3000/login'
+    const url = `http://${IP}:3000/login`;
     return axios.post(url, loginValues)
         .catch(error => {
-            if (error.response.status !== 201) {
-                console.log(error.response.data)
-                return error.response.data
+            if (error.response && error.response.status !== 201) {
+                console.log(error.response.data);
+                return error.response.data;
             }
         });
 }

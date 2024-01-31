@@ -1,5 +1,6 @@
-import { useState } from "react";
 import { Alert, Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Formik, useFormik } from "formik";
+import * as Yup from 'yup';
 import registerService from "./registerService";
 import { RegisterValues } from "../../client-types/RegisterValues";
 import { useAppDispatch } from '../../hooks';
@@ -7,66 +8,80 @@ import { setAuth, initialState } from '../../slices/authSlice';
 import { save } from "../../utils/secureStorage";
 
 
-
 const Register: React.FC = () => {
-  const [registerForm, setRegisterForm] = useState<RegisterValues>({ username: '', email: '', password: '' })
-  const [error, setError] = useState<RegisterValues>({ username: '', email: '', password: '' })
+  const validationSchema = Yup.object().shape({
+    username: Yup.string()
+      .required('Username is required'),
+    email: Yup.string()
+      .email('Invalid email')
+      .required('Email is required'),
+    password: Yup.string()
+      .min(6, 'Password must be at least 6 characters')
+      .required('Password is required'),
+  })
 
   const dispatch = useAppDispatch();
 
-  const handleChange = (name: keyof typeof registerForm, value: string) => {
-    setRegisterForm({ ...registerForm, [name]: value })
-  }
-
-  const handleSubmit = async () => {
-    let newError: RegisterValues = { ...error }
-    !registerForm.username ? newError.username = 'Username is required' : newError.username = '';
-    !registerForm.email ? newError.email = 'Email is required' : newError.email = '';
-    !registerForm.password ? newError.password = 'Password is required' :
-      registerForm.password.length < 6 ? newError.password = 'Password must be at least 6 characters' : newError.password = '';
-    setError(newError)
-
-    if (Object.values(newError).every(err => err === '')) {
-      const res: any = await registerService(registerForm)
-      // console.log('axios res', res)
-      if (res.message) {
-        // console.log('registration error', res.message)
-        Alert.alert(`${res.message}`);
-        dispatch(setAuth(initialState));
-      } else {
-        dispatch(setAuth({ isAuthenticated: true, token: res.data }))
-        save('accessToken', res.data);
-      }
+  const handleSubmit = async (values: RegisterValues) => {
+    const res: any = await registerService(values)
+    // console.log('axios res', res)
+    if (res.message) {
+      // console.log('registration error', res.message)
+      Alert.alert(`${res.message}`);
+      dispatch(setAuth(initialState));
+    } else {
+      dispatch(setAuth({ isAuthenticated: true, token: res.data }))
+      save('accessToken', res.data);
     }
   }
 
   return (
-    <>
-      <View style={styles.container}>
-        <Text style={styles.head}>Register</Text>
-        <TextInput
-          style={styles.input}
-          placeholder='Username'
-          onChange={(event) => handleChange('username', event.nativeEvent.text)}
-        />
-        {error.username !== '' && <Text style={styles.error}>{error.username}</Text>}
-        <TextInput
-          style={styles.input}
-          placeholder='Email'
-          onChange={(event) => handleChange('email', event.nativeEvent.text)}
-        />
-        {error.email !== '' && <Text style={styles.error}>{error.email}</Text>}
-        <TextInput
-          style={styles.input}
-          placeholder='Password'
-          onChange={(event) => handleChange('password', event.nativeEvent.text)}
-        />
-        {error.password !== '' && <Text style={styles.error}>{error.password}</Text>}
-        <Button title="Register" onPress={handleSubmit} />
-      </View>
-    </>
+    <View style={styles.container}>
+      <Text style={styles.head}>Register</Text>
+      <Formik
+        initialValues={{ username: '', email: '', password: '' }}
+        validationSchema={validationSchema}
+        onSubmit={values => handleSubmit(values)}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+          <>
+            <TextInput
+              style={styles.input}
+              placeholder='Username'
+              onChangeText={handleChange('username')}
+              onBlur={handleBlur('username')}
+              value={values.username}
+            />
+            {touched.username && errors.username && (
+              <Text style={styles.error}>{errors.username}</Text>
+            )}
+            <TextInput
+              style={styles.input}
+              placeholder='Email'
+              onChangeText={handleChange('email')}
+              onBlur={handleBlur('email')}
+              value={values.email}
+            />
+            {touched.email && errors.email && (
+              <Text style={styles.error}>{errors.email}</Text>
+            )}
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              onChangeText={handleChange('password')}
+              onBlur={handleBlur('password')}
+              value={values.password}
+              secureTextEntry={true}
+            />
+            {touched.password && errors.password && (
+              <Text style={styles.error}>{errors.password}</Text>
+            )}
+            <Button title="Register" onPress={handleSubmit} />
+          </>
+        )}
+      </Formik>
+    </View>
   )
-
 }
 
 const styles = StyleSheet.create({
