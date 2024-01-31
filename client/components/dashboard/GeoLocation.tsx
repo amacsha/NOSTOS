@@ -15,7 +15,8 @@ const useCurrentLocation = () => {
     let location = await Location.getCurrentPositionAsync({});
     dispatch(setLocation({
       lat: location.coords.latitude,
-      lng: location.coords.longitude
+      lng: location.coords.longitude,
+      cityName: "London"
     }));
   };
 

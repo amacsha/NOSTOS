@@ -42,6 +42,68 @@ const getAvgEntryRating = async (ctx : Koa.Context) => {
     }
 }
 
+
+const getAvgInPlace = async (ctx : Koa.Context) => {
+    try {
+        const entryIds = (await prisma.entry.findMany({
+            where: {
+              placeId: Number(ctx.params.placeID),
+            },
+        })).map(entry => entry.id)
+
+        const ratings = await prisma.rating.groupBy({
+            by: ['entryId'],
+            where: {
+                entryId: {in: entryIds}
+            },
+            _avg: {
+                value: true
+            }
+        })
+
+        ctx.body = ratings
+
+    } catch (err) {
+        console.log(err);
+        ctx.status = 400;
+        ctx.body = 'Error: could not find rating';
+    }
+}
+
+const getAvgInCity = async (ctx : Koa.Context) => {
+    try {
+        const cityPlaceIds = (await prisma.place.findMany({
+            where: {
+                city: ctx.params.cityName
+            }
+        })).map(place => place.id);
+
+        const entryIds = (await prisma.entry.findMany({
+            where: {
+              placeId: {
+                in: cityPlaceIds
+              },
+            },
+        })).map(entry => entry.id)
+
+        const ratings = await prisma.rating.groupBy({
+            by: ['entryId'],
+            where: {
+                entryId: {in: entryIds}
+            },
+            _avg: {
+                value: true
+            }
+        })
+
+        ctx.body = ratings
+    } catch (err) {
+        console.log(err);
+        ctx.status = 400;
+        ctx.body = 'Error: could not find rating';
+    }
+}
+
 const setUserRating = async (ctx : Koa.Context) => {
     try {
         const {raterId, entryId, value} = <rating> ctx.request.body
@@ -63,4 +125,4 @@ const setUserRating = async (ctx : Koa.Context) => {
     }
 }
 
-export {getAvgEntryRating, getUserRating, setUserRating}
+export {getAvgEntryRating, getUserRating, setUserRating, getAvgInCity, getAvgInPlace}

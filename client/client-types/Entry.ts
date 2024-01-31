@@ -6,6 +6,6 @@ export interface Entry {
   content: string;
   creation_date: string; 
   tag: string[];
-  ratingIds: number[]; 
-  commentIds: number[];
+  // ratingIds: number[]; 
+  // commentIds: number[];
 }
