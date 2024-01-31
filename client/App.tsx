@@ -18,7 +18,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        {/* <Stack.Navigator>
+        <Stack.Navigator>
           {isSignedIn ? (
             <>
               <Stack.Screen name="register" component={Register} />
@@ -28,8 +28,8 @@ export default function App() {
               <Stack.Screen name="login" component={Login} />
             </>
           )}
-        </Stack.Navigator> */}
-        <Main />
+        </Stack.Navigator>
+        {/* <Main /> */}
 
       </NavigationContainer>
     </Provider>

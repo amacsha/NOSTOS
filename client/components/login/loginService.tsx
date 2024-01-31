@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { LoginValues } from '../../client-types/LoginValues';
 
-const IP = process.env.EXPO_PUBLIC_IP_ADDRESS;
+const IP: string = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
 
-const loginService = (loginValues) => {
+const loginService = (loginValues: LoginValues) => {
     const url = `http://${IP}:3000/login`;
     return axios.post(url, loginValues)
         .catch(error => {

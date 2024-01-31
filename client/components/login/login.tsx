@@ -58,6 +58,7 @@ const Login: React.FC = () => {
               onChangeText={handleChange("password")}
               onBlur={handleBlur("password")}
               value={values.password}
+              secureTextEntry={true}
             />
             {touched.password && errors.password && (
               <Text style={styles.error}>{errors.password}</Text>

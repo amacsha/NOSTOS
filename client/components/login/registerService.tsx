@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { RegisterValues } from '../../client-types/RegisterValues';
-import { Alert } from 'react-native';
 
 const IP = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
