@@ -24,8 +24,8 @@ export default function UserStart() {
           <Stack.Screen name="Main" component={Main} />
         ) : (
           <>
-            <Stack.Screen name="Register" component={Register} />
             <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
           </>
         )}
       </Stack.Navigator>
