@@ -1,9 +1,10 @@
 import Koa from 'koa';
 const app = new Koa();
+import cors from '@koa/cors';
+import { bodyParser } from '@koa/bodyparser';
+import koaRouter from './router';
 
-const cors = require('@koa/cors');
-const { bodyParser } = require('@koa/bodyparser');
-const koaRouter = require('./router');
+import { lastVisitCleanupAgent } from './controllers/lastVisited.controller';
 
 app.use(cors())
    .use(bodyParser())
@@ -15,9 +16,7 @@ const port = 3000;
 
 app.listen(port, () => {
 	console.log('Server running on ' + port);
-   setInterval(() => {
-      console.log('10 secs')
-   }, 1000 * 10)
+   // lastVisitCleanupAgent()
 })
 
 

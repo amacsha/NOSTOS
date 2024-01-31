@@ -49,4 +49,28 @@ const getLastVisits = async (ctx: Koa.Context) => {
   }
 };
 
-export { setLastVisit, getLastVisits };
+
+const lastVisitCleanupAgent = () => {
+  setTimeout(async () => {
+    try {
+      const cutoffTime = new Date()
+      cutoffTime.setHours(cutoffTime.getHours() - 48);
+      const oldMissions = await prisma.lastVisited.deleteMany({
+        where: { 
+          visit_time: {
+            lte: cutoffTime
+          },
+        },
+      });
+  
+      console.log('Deleted:', oldMissions)
+    } catch (error) {
+      console.log(error);
+    }
+
+
+    lastVisitCleanupAgent();
+  }, 1000 * 60 * 30);
+}
+
+export { setLastVisit, getLastVisits, lastVisitCleanupAgent};
