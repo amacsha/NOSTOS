@@ -2,9 +2,14 @@ const supertest = require('supertest');
 const Koa = require('koa');
 const { bodyParser } = require('@koa/bodyparser');
 const { default: router } = require('../src/router')
+const bcrypt = require('bcrypt');
+
 
 const { describe, it, test, expect, beforeEach, beforeAll, afterAll } = require('@jest/globals')
-const { prisma } = require('../src/models/db')
+
+const {clearDatabase} = require('./helpers')
+const {prisma} = require('../src/models/db')
+
 
 let userData = {
   email: 'dominic@test.com',
@@ -20,13 +25,17 @@ describe('Comments', () => {
   const request = supertest.agent(app.callback())
 
   beforeAll(async () => {
-    // The order is important! Do not change!
-    await prisma.comment.deleteMany({});
-    await prisma.rating.deleteMany({});
-    await prisma.lastVisited.deleteMany({});
-    await prisma.entry.deleteMany({});
-    await prisma.user.deleteMany({});
-    await prisma.place.deleteMany({});
+    await clearDatabase();
+  })
+
+  afterAll(() => {
+    prisma.$disconnect();
+    console.error.mockRestore();
+  })
+
+  beforeEach( () => {
+    jest.spyOn(console, 'error')
+    console.error.mockImplementation(() => null)
   })
 
   it('should create a new user', async () => {
@@ -34,6 +43,8 @@ describe('Comments', () => {
 
     userData.email = "gabriel@test.com";
     userData.username = "gabriel";
+    userData.password = await bcrypt.hash(userData.password, 10);
+
     const result = await prisma.user.create({ data: userData });
     userData.id = result.id;
 
@@ -62,11 +73,10 @@ describe('Comments', () => {
     userData.password = '123456';
   })
 
-  // it('should log in a user', async () => {
-  //   const response = await request.post('/login').send(userData);
-  //   // console.log(userData)
-  //   expect(response.status).toBe(200);
-  // })
+  it('should log in a user', async () => {
+    const response = await request.post('/login').send(userData);
+    expect(response.status).toBe(200);
+  })
 
   it('should deny login for an invalid account', async () => {
     try {

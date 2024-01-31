@@ -4,7 +4,10 @@ const {bodyParser} = require('@koa/bodyparser');
 const {default: router} = require('../src/router')
 
 const {describe, it, test, expect, beforeEach, beforeAll, afterAll} = require('@jest/globals')
+
+const {clearDatabase} = require('./helpers')
 const {prisma} = require('../src/models/db')
+
 
 describe('Comments', () => {
   const app = new Koa();
@@ -17,13 +20,7 @@ describe('Comments', () => {
   let tempEntryId = 0;
 
   beforeAll(async () => {
-    // The order is important! Do not change!
-    await prisma.comment.deleteMany({});
-    await prisma.rating.deleteMany({});
-    await prisma.lastVisited.deleteMany({});
-    await prisma.entry.deleteMany({});
-    await prisma.user.deleteMany({});
-    await prisma.place.deleteMany({});
+    await clearDatabase();
 
     // Comments rely on a User and an Entry (which relies on a Place), so create one of each first.
 
