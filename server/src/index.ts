@@ -1,9 +1,9 @@
 import Koa from 'koa';
 const app = new Koa();
 
-const cors = require('@koa/cors');
-const { bodyParser } = require('@koa/bodyparser');
-const koaRouter = require('./router');
+import cors from '@koa/cors';
+import { bodyParser } from '@koa/bodyparser';
+import koaRouter from './router';
 
 app.use(cors())
    .use(bodyParser())
@@ -18,4 +18,4 @@ app.listen(port, () => {
 })
 
 
-module.exports = app
+export default app;

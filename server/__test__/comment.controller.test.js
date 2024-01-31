@@ -100,9 +100,21 @@ describe('Comments', () => {
 
     expect(response.status).toBe(200);
     expect(result.length).toBe(2);
-
   })
-  // it('should delete a comment from an entry', async () => {
 
-  // })
+  it('should delete a comment from an entry', async () => {
+    const response = await request.delete(`/comment/delete/byAuthor/${tempUserIds[0]}/forEntry/${tempEntryId}`);
+    await prisma.comment.delete({
+      where: {
+        commenterId_entryId: {
+          commenterId: Number(tempUserIds[1]),
+          entryId: Number(tempEntryId)
+        }
+      }
+    });
+
+    const result = await prisma.comment.findMany({});
+    expect(response.status).toBe(200);
+    expect(result.length).toBe(0)
+  })
 })

@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "ENV=test jest --runInBand",
-    "test-win": "set ENV=test&&jest --runInBand",
+    "test": "ENV=test jest --verbose --runInBand",
+    "test-win": "set ENV=test&&jest --verbose --runInBand",
     "start": "node ./dist/index.js",
     "tsc": "tsc",
     "dev": "ts-node-dev --respawn --pretty --transpile-only ./src/index.ts",
@@ -37,6 +37,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/koa": "^2.14.0",
+    "@types/koa__cors": "^5.0.0",
     "@types/koa__router": "^12.0.4",
     "@types/koa-bodyparser": "^4.3.12",
     "@types/koa-json": "^2.0.23",
