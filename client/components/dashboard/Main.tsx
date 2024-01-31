@@ -23,7 +23,8 @@ const Main: React.FC = ({navigation}: any) => {
         <Text style={styles.fetchingText}>Fetching location...</Text>
       )}
       <Text>Main Component</Text>
-      <Button title='Go to mission' onPress={(event: GestureResponderEvent) => navigation.navigate('Mission')} />
+      <Button title='Go to mission' onPress={() => navigation.navigate('Mission')} />
+      <Button title='View entry' onPress={() => navigation.navigate('EntryView')} />
     </View>
   );
 };

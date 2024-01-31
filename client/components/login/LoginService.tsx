@@ -3,7 +3,7 @@ import { LoginValues } from '../../client-types/LoginValues';
 
 const IP: string | undefined = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
-const loginService = (loginValues: LoginValues) => {
+const LoginService = (loginValues: LoginValues) => {
     console.log(IP)
     const url = `http://${IP}:3000/login`;
     return axios.post(url, loginValues)
@@ -15,4 +15,4 @@ const loginService = (loginValues: LoginValues) => {
         });
 }
 
-export default loginService;
+export default LoginService;

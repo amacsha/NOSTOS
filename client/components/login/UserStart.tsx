@@ -8,6 +8,9 @@ import { useSelector } from "react-redux";
 import Main from "../dashboard/Main";
 import Mission from "../mission/Mission";
 import { NavigationContainer } from "@react-navigation/native";
+import Location from "../dashboard/Location";
+import EntryView from "../entry-view/EntryView";
+import NewEntryForm from "../new-entry/NewEntryForm";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +28,9 @@ export default function UserStart() {
           <>
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Mission" component={Mission} />
+            <Stack.Screen name="Location" component={Location} />
+            <Stack.Screen name="EntryView" component={EntryView} />
+            <Stack.Screen name="NewEntryForm" component={NewEntryForm} />
           </>
         ) : (
           <>

@@ -1,7 +1,7 @@
 import { Alert, Button, GestureResponderEvent, StyleSheet, Text, TextInput, View } from "react-native";
 import { Formik, useFormik } from "formik";
 import * as Yup from 'yup';
-import registerService from "./RegisterService";
+import RegisterService from "./RegisterService";
 import { RegisterValues } from "../../client-types/RegisterValues";
 import { useAppDispatch } from '../../hooks';
 import { setAuth, initialState } from '../../slices/authSlice';
@@ -23,7 +23,7 @@ const Register: React.FC = ({navigation}: any) => {
   const dispatch = useAppDispatch();
 
   const handleSubmit = async (values: RegisterValues) => {
-    const res: any = await registerService(values)
+    const res: any = await RegisterService(values)
     // console.log('axios res', res)
     if (res.message) {
       // console.log('registration error', res.message)
