@@ -6,7 +6,7 @@ const {default: router} = require('../src/router')
 const {describe, it, test, expect, beforeEach, beforeAll, afterAll} = require('@jest/globals')
 const {prisma} = require('../src/models/db')
 
-describe('Entry', () => {
+describe('Rating', () => {
   const app = new Koa();
   app.use(bodyParser());
   app.use(router.routes());

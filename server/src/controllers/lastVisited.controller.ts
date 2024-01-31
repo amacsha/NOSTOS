@@ -1,12 +1,19 @@
 import Koa from 'koa';
-const lastVisit_client = require('../models/db');
+import prisma from '../models/db'
 import { LastVisited } from '../../server-types/types';
 
 const setLastVisit = async (ctx: Koa.Context) => {
   const body = <LastVisited>ctx.request.body;
   try {
-    const mission = await lastVisit_client.LastVisited.create({
-      data: {
+    const mission = await prisma.lastVisited.upsert({
+      where: {
+        userId_placeId: {
+          userId: body.userId,
+          placeId: body.placeId,
+        }
+      },
+      update: {visit_time: new Date()},
+      create: {
         userId: body.userId,
         placeId: body.placeId,
       },
@@ -20,12 +27,20 @@ const setLastVisit = async (ctx: Koa.Context) => {
   }
 };
 
+
 const getLastVisits = async (ctx: Koa.Context) => {
   try {
-    const missions = await lastVisit_client.LastVisited.findMany({
-      where: { id: Number(ctx.params.id) },
+    const cutoffTime = new Date()
+    cutoffTime.setHours(cutoffTime.getHours() - 48);
+    const missions = await prisma.lastVisited.findMany({
+      where: { 
+        userId: Number(ctx.params.userId) ,
+        visit_time: {
+          gte: cutoffTime
+        },
+      },
     });
-    ctx.status = 200;
+    ctx.status = 201;
     ctx.body = missions;
   } catch (error) {
     console.error(error);

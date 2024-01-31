@@ -15,6 +15,9 @@ const port = 3000;
 
 app.listen(port, () => {
 	console.log('Server running on ' + port);
+   setInterval(() => {
+      console.log('10 secs')
+   }, 1000 * 10)
 })
 
 
