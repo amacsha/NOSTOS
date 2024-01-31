@@ -14,11 +14,7 @@ describe('Comments', () => {
   app.use(bodyParser());
   app.use(router.routes());
   const request = supertest.agent(app.callback())
-
-  let tempUserIds = [];
-  let tempPlaceId = 0;
-  let tempEntryId = 0;
-
+  
   beforeAll(async () => {
     await clearDatabase();
 
