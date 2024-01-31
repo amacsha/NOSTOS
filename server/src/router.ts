@@ -46,6 +46,8 @@ router.get('/place/getByCity/:cityName', getPlacesForCity);
 router.post('/place/addMany', addManyPlaces);
 
 // COMMENT
+
+//TODO re-visit route structure
 router.post('/comment/addNew/:entryId', addNewComment);
 router.get('/comment/getAll/:entryId', getAllCommentsByEntry);
 router.delete('/comment/delete/byAuthor/:commenterId/forEntry/:entryId', deleteComment);
