@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Alert, Button, GestureResponderEvent, StyleSheet, Text, TextInput, View } from "react-native";
 import { Formik, useFormik } from "formik";
 import * as Yup from 'yup';
-import loginService from "./loginService";
+import loginService from "./LoginService";
 import { LoginValues } from "../../client-types/LoginValues";
 import { useAppDispatch } from '../../hooks';
 import { setAuth, initialState } from '../../slices/authSlice';

@@ -4,9 +4,12 @@ import UserStart from "./components/login/UserStart";
 import store from "./store";
 import { Provider } from "react-redux";
 
+import Comment from "./components/entry-view/Comment";
+
 export default function App() {
   return (
     <Provider store={store}>
+      {/* <Comment /> */}
       <UserStart />
     </Provider>
   );

@@ -1,7 +1,7 @@
 import { Alert, Button, GestureResponderEvent, StyleSheet, Text, TextInput, View } from "react-native";
 import { Formik, useFormik } from "formik";
 import * as Yup from 'yup';
-import registerService from "./registerService";
+import registerService from "./RegisterService";
 import { RegisterValues } from "../../client-types/RegisterValues";
 import { useAppDispatch } from '../../hooks';
 import { setAuth, initialState } from '../../slices/authSlice';
