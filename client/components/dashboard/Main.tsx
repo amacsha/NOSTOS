@@ -17,10 +17,11 @@ const Main: React.FC = ({navigation}: any) => {
   const asyncFetchLocation =  async() => {
     await fetchLocation()
   }
+
+  useEffect(() => {asyncFetchLocation(); console.log('loc:', location.value?.cityName)}, [])
   
   useEffect(() => {
-    asyncFetchLocation();
-    location.value != undefined && cityFetcher(location.value?.cityName, setCityEntries)
+    location.value?.cityName != undefined && cityFetcher(location.value?.cityName, setCityEntries)
   }, [location]);
 
 
