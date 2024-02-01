@@ -24,9 +24,7 @@ const Register: React.FC = ({navigation}: any) => {
 
   const handleSubmit = async (values: RegisterValues) => {
     const res: any = await RegisterService(values)
-    // console.log('axios res', res)
     if (res.message) {
-      // console.log('registration error', res.message)
       Alert.alert(`${res.message}`);
       dispatch(setAuth(initialState));
     } else {
