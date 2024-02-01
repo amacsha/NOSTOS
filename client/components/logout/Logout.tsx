@@ -9,10 +9,8 @@ const LogoutService: React.FC = () => {
     const dispatch = useAppDispatch();
 
     function logout() {
-        console.log('before')
         dispatch(setAuth(initialState));
         save('accessToken', null);
-        console.log('after')
     }
 
     return (
