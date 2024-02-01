@@ -14,6 +14,7 @@ import { selectPlace } from "../../slices/placesSlice";
 
 const Location: React.FC = ({navigation}: any) => {
   const placeId = useSelector((state: RootState) => state.places.selectedPlaceId);
+  const userId =  useSelector((state: RootState) => state.user.id);
   const [placeEntries, setPlaceEntries] = useState<(SmallEntry & {avg: number})[]>([])
 
   const dispatch = useAppDispatch()
@@ -36,9 +37,11 @@ const Location: React.FC = ({navigation}: any) => {
       ) : (
         <Text style={styles.fetchingText}>Sending position to the Mothership...</Text>
       )}
-      <View style={{flex: 1}}>
-        <Button title="Write a new entry" onPress={() => navigation.navigate('NewEntryForm')} />
-      </View>
+      {placeEntries.every((entry) => entry.authorId != userId) && 
+        <View style={{flex: 1}}>
+          <Button title="Write a new entry" onPress={() => navigation.navigate('NewEntryForm')} />
+        </View>
+      }
     </View>
   )
 }
