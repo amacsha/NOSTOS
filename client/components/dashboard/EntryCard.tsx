@@ -1,17 +1,23 @@
-import { View, Text, StyleSheet, Button, GestureResponderEvent } from 'react-native';
-
+import { View, Text, StyleSheet, Pressable} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { SmallEntry } from '../../client-types/SmallEntry';
 
-const EntryCard: React.FC<{entry: SmallEntry}> = ({ entry } : {entry: SmallEntry}) => {
+import { useAppDispatch } from '../../hooks';
+import { selectEntry } from '../../slices/entriesSlice';
+
+const EntryCard: React.FC<{entry: SmallEntry & {avg: number}}> = ({ entry } : {entry: SmallEntry & {avg: number}}) => {
+  const navigation = useNavigation();
+  const dispatch = useAppDispatch();
+  
   return (
-    <View style={styles.card}>
+    <Pressable onPress={() => {dispatch(selectEntry(entry.id));navigation.navigate("EntryView" as never)}} style={styles.card}>
       {entry.id ? 
       <View>
         <Text style={styles.entryTitle}>{entry.title}</Text>
         <Text style={styles.entrySmallText}>{entry.creation_date}</Text>
         <Text style={styles.entrySmallText}>tags: {entry.tag.join(", ")}</Text>
       </View> : ""}
-    </View>
+    </Pressable>
   );
 };
 

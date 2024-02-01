@@ -4,57 +4,29 @@ import GeoLocation from './GeoLocation';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
+
 import { SmallEntry } from '../../client-types/SmallEntry';
 import EntriesView from './EntriesView';
-
+import { cityFetcher } from './DashboardsServices';
 
 const Main: React.FC = ({navigation}: any) => {
   const fetchLocation = GeoLocation();
   const location = useSelector((state: RootState) => state.location);
   const [cityEntries, setCityEntries] = useState<(SmallEntry & {avg: number})[]>([])
 
+  const asyncFetchLocation =  async() => {
+    await fetchLocation()
+  }
+  
   useEffect(() => {
-    fetchLocation();
-    const avgs = [
-      {
-        "_avg": {
-          "value": 4
-        },
-        "entryId": 1
-      },
-      {
-        "_avg": {
-          "value": 3
-        },
-        "entryId": 2
-      }
-    ]
-
-    const rawentries = [
-      {
-        id: 2,
-        authorId: 1,
-        title: "Exciting Story!",
-        creation_date: new Date().toDateString(),
-        tag: ['fun', 'cool'],
-      },
-      {
-        id: 1,
-        authorId: 1,
-        title: "Even more exciting Story!",
-        creation_date: new Date().toDateString(),
-        tag: ['fun', 'cool', 'cooler'],
-      },
-    ]
-    setCityEntries(rawentries.map((entry) => {
-      return {...entry, avg: avgs.find(a => a.entryId == entry.id)?._avg.value || 0}
-    }))
-  }, []);
+    asyncFetchLocation();
+    location.value != undefined && cityFetcher(location.value?.cityName, setCityEntries)
+  }, [location]);
 
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{flex: 2}}>
+      <View>
         <Text>City: {location.value?.cityName}</Text>
         <Text>Active missions should go here</Text>
       </View>
@@ -65,9 +37,7 @@ const Main: React.FC = ({navigation}: any) => {
       ) : (
         <Text style={styles.fetchingText}>Sending position to the Mothership...</Text>
       )}
-      <View style={styles.bottom}>
-        <Button title='Go to mission' onPress={(event: GestureResponderEvent) => navigation.navigate('Mission')} />
-      </View>
+      <Button title='Go to mission' onPress={() => navigation.navigate('Mission')} />
     </SafeAreaView>
   );
 };
@@ -81,7 +51,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'stretch',
     padding: 10,
-    paddingVertical: 40,
+    paddingTop: 40,
   },
   locationText: {
     fontSize: 16,

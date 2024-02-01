@@ -4,20 +4,20 @@ import { Comment } from "../client-types/Comment";
 import { Rating } from "../client-types/Rating";
 
 type EntriesState = {
-  entries: { [id: number]: Entry };
+  selctedEntryID: undefined | number;
 };
 
 
 const initialState: EntriesState = {
-  entries: {},
+  selctedEntryID: undefined ,
 };
 
 export const entriesSlice = createSlice({
   name: 'entries',
   initialState,
   reducers: {
-    addEntry: (state, action: PayloadAction<Entry>) => {
-      state.entries[action.payload.id] = action.payload;
+    selectEntry: (state, action: PayloadAction<number>) => {
+      state.selctedEntryID = action.payload;
     },
     // addRatingToEntry: (state, action: PayloadAction<{ entryId: number; rating: Rating }>) => {
     //   const entry = state.entries[action.payload.entryId];
@@ -34,5 +34,7 @@ export const entriesSlice = createSlice({
    
   },
 });
+
+export const {selectEntry} = entriesSlice.actions
 
 export default entriesSlice.reducer;

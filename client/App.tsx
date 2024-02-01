@@ -9,8 +9,8 @@ import Main from "./components/dashboard/Main";
 export default function App() {
   return (
     <Provider store={store}>
-      {/* <UserStart /> */}
-      <Main/>
+      <UserStart />
+      {/* <Main/> */}
     </Provider>
   );
 }
