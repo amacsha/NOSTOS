@@ -4,6 +4,7 @@ import userSlice from "./slices/userSlice";
 import locationSlice from "./slices/locationSlice";
 import entriesSlice from "./slices/entriesSlice";
 import placesSlice from "./slices/placesSlice";
+import commentsSlice from "./slices/commentsSlice";
 
 
 // ...
@@ -15,6 +16,7 @@ export const store = configureStore({
     location: locationSlice,
     entries: entriesSlice,
     places: placesSlice,
+    comments: commentsSlice
   },
 });
 

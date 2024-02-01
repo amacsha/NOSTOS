@@ -10,7 +10,6 @@ import { updateUserDetails } from "../../slices/userSlice";
 import { save } from "../../utils/secureStorage";
 import { LoginValues } from "../../client-types/LoginValues";
 import { UserResponse } from "../../client-types/UserResponse";
-import React from 'react'
 
 
 type LoginProps = {
