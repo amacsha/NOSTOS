@@ -7,13 +7,24 @@ export async function addNewComment(ctx: Context): Promise<void> {
   const { commenterId, content } = <Comment> ctx.request.body;
   // console.log('Creating new comment.');
   try {
-    const comment = await db.comment.create({
-      data: {
+    const comment = await db.comment.upsert({
+      where: {
+        commenterId_entryId: {
+          commenterId: commenterId,
+          entryId: Number(ctx.params.entryId)
+        }
+        }
+      ,
+      update: {
+        content: content
+      },
+      create: {
         commenterId,
         entryId: Number(ctx.params.entryId),
         content
       }
     });
+  
     ctx.status = 201;
     ctx.response.body = 'Created';
   } catch (error) {

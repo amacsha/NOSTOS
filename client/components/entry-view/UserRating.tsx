@@ -65,7 +65,7 @@ export default function UserRating({ userId, entryId }: any) {
         </Pressable>
       </View>
 
-    <Text style={styles.avgRating}>Average: {avgRating}</Text>
+    <Text style={styles.avgRating}>Average: {avgRating?.toFixed(1)}</Text>
     </View>
 
 //     {/* <Rating showRating startingValue={rating} onFinishRating={(val: number) => handleClick(val)} /> */}

@@ -9,6 +9,7 @@ import { updateUserDetails } from "../../slices/userSlice";
 import { save } from "../../utils/secureStorage";
 import { LoginValues } from "../../client-types/LoginValues";
 import { UserResponse } from "../../client-types/UserResponse";
+import React from 'react'
 
 
 type LoginProps = {
@@ -46,7 +47,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.head}>Login</Text>
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={{ email: 'L@l', password: 'aaaaaa' }}
         validationSchema={validationSchema}
         onSubmit={values => handleSubmit(values)}
       >

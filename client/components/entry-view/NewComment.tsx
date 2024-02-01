@@ -16,26 +16,28 @@ import {
 import { postComment } from "./EntryService";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import React from "react";
+import { useNavigation } from "@react-navigation/native";
 
-export default function NewComment({ navigation }: any) {
+export default function NewComment({route}: any) {
+  const navigation = useNavigation();
 
   const entryId = useSelector((state: RootState) => state.entries.selectedEntryID);
   const userId = useSelector((state: RootState) => state.user.id);
 
-  //GET USER ID AND ENTRY ID FROM STATE
-
   async function handleSubmit(values: {content: string}) {
-    // API Call
-    console.log(entryId, userId, values.content)
-    // await postComment(entryId as number, userId as number, values.content)
+    if (values.content) {
+      await postComment(entryId as number, userId as number, values.content)
+      route.params.load();
+    }
 
-    navigation.navigate("EntryView");
+    navigation.navigate("EntryView" as never);
   }
 
   return (
     <View>
       <Formik
-        initialValues={{ content: "" }}
+        initialValues={route.params?.defaultContent ? {content: route.params.defaultContent} : { content: "" }}
         onSubmit={values => handleSubmit(values)}
       >
         {({ handleChange, handleSubmit, values }) => (
@@ -49,29 +51,12 @@ export default function NewComment({ navigation }: any) {
             ></TextInput>
 
             <Button title="Save" onPress={(event: GestureResponderEvent) => handleSubmit()}/>
-            <Button title="Cancel" onPress={() => navigation.navigate('EntryView')}/>
+            <Button title="Cancel" onPress={() => navigation.navigate('EntryView' as never)}/>
           </>
         )}
       </Formik>
     </View>
   );
-
-  // return (
-  //   <>
-  //   <View style={styles.container}>
-  //     <Formik initialValues={{comment: '', entryId: 0}} onSubmit={values => handleSubmit(values)}/>
-
-  //     <TextInput placeholder="Have your say.." style={styles.input} autoFocus/>
-  //   </View>
-
-  //   <View>
-  //     <Button title="Save" onPress={handleSubmit}/>
-  //     <Button title="Cancel" onPress={() => navigation.navigate('EntryView')}/>
-  //   </View>
-
-  //   </>
-
-  // )
 }
 
 const styles = StyleSheet.create({
