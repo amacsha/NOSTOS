@@ -22,7 +22,7 @@ const Main: React.FC = ({navigation}: any) => {
     await fetchLocation()
   }
 
-  useEffect(() => {asyncFetchLocation(); console.log('loc:', location.value?.cityName)}, [])
+  useEffect(() => {asyncFetchLocation()}, [])
   
   useEffect(() => {
     location.value?.cityName != undefined && cityFetcher(location.value?.cityName, setCityEntries)
@@ -34,8 +34,9 @@ const Main: React.FC = ({navigation}: any) => {
 
 
   return (
-    <View style={styles.container}>
-      <View style={{flex: 3}}>
+    <SafeAreaView style={styles.container}>
+      <View>
+      <Button title='Go to mission' onPress={() => navigation.navigate('Mission')} />
         <Text>City: {location.value?.cityName}</Text>
         {activeMissions.length == 0 ?
           <Text>No active missions available</Text>:
@@ -50,10 +51,7 @@ const Main: React.FC = ({navigation}: any) => {
       ) : (
         <Text style={styles.fetchingText}>Sending position to the Mothership...</Text>
       )}
-      <View style={{flex: 1}}>
-        <Button title='Go to mission' onPress={() => navigation.navigate('Mission')} />
-      </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
