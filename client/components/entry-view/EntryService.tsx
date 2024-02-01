@@ -46,6 +46,17 @@ const url = `http://${IP}:3000/comment/getAll/${entryId}`;
 const response = await axios.get(url);
 return response.data;
 }
+
+export async function postComment (entryId: number, commenterId: number, content: string) {
+  const data = {
+    commenterId,
+    content
+  }
+  
+  const url = `http://${IP}:3000/comment/addNew/${entryId}`;
+  const response = axios.post(url, data)
+}
+
 export async function getUsernameFromID (commenterId: number) {
 const url = `http://${IP}:3000/user/getUsername/${commenterId}`;
 const response = await axios.get(url);

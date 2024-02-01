@@ -7,12 +7,16 @@ import { RootState } from '../../store';
 
 import { SmallEntry } from '../../client-types/SmallEntry';
 import EntriesView from './EntriesView';
-import { cityFetcher } from './DashboardsServices';
+import { cityFetcher, getActiveMissions } from './DashboardsServices';
+import { Place } from '../../client-types/Place';
+import MissionView from './MissionView';
 
 const Main: React.FC = ({navigation}: any) => {
   const fetchLocation = GeoLocation();
   const location = useSelector((state: RootState) => state.location);
+  const userId =  useSelector((state: RootState) => state.user.id);
   const [cityEntries, setCityEntries] = useState<(SmallEntry & {avg: number})[]>([])
+  const [activeMissions, setActiveMissions] = useState<Place[]>([])
 
   const asyncFetchLocation =  async() => {
     await fetchLocation()
@@ -24,16 +28,24 @@ const Main: React.FC = ({navigation}: any) => {
     location.value?.cityName != undefined && cityFetcher(location.value?.cityName, setCityEntries)
   }, [location]);
 
+  useEffect(() => {
+    userId && getActiveMissions(userId, setActiveMissions)
+  }, [userId])
+
 
   return (
     <SafeAreaView style={styles.container}>
       <View>
       <Button title='Go to mission' onPress={() => navigation.navigate('Mission')} />
         <Text>City: {location.value?.cityName}</Text>
-        <Text>Active missions should go here</Text>
+        {activeMissions.length == 0 ?
+          <Text>No active missions available</Text>:
+          <MissionView places={activeMissions}></MissionView>
+        }
       </View>
       {location ? (
-        <View style={{flex: 4}}>
+        <View style={{flex: 7, borderColor: 'green',
+        borderWidth: 2,}}>
           <EntriesView entries={cityEntries}></EntriesView>
         </View>
       ) : (
@@ -49,22 +61,18 @@ export default Main;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     alignItems: 'stretch',
-    padding: 10,
-    paddingTop: 40,
   },
   locationText: {
     fontSize: 16,
     color: 'black',
-    marginBottom: 10,
   },
   fetchingText: {
     fontSize: 14,
     color: 'gray',
   },
   bottom : {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   }

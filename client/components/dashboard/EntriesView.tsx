@@ -1,18 +1,24 @@
 import { View, Text, StyleSheet, Button, GestureResponderEvent } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import RadioGroup, {RadioButtonProps} from 'react-native-radio-buttons-group';
 
 import { SmallEntry } from '../../client-types/SmallEntry';
 import EntryCard from './EntryCard';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native';
 
-
+import { useAppDispatch } from '../../hooks';
+import { updatePrefrence, getPrefrence } from './DashboardsServices';
 
 const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entries } : {entries: (SmallEntry & {avg: number})[]}) => {
-  // const filter_preference = useSelector((state: RootState) => state.user.filter_preference);
-  const [filter_preference, setFilterPrefrence] = useState("top rated")
+  const filter_preference = useSelector((state: RootState) => state.user.filter_preference);
+  const userId = useSelector((state: RootState) => state.user.id);
+  const dispatch = useAppDispatch()
+  
+  useEffect(() => {
+    userId && getPrefrence(dispatch, userId)
+  }, [userId])
 
   const radioButtons: RadioButtonProps[] = useMemo(() => ([
     {
@@ -27,22 +33,18 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
     }
   ]), []);
 
-  const handlePrefrenceChange = (newPrefrence: string) => {
-    
-  }
-
   return (
     <View style={styles.entryView}>
         <View>
             <Text>Filter by: {filter_preference}</Text>
             <RadioGroup 
               radioButtons={radioButtons} 
-              onPress={setFilterPrefrence}
-              selectedId={filter_preference}
+              onPress={(newPref) => userId != null && updatePrefrence(newPref, dispatch, userId)}
+              selectedId={filter_preference == null? undefined : filter_preference}
               layout='row'
             />
         </View>
-        <View style={{flexGrow: 1}}>
+        <ScrollView>
         {entries.sort((a, b) => {
             return filter_preference == 'recent' ? 
             new Date(b.creation_date).getTime() - new Date(a.creation_date).getTime()  :
@@ -50,7 +52,7 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
         }).map((entry) => {
             return <EntryCard entry={entry} key={entry.id}/>
         })}
-        </View>
+        </ScrollView>
     </View>
   );
 };
@@ -66,5 +68,6 @@ const styles = StyleSheet.create({
     gap: 5,
     borderColor: 'black',
     borderWidth: 2,
+    flexGrow: 1
   },
 });
