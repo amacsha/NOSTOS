@@ -6,7 +6,7 @@ import RadioGroup, {RadioButtonProps} from 'react-native-radio-buttons-group';
 
 import { SmallEntry } from '../../client-types/SmallEntry';
 import EntryCard from './EntryCard';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native';
 
 import { useAppDispatch } from '../../hooks';
 import { updatePrefrence } from './DashboardsServices';
@@ -40,7 +40,7 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
               layout='row'
             />
         </View>
-        <View style={{flexGrow: 1}}>
+        <ScrollView>
         {entries.sort((a, b) => {
             return filter_preference == 'recent' ? 
             new Date(b.creation_date).getTime() - new Date(a.creation_date).getTime()  :
@@ -48,7 +48,7 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
         }).map((entry) => {
             return <EntryCard entry={entry} key={entry.id}/>
         })}
-        </View>
+        </ScrollView>
     </View>
   );
 };
@@ -64,5 +64,6 @@ const styles = StyleSheet.create({
     gap: 5,
     borderColor: 'black',
     borderWidth: 2,
+    flexGrow: 1
   },
 });
