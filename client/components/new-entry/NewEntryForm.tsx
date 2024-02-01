@@ -82,7 +82,7 @@ const NewEntryForm: React.FC = () => {
                         {touched.tag && errors.tag && (
                             <Text style={styles.error}>{errors.tag}</Text>
                         )}
-                        <Button title="+" style={styles.add}
+                        <Button title="+"
                             onPress={() => {
                                 if (tags !== '') values.tag.push(tags.trim().toLowerCase())
                                 setTags("")
@@ -91,7 +91,7 @@ const NewEntryForm: React.FC = () => {
                         {values.tag.length > 0 && values.tag.map((oneTag, index) => {
                             return (<View key={index}>
                                 <Text>{oneTag}</Text>
-                                <Button title='-' style={styles.delete}
+                                <Button title='-'
                                     onPress={() => {
                                         const newTagArray = [...values.tag];
                                         newTagArray.splice(index, 1);
