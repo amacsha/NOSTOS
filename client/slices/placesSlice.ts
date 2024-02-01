@@ -1,24 +1,29 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { Place } from "../client-types/Place"
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Place } from "../client-types/Place";
 
 type PlacesState = {
-  places: { [id: number]: Place };
+  places: Record<number, Place>;
   selectedPlaceId: number | null;
 };
 
-const initialState : PlacesState = {
+const initialState: PlacesState = {
   places: {},
   selectedPlaceId: null,
 };
 
 export const PlacesSlice = createSlice({
-  name: 'places',
+  name: "places",
   initialState,
   reducers: {
     setPlaces: (state, action: PayloadAction<Place[]>) => {
-      action.payload.forEach((place) => {
-        state.places[place.id] = place;
-      });
+      const placesObject = action.payload.reduce<Record<number, Place>>(
+        (obj, place) => {
+          obj[place.id] = place;
+          return obj;
+        },
+        {}
+      );
+      state.places = placesObject;
     },
     selectPlace: (state, action: PayloadAction<number>) => {
       state.selectedPlaceId = action.payload;
@@ -27,8 +32,9 @@ export const PlacesSlice = createSlice({
       state.selectedPlaceId = null;
     },
   },
-}); 
+});
 
-export const { setPlaces, selectPlace, clearSelectedPlace } = PlacesSlice.actions;
+export const { setPlaces, selectPlace, clearSelectedPlace } =
+  PlacesSlice.actions;
 
 export default PlacesSlice.reducer;

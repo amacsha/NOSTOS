@@ -1,15 +1,20 @@
 import { Alert, Button, GestureResponderEvent, StyleSheet, Text, TextInput, View } from "react-native";
-import { Formik, useFormik } from "formik";
+import { Formik } from "formik";
 import * as Yup from 'yup';
-import RegisterService from "./RegisterService";
+import RegisterService from "../../service/RegisterService";
 import { RegisterValues } from "../../client-types/RegisterValues";
 import { useAppDispatch } from '../../hooks';
-import { setAuth, initialState } from '../../slices/authSlice';
+import { setAuth, initialState } from "../../slices/authSlice";
+import { updateUserDetails } from "../../slices/userSlice";
 import { save } from "../../utils/secureStorage";
+import { UserResponse } from "../../client-types/UserResponse";
 
 
-const Register: React.FC = ({navigation}: any) => {
-  const validationSchema = Yup.object().shape({
+
+
+const Register: React.FC = () => {
+
+  const validationSchema = Yup.object<RegisterValues>().shape({
     username: Yup.string()
       .required('Username is required'),
     email: Yup.string()
@@ -23,13 +28,18 @@ const Register: React.FC = ({navigation}: any) => {
   const dispatch = useAppDispatch();
 
   const handleSubmit = async (values: RegisterValues) => {
-    const res: any = await RegisterService(values)
+
+    const res: UserResponse = await RegisterService(values)
     if (res.message) {
       Alert.alert(`${res.message}`);
       dispatch(setAuth(initialState));
     } else {
-      dispatch(setAuth({ isAuthenticated: true, token: res.data }))
-      save('accessToken', res.data);
+      Alert.alert('user created 👍')
+      dispatch(setAuth({ isAuthenticated: true, token: res.data.accessToken }))
+      dispatch(updateUserDetails({
+        id: res.data.userId, email: res.data.email, username: res.data.username
+      }))
+      save('accessToken', res.data.accessToken);
     }
   }
 

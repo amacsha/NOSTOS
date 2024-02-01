@@ -1,17 +1,23 @@
-import React, { useEffect, useState } from "react";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Alert, Button, GestureResponderEvent, StyleSheet, Text, TextInput, View } from "react-native";
-import { Formik, useFormik } from "formik";
+import { Formik } from "formik";
 import * as Yup from 'yup';
-import LoginService from "./LoginService";
-import { LoginValues } from "../../client-types/LoginValues";
+import LoginService from "../../service/LoginService";
 import { useAppDispatch } from '../../hooks';
 import { setAuth, initialState } from '../../slices/authSlice';
+import { updateUserDetails } from "../../slices/userSlice";
 import { save } from "../../utils/secureStorage";
+import { LoginValues } from "../../client-types/LoginValues";
+import { UserResponse } from "../../client-types/UserResponse";
 
 
+type LoginProps = {
+  navigation: NativeStackNavigationProp<any>
+}
 
-const Login: React.FC = ({navigation}: any) => {
-  const validationSchema = Yup.object().shape({
+const Login: React.FC<LoginProps> = ({ navigation }) => {
+
+  const validationSchema = Yup.object<LoginValues>().shape({
     email: Yup.string()
       .email('Invalid email')
       .required('Email is required'),
@@ -22,14 +28,17 @@ const Login: React.FC = ({navigation}: any) => {
   const dispatch = useAppDispatch();
 
   const handleSubmit = async (values: LoginValues) => {
-    const res: any = await LoginService(values)
+    const res: UserResponse = await LoginService(values)
     if (res.error) {
       Alert.alert(`${res.error}`);
       dispatch(setAuth(initialState));
     } else {
       Alert.alert('login 👍')
-      dispatch(setAuth({ isAuthenticated: true, token: res.data }))
-      save('accessToken', res.data);
+      dispatch(setAuth({ isAuthenticated: true, token: res.data.accessToken }))
+      dispatch(updateUserDetails({
+        id: res.data.userId, email: res.data.email, username: res.data.username
+      }))
+      save('accessToken', res.data.accessToken);
     }
   }
 
@@ -77,7 +86,7 @@ const styles = StyleSheet.create({
   container: {},
   head: {},
   input: {},
-  error: {},
+  error: {}
 })
 
 export default Login;

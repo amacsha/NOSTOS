@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./Login";
-import Register from "./Register";
+import Register from "../register/Register";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
 import Main from "../dashboard/Main";
