@@ -24,7 +24,6 @@ export default function UserStart() {
       <Stack.Navigator>
         {isAuthenticated ? (
           <>
-            <Stack.Screen name="NewEntryForm" component={NewEntryForm} />
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Mission" component={Mission} />
             <Stack.Screen name="Location" component={Location} />

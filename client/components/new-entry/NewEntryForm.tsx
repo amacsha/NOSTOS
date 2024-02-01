@@ -21,7 +21,7 @@ const NewEntryForm: React.FC = () => {
         (state: RootState) => state.places.selectedPlaceId
     )
 
-    const validationSchema = Yup.object<Entry>().shape({
+    const validationSchema = Yup.object().shape({
         title: Yup.string().required('Choose a nice title to your story'),
         content: Yup.string().required('Tell us about your experience'),
         tag: Yup.array()
@@ -32,7 +32,8 @@ const NewEntryForm: React.FC = () => {
         values.authorId = userId
         values.placeId = 1
         console.log(values)
-        await NewEntryService(values)
+        const res = await NewEntryService(values)
+        console.log('form', res.data)
         values.tag = []
     }
 
@@ -44,7 +45,7 @@ const NewEntryForm: React.FC = () => {
                 validationSchema={validationSchema}
                 onSubmit={(values, actions) => {
                     handleSubmit(values)
-                        .then(() => actions.resetForm())
+                    // .then(() => actions.resetForm())
                 }}
             >
                 {({ handleChange, handleSubmit, handleBlur, setFieldValue, values, touched, errors }) => (
