@@ -1,5 +1,6 @@
+import React from 'react';
 import { useState } from 'react'
-import { Button, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import NewEntryService from '../../service/NewEntryService';
@@ -33,8 +34,8 @@ const NewEntryForm: React.FC = () => {
         values.placeId = 1
         console.log(values)
         const res = await NewEntryService(values)
-        console.log('form', res.data)
         values.tag = []
+        console.log('form', res.data)
     }
 
     return (
@@ -45,7 +46,11 @@ const NewEntryForm: React.FC = () => {
                 validationSchema={validationSchema}
                 onSubmit={(values, actions) => {
                     handleSubmit(values)
-                    // .then(() => actions.resetForm())
+                        .then(() => {
+                            actions.resetForm()
+                            actions.setFieldValue('tag', [])
+                            setTags('')
+                        })
                 }}
             >
                 {({ handleChange, handleSubmit, handleBlur, setFieldValue, values, touched, errors }) => (
