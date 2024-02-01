@@ -61,7 +61,7 @@ const getPlaceEntries= async (ctx : Koa.Context) => {
             orderBy: ctx.params.sortPrefrence == 'recent'? {creation_date: 'desc'} : undefined
         })
 
-        ctx.body = ctx.params.sortPrefrence == 'top-rated'? await sortByRatings(entries) : entries;
+        ctx.body = ctx.params.sortPrefrence == 'top rated'? await sortByRatings(entries) : entries;
 
     } catch (err) {
         console.log(err)
@@ -93,7 +93,7 @@ const getCityEntries= async (ctx : Koa.Context) => {
             },
             orderBy: ctx.params.sortPrefrence == 'recent'? {creation_date: 'desc'} : undefined
         });
-        ctx.body = ctx.params.sortPrefrence == 'top-rated' ? await sortByRatings(entries) : entries;
+        ctx.body = ctx.params.sortPrefrence == 'top rated' ? await sortByRatings(entries) : entries;
 
     } catch (err) {
         console.log(err)

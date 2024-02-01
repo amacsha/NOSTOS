@@ -17,7 +17,7 @@ router.get('/entry/getOne/:entryID', getEntry)
 router.get('/entry/getMany/byPlace/:placeID/sortBy/:sortPrefrence', getPlaceEntries)
 router.get('/entry/getMany/byPlace/:placeID/', getPlaceEntries)
 router.get('/entry/getMany/byCity/:cityName/sortBy/:sortPrefrence', getCityEntries)
-router.get('/entry/getMany/byCity/:cityName/', getCityEntries)
+router.get('/entry/getMany/byCity/:cityName', getCityEntries)
 router.delete('/entry/delete/:entryID')
 
 
