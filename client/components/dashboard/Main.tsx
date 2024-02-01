@@ -8,6 +8,7 @@ import { RootState } from '../../store';
 import { SmallEntry } from '../../client-types/SmallEntry';
 import EntriesView from './EntriesView';
 import { cityFetcher } from './DashboardsServices';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const Main: React.FC = ({navigation}: any) => {
   const fetchLocation = GeoLocation();
@@ -26,7 +27,7 @@ const Main: React.FC = ({navigation}: any) => {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View>
         <Text>City: {location.value?.cityName}</Text>
         <Text>Active missions should go here</Text>
@@ -39,7 +40,7 @@ const Main: React.FC = ({navigation}: any) => {
         <Text style={styles.fetchingText}>Sending position to the Mothership...</Text>
       )}
       <Button title='Go to mission' onPress={() => navigation.navigate('Mission')} />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -48,7 +49,7 @@ export default Main;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: '#fff',
     alignItems: 'stretch',
     padding: 10,
@@ -64,7 +65,6 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   bottom : {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   }

@@ -18,8 +18,8 @@ const cityFetcher = (cityName: String, setter: React.Dispatch<React.SetStateActi
   })
 }
 
-const updatePrefrence = (newPrefrence: string, dispatch: any) => {
-  axios.put(`${base_url}/user/setUserFilterPreference/:id`, {filter_preference: newPrefrence}).then(() => {
+const updatePrefrence = (newPrefrence: string, dispatch: any, userId: number) => {
+  axios.put(`${base_url}/user/setUserFilterPreference/${userId}`, {filter_preference: newPrefrence}).then(() => {
     dispatch(updateFilterPreference(newPrefrence))
   }).catch((err) => {
     console.log(err)

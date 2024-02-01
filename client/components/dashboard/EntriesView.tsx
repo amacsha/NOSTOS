@@ -9,11 +9,11 @@ import EntryCard from './EntryCard';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { useAppDispatch } from '../../hooks';
-import { updateFilterPreference } from '../../slices/userSlice';
 import { updatePrefrence } from './DashboardsServices';
 
 const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entries } : {entries: (SmallEntry & {avg: number})[]}) => {
   const filter_preference = useSelector((state: RootState) => state.user.filter_preference);
+  const userId = useSelector((state: RootState) => state.user.id);
   const dispatch = useAppDispatch()
 
   const radioButtons: RadioButtonProps[] = useMemo(() => ([
@@ -35,7 +35,7 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
             <Text>Filter by: {filter_preference}</Text>
             <RadioGroup 
               radioButtons={radioButtons} 
-              onPress={(newPref) => updatePrefrence(newPref, dispatch)}
+              onPress={(newPref) => userId != null && updatePrefrence(newPref, dispatch, userId)}
               selectedId={filter_preference == null? undefined : filter_preference}
               layout='row'
             />
