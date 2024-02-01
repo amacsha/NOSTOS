@@ -1,5 +1,6 @@
+import React from 'react';
 import { useState } from 'react'
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import NewEntryService from '../../service/NewEntryService';
@@ -33,8 +34,8 @@ const NewEntryForm: React.FC = () => {
         values.placeId = 1
         console.log(values)
         const res = await NewEntryService(values)
-        console.log('form', res.data)
         values.tag = []
+        console.log('form', res.data)
     }
 
     return (
@@ -45,7 +46,11 @@ const NewEntryForm: React.FC = () => {
                 validationSchema={validationSchema}
                 onSubmit={(values, actions) => {
                     handleSubmit(values)
-                    // .then(() => actions.resetForm())
+                        .then(() => {
+                            actions.resetForm()
+                            actions.setFieldValue('tag', [])
+                            setTags('')
+                        })
                 }}
             >
                 {({ handleChange, handleSubmit, handleBlur, setFieldValue, values, touched, errors }) => (
@@ -72,42 +77,51 @@ const NewEntryForm: React.FC = () => {
                         {touched.content && errors.content && (
                             <Text style={styles.error}>{errors.content}</Text>
                         )}
-                        <TextInput
-                            style={styles.input}
-                            value={tags}
-                            onChangeText={text => setTags(text)}
-                            onBlur={handleBlur('tag')}
-                            placeholder='add 3 tags'
-                            placeholderTextColor='#876FE4'
-                        />
-                        {touched.tag && errors.tag && (
-                            <Text style={styles.error}>{errors.tag}</Text>
-                        )}
-                        <Button title="+"
-                            onPress={() => {
-                                if (tags !== '') values.tag.push(tags.trim().toLowerCase())
-                                setTags("")
-                            }}
-                        />
+                        <View style={styles.tag}>
+                            <TextInput
+                                style={styles.tagInput}
+                                value={tags}
+                                onChangeText={text => setTags(text)}
+                                onBlur={handleBlur('tag')}
+                                placeholder='add 3 tags'
+                                placeholderTextColor='#876FE4'
+                            />
+                            {touched.tag && errors.tag && (
+                                <Text style={styles.error}>{errors.tag}</Text>
+                            )}
+                            <Pressable style={[styles.button, styles.add]}
+                                onPress={() => {
+                                    if (tags !== '') values.tag.push(tags.trim().toLowerCase())
+                                    setTags("")
+                                }}
+                            >
+                                <Text style={styles.buttonText}>+</Text>
+                            </Pressable>
+                        </View>
                         {values.tag.length > 0 && values.tag.map((oneTag, index) => {
-                            return (<View key={index}>
-                                <Text>{oneTag}</Text>
-                                <Button title='-'
-                                    onPress={() => {
-                                        const newTagArray = [...values.tag];
-                                        newTagArray.splice(index, 1);
-                                        setFieldValue('tag', newTagArray);
-                                    }}
-                                />
-                            </View>
+                            return (
+                                <View style={styles.tag} key={index}>
+                                    <Text style={styles.tagText}>{oneTag}</Text>
+                                    <Pressable style={[styles.button, styles.delete]}
+                                        onPress={() => {
+                                            const newTagArray = [...values.tag];
+                                            newTagArray.splice(index, 1);
+                                            setFieldValue('tag', newTagArray);
+                                        }}
+                                    >
+                                        <Text style={styles.buttonText} >-</Text>
+                                    </Pressable>
+                                </View>
                             )
                         })}
-                        <Button title="Submit" onPress={() => handleSubmit()} />
+                        <Pressable style={styles.button} onPress={() => handleSubmit()} >
+                            <Text style={styles.buttonText}>Submit</Text>
+                        </Pressable>
                     </>
                 )}
             </Formik >
             <LogoutService />
-        </View>
+        </View >
     )
 }
 
@@ -115,21 +129,78 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: '#081116',
         height: '100%',
-        color: '#D4D5D6'
+        color: '#D4D5D6',
+        padding: 10
     },
     head: {},
     input: {
         backgroundColor: '#19222A',
         color: '#D4D5D6',
-        margin: 5,
+        marginVertical: 2,
+        height: 30,
+        fontSize: 17,
+        paddingLeft: 10
     },
     error: {
         backgroundColor: '#341717',
         color: '#DD7272',
-        margin: 5,
+        marginVertical: 2,
+        marginHorizontal: 10,
+        height: 30,
+        fontSize: 17,
     },
-    add: {},
-    delete: {}
+    button: {
+        backgroundColor: '#45417B',
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        margin: 3,
+        padding: 3,
+        height: 30,
+        width: 80,
+    },
+    buttonText: {
+        color: '#9578F8',
+        fontSize: 17,
+    },
+    tag: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderRadius: 25,
+        width: 80,
+        height: 30,
+        backgroundColor: '#19222A',
+        margin: 2,
+
+    },
+    add: {
+        height: 30,
+        width: 30,
+        padding: 0
+
+    },
+    delete: {
+        height: 30,
+        width: 30,
+        borderRadius: 25,
+        padding: 0
+    },
+    tagInput: {
+        paddingLeft: 10,
+        paddingRight: 0,
+        marginRight: 0,
+        width: 200,
+        backgroundColor: '#19222A',
+
+    },
+    tagText: {
+        paddingLeft: 10,
+        color: '#9578F8',
+        height: 30,
+        width: 30,
+        marginTop: 6,
+        textAlign: 'center',
+    }
 })
 
 export default NewEntryForm;

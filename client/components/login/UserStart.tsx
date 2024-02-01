@@ -20,6 +20,8 @@ export default function UserStart() {
     (state: RootState) => state.auth.isAuthenticated
   );
 
+  
+
   return (
     <NavigationContainer>
       <Stack.Navigator>

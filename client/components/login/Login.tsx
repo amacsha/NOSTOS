@@ -1,5 +1,6 @@
+import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Alert, Button, GestureResponderEvent, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Button, GestureResponderEvent, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { Formik } from "formik";
 import * as Yup from 'yup';
 import LoginService from "../../service/LoginService";
@@ -56,6 +57,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
             <TextInput
               style={styles.input}
               placeholder="Email"
+              placeholderTextColor='#876FE4'
               onChangeText={handleChange("email")}
               onBlur={handleBlur('email')}
               value={values.email}
@@ -66,6 +68,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
             <TextInput
               style={styles.input}
               placeholder="Password"
+              placeholderTextColor='#876FE4'
               onChangeText={handleChange("password")}
               onBlur={handleBlur("password")}
               value={values.password}
@@ -74,8 +77,12 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
             {touched.password && errors.password && (
               <Text style={styles.error}>{errors.password}</Text>
             )}
-            <Button title="Login" onPress={(event: GestureResponderEvent) => handleSubmit()} />
-            <Button title="Register" onPress={() => navigation.navigate('Register')} />
+            <Pressable style={styles.button} onPress={(event: GestureResponderEvent) => handleSubmit()}>
+              <Text style={styles.buttonText} >Login</Text>
+            </Pressable>
+            <Pressable style={styles.button} onPress={() => navigation.navigate('Register')}>
+              <Text style={styles.buttonText}>Register</Text>
+            </Pressable>
           </>
         )}
       </Formik>
@@ -84,10 +91,42 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    backgroundColor: '#081116',
+    height: '100%',
+    color: '#D4D5D6'
+  },
   head: {},
-  input: {},
-  error: {}
+  input: {
+    backgroundColor: '#19222A',
+    color: '#D4D5D6',
+    marginVertical: 2,
+    marginHorizontal: 10,
+    height: 30,
+    fontSize: 17,
+  },
+  error: {
+    backgroundColor: '#341717',
+    color: '#DD7272',
+    marginVertical: 2,
+    marginHorizontal: 10,
+    height: 30,
+    fontSize: 17,
+  },
+  button: {
+    backgroundColor: '#45417B',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    margin: 3,
+    padding: 3,
+    height: 30,
+    width: 80,
+  },
+  buttonText: {
+    color: '#9578F8',
+    fontSize: 17,
+  }
 })
 
 export default Login;
