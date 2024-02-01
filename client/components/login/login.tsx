@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Alert, Button, GestureResponderEvent, StyleSheet, Text, TextInput, View } from "react-native";
-import { Alert, Button, GestureResponderEvent, StyleSheet, Text, TextInput, View } from "react-native";
-import { Formik, useFormik } from "formik";
+import { Formik } from "formik";
 import * as Yup from 'yup';
-import { AxiosResponse } from "axios";
-import loginService from "./loginService";
+import LoginService from "../../service/LoginService";
 import { useAppDispatch } from '../../hooks';
 import { setAuth, initialState } from '../../slices/authSlice';
+import { updateUserDetails } from "../../slices/userSlice";
 import { save } from "../../utils/secureStorage";
 import { LoginValues } from "../../client-types/LoginValues";
-import { LoginResponse } from "../../client-types/LoginResponse";
+import { UserResponse } from "../../client-types/UserResponse";
 
-const Login: React.FC = () => {
+
+type LoginProps = {
+  navigation: NativeStackNavigationProp<any>
+}
+
+const Login: React.FC<LoginProps> = ({ navigation }) => {
 
   const validationSchema = Yup.object<LoginValues>().shape({
     email: Yup.string()
@@ -24,14 +28,17 @@ const Login: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const handleSubmit = async (values: LoginValues) => {
-    const res: AxiosResponse<LoginResponse> = await loginService(values)
-    if ('error' in res) {
+    const res: UserResponse = await LoginService(values)
+    if (res.error) {
       Alert.alert(`${res.error}`);
       dispatch(setAuth(initialState));
     } else {
       Alert.alert('login 👍')
-      dispatch(setAuth({ isAuthenticated: true, token: res.data.token }))
-      save('accessToken', res.data.token);
+      dispatch(setAuth({ isAuthenticated: true, token: res.data.accessToken }))
+      dispatch(updateUserDetails({
+        id: res.data.userId, email: res.data.email, username: res.data.username
+      }))
+      save('accessToken', res.data.accessToken);
     }
   }
 

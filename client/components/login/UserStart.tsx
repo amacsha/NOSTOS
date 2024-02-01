@@ -2,12 +2,13 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./Login";
-import Register from "./Register";
+import Register from "../register/Register";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
 import Main from "../dashboard/Main";
 import Mission from "../mission/Mission";
 import { NavigationContainer } from "@react-navigation/native";
+import NewEntryForm from "../new-entry/NewEntryForm";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ export default function UserStart() {
       <Stack.Navigator>
         {isAuthenticated ? (
           <>
+            <Stack.Screen name="NewEntryForm" component={NewEntryForm} />
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Mission" component={Mission} />
           </>

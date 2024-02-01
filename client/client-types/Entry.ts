@@ -1,11 +1,11 @@
 export interface Entry {
-  id: number;
-  placeId: number;
-  authorId: number;
+  id?: number;
+  placeId: number | null;
+  authorId: number | null;
   title: string;
   content: string;
-  creation_date: string; 
+  creation_date?: string;
   tag: string[];
-  ratingIds: number[]; 
-  commentIds: number[];
+  ratingIds?: number[];
+  commentIds?: number[];
 }
