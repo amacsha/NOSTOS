@@ -1,13 +1,24 @@
-import { View, Text } from "react-native"
+import { View, Text, StyleSheet, ScrollView } from "react-native"
 
-export default function OneComment({content, userName}: any) {
+export default function OneComment({ content, userName }: any) {
   if (content) {
     return (
-      <View>
-      <Text>{userName} said {content}</Text>
-    </View>
+      <ScrollView style={styles.container}>
+        <Text>{userName}: "{content}".</Text>
+      </ScrollView>
     )
   }
-
-  // return <Text>loading</Text>
 }
+
+const styles = StyleSheet.create({
+  container: {
+    margin: 15
+
+  },
+  username: {
+
+  },
+  content: {
+
+  }
+})

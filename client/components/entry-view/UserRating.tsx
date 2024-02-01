@@ -30,11 +30,22 @@ export default function UserRating({ userId, entryId }: any) {
     await load();
   }
 
-  if (rating == undefined || avgRating == undefined) return <ActivityIndicator />
+  // if (rating == undefined || avgRating == undefined){
+  //   return (
+  //     <>
+  //       <Text>No ratings yet, be the first one to rate this entry!</Text>
+  //       {/* <ActivityIndicator /> */}
+  //     </>
+  //   )
+  // }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.userRating}>Your rating: {rating}</Text>
+      {rating === undefined ?
+        <Text style={styles.userRating}>Choose your rating {rating}</Text>
+        :
+        <Text style={styles.userRating}>Your rating: {rating}</Text>
+      }
 
       <View style={styles.buttonContainer}>
         <Pressable onPress={() => handleClick(1)} style={styles.button}>

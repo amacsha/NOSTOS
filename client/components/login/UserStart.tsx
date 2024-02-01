@@ -11,6 +11,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Location from "../dashboard/Location";
 import EntryView from "../entry-view/EntryView";
 import NewEntryForm from "../new-entry/NewEntryForm";
+import NewComment from "../entry-view/NewComment";
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,7 @@ export default function UserStart() {
             <Stack.Screen name="Location" component={Location} />
             <Stack.Screen name="EntryView" component={EntryView} />
             <Stack.Screen name="NewEntryForm" component={NewEntryForm} />
+            <Stack.Screen name="New Comment" component={NewComment} />
           </>
         ) : (
           <>

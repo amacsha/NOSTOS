@@ -5,18 +5,19 @@ import { useSelector } from 'react-redux';
 import UserRating from "./UserRating";
 import CommentView from "./CommentView";
 import { RootState } from "../../store";
+import NewComment from "./NewComment";
 
-const EntryView: React.FC = ({ navigate }: any) => {
+const EntryView: React.FC = ({ navigation }: any) => {
+    const id = useSelector((state: RootState) => state.entries.selectedEntryID);
+
     const [entryDetails, setEntryDetails] = useState<any>(undefined)
-
     const [userId] = useState<number>(85)
-    const [entryId] = useState<number>(1)
+    // const [entryId] = useState<number>(id)
     const [comments, setComments] = useState<any>([])
 
-    const id = useSelector((state: RootState) => state.entries.selectedEntryID);
     async function load() {
-        const update = await getOneEntry(entryId);
-        const comments = await getComments(entryId)
+        const update = await getOneEntry(id as number);
+        const comments = await getComments(id as number)
         setComments(comments)
         setEntryDetails(update)
     }
@@ -36,11 +37,11 @@ const EntryView: React.FC = ({ navigate }: any) => {
                 </View>
 
                 <View style={styles.ratings}>
-                    <UserRating userId={userId} entryId={entryId} />
+                    <UserRating userId={userId} entryId={id} />
                 </View>
             </View>
-            <View>
-
+            <View style={styles.commentContainer}>
+            <Button title="NEW COMMENT" onPress={() => navigation.navigate('New Comment')}/>
                 <CommentView comments={comments} />
             </View>
         </>
@@ -51,6 +52,11 @@ const styles = StyleSheet.create({
     container: {
         borderWidth: 2,
         margin: 5
+    },
+    commentContainer: {
+        borderWidth: 2,
+        margin: 5,
+        maxHeight: 350
     },
     title: {
         fontWeight: "bold",
