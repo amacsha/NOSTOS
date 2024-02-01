@@ -2,11 +2,11 @@
 import Router from '@koa/router';
 const router = new Router();
 import { getLastVisits, setLastVisit } from './controllers/lastVisited.controller';
-import {createOneUser, deleteUser, getOneUser, getUserFilterPreference, loginUser, logoutUser, setUserFilterPreference} from './controllers/user.controller';
+import {createOneUser, deleteUser, getOneUser, getUserFilterPreference, getUsernameByID, loginUser, logoutUser, setUserFilterPreference} from './controllers/user.controller';
 import {authMiddleware} from './middlewares/auth'
 
 import {getEntry, postEntry, getCityEntries, getPlaceEntries} from './controllers/entry.controller'
-import {getAvgEntryRating, getUserRating, setUserRating} from './controllers/rating.controller'
+import {getAvgEntryRating, getAvgInCity, getAvgInPlace, getUserRating, setUserRating} from './controllers/rating.controller'
 import { addManyPlaces, addNewPlace, getAllPlaces, getPlacesForCity } from './controllers/place.controller';
 import { addNewComment, deleteComment, getAllCommentsByEntry } from './controllers/comment.controller';
 
@@ -15,9 +15,9 @@ import { addNewComment, deleteComment, getAllCommentsByEntry } from './controlle
 router.post('/entry/addOne', postEntry)
 router.get('/entry/getOne/:entryID', getEntry)
 router.get('/entry/getMany/byPlace/:placeID/sortBy/:sortPrefrence', getPlaceEntries)
-router.get('/entry/getMany/byPlace/:placeID/', getPlaceEntries)
+router.get('/entry/getMany/byPlace/:placeID', getPlaceEntries)
 router.get('/entry/getMany/byCity/:cityName/sortBy/:sortPrefrence', getCityEntries)
-router.get('/entry/getMany/byCity/:cityName/', getCityEntries)
+router.get('/entry/getMany/byCity/:cityName', getCityEntries)
 router.delete('/entry/delete/:entryID')
 
 
@@ -25,10 +25,13 @@ router.delete('/entry/delete/:entryID')
 router.post('/rating/setUserRating', setUserRating)
 router.get('/rating/onEntry/:entryID/byUser/:userID', getUserRating)
 router.get('/rating/AverageEntryRating/:entryID', getAvgEntryRating)
+router.get('/rating/AveragesForCity/:cityName', getAvgInCity)
+router.get('/rating/AveragesForPlace/:placeID', getAvgInPlace)
 
 // USER
 router.post('/user/createOneUser', createOneUser);
 router.get('/user/getOneUser/:id', getOneUser);
+router.get('/user/getUsername/:id', getUsernameByID);
 router.delete('/user/deleteUser/:id', deleteUser);
 router.put('/user/setUserFilterPreference/:id', setUserFilterPreference);
 router.get('/user/getUserFilterPreference/:id', getUserFilterPreference);

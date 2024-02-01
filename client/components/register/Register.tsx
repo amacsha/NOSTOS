@@ -1,7 +1,12 @@
 import { Alert, Button, GestureResponderEvent, StyleSheet, Text, TextInput, View } from "react-native";
 import { Formik } from "formik";
 import * as Yup from 'yup';
+<<<<<<<< HEAD:client/components/register/Register.tsx
 import RegisterService from "../../service/RegisterService";
+========
+import RegisterService from "./RegisterService";
+import { RegisterValues } from "../../client-types/RegisterValues";
+>>>>>>>> dev:client/components/login/Register.tsx
 import { useAppDispatch } from '../../hooks';
 import { setAuth, initialState } from '../../slices/authSlice';
 import { updateUserDetails } from "../../slices/userSlice";
@@ -28,7 +33,11 @@ const Register: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const handleSubmit = async (values: RegisterValues) => {
+<<<<<<<< HEAD:client/components/register/Register.tsx
     const res: UserResponse = await RegisterService(values)
+========
+    const res: any = await RegisterService(values)
+>>>>>>>> dev:client/components/login/Register.tsx
     if (res.message) {
       Alert.alert(`${res.message}`);
       dispatch(setAuth(initialState));

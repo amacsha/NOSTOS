@@ -1,30 +1,45 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Button, GestureResponderEvent } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Button, GestureResponderEvent, SafeAreaView } from 'react-native';
 import GeoLocation from './GeoLocation';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
 
+import { SmallEntry } from '../../client-types/SmallEntry';
+import EntriesView from './EntriesView';
+import { cityFetcher } from './DashboardsServices';
+
 const Main: React.FC = ({navigation}: any) => {
   const fetchLocation = GeoLocation();
   const location = useSelector((state: RootState) => state.location);
+  const [cityEntries, setCityEntries] = useState<(SmallEntry & {avg: number})[]>([])
 
+  const asyncFetchLocation =  async() => {
+    await fetchLocation()
+  }
+
+  useEffect(() => {asyncFetchLocation(); console.log('loc:', location.value?.cityName)}, [])
+  
   useEffect(() => {
-    fetchLocation();
-  }, []);
+    location.value?.cityName != undefined && cityFetcher(location.value?.cityName, setCityEntries)
+  }, [location]);
 
 
   return (
-  
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <View>
+        <Text>City: {location.value?.cityName}</Text>
+        <Text>Active missions should go here</Text>
+      </View>
       {location ? (
-        <Text style={styles.locationText}>Latitude: {location.value?.lat}, Longitude: {location.value?.lng}</Text>
+        <View style={{flex: 4}}>
+          <EntriesView entries={cityEntries}></EntriesView>
+        </View>
       ) : (
-        <Text style={styles.fetchingText}>Fetching location...</Text>
+        <Text style={styles.fetchingText}>Sending position to the Mothership...</Text>
       )}
-      <Text>Main Component</Text>
-      <Button title='Go to mission' onPress={(event: GestureResponderEvent) => navigation.navigate('Mission')} />
-    </View>
+      <Button title='Go to mission' onPress={() => navigation.navigate('Mission')} />
+    </SafeAreaView>
   );
 };
 
@@ -35,8 +50,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'stretch',
+    padding: 10,
+    paddingTop: 40,
   },
   locationText: {
     fontSize: 16,
@@ -47,4 +63,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'gray',
   },
+  bottom : {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });

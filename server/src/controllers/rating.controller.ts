@@ -22,6 +22,18 @@ const getUserRating = async (ctx : Koa.Context) => {
     }
 }
 
+const getNumberOfRatingsForAnEntry = async (ctx: Koa.Context) => {
+    try {
+        const count = await prisma.rating.count({where: {entryId: Number(ctx.params.entryID)}});
+        ctx.response.body = count;
+        ctx.status = 200;
+    } catch (error) {
+        console.log(error)
+        ctx.status = 400;
+        ctx.body = 'Error'
+    }
+}
+
 const getAvgEntryRating = async (ctx : Koa.Context) => {
     try {
         const avg = await prisma.rating.aggregate({
@@ -35,6 +47,68 @@ const getAvgEntryRating = async (ctx : Koa.Context) => {
 
         ctx.body = avg
 
+    } catch (err) {
+        console.log(err);
+        ctx.status = 400;
+        ctx.body = 'Error: could not find rating';
+    }
+}
+
+
+const getAvgInPlace = async (ctx : Koa.Context) => {
+    try {
+        const entryIds = (await prisma.entry.findMany({
+            where: {
+              placeId: Number(ctx.params.placeID),
+            },
+        })).map(entry => entry.id)
+
+        const ratings = await prisma.rating.groupBy({
+            by: ['entryId'],
+            where: {
+                entryId: {in: entryIds}
+            },
+            _avg: {
+                value: true
+            }
+        })
+
+        ctx.body = ratings
+
+    } catch (err) {
+        console.log(err);
+        ctx.status = 400;
+        ctx.body = 'Error: could not find rating';
+    }
+}
+
+const getAvgInCity = async (ctx : Koa.Context) => {
+    try {
+        const cityPlaceIds = (await prisma.place.findMany({
+            where: {
+                city: ctx.params.cityName
+            }
+        })).map(place => place.id);
+
+        const entryIds = (await prisma.entry.findMany({
+            where: {
+              placeId: {
+                in: cityPlaceIds
+              },
+            },
+        })).map(entry => entry.id)
+
+        const ratings = await prisma.rating.groupBy({
+            by: ['entryId'],
+            where: {
+                entryId: {in: entryIds}
+            },
+            _avg: {
+                value: true
+            }
+        })
+
+        ctx.body = ratings
     } catch (err) {
         console.log(err);
         ctx.status = 400;
@@ -63,4 +137,4 @@ const setUserRating = async (ctx : Koa.Context) => {
     }
 }
 
-export {getAvgEntryRating, getUserRating, setUserRating}
+export {getAvgEntryRating, getUserRating, setUserRating, getAvgInCity, getAvgInPlace, getNumberOfRatingsForAnEntry}
