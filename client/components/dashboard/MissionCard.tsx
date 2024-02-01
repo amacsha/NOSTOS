@@ -5,6 +5,7 @@ import { Place } from '../../client-types/Place';
 import { useAppDispatch } from '../../hooks';
 
 import { selectPlace } from '../../slices/placesSlice';
+import React from 'react';
 
 const MissionCard: React.FC<{place: Place}> = ({ place } : {place: Place}) => {
   const navigation = useNavigation();
