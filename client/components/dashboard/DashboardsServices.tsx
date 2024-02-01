@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { SmallEntry } from '../../client-types/SmallEntry';
-import { useAppDispatch } from '../../hooks';
 import { updateFilterPreference } from '../../slices/userSlice';
 
 
@@ -19,9 +18,12 @@ const cityFetcher = (cityName: String, setter: React.Dispatch<React.SetStateActi
   })
 }
 
-const updatePrefrence = () => {
-  axios.put(`${base_url}/user/setUserFilterPreference/:id`, {})
+const updatePrefrence = (newPrefrence: string, dispatch: any) => {
+  axios.put(`${base_url}/user/setUserFilterPreference/:id`, {filter_preference: newPrefrence}).then(() => {
+    dispatch(updateFilterPreference(newPrefrence))
+  }).catch((err) => {
+    console.log(err)
+  })
 }
 
-export {cityFetcher}
-
+export {cityFetcher, updatePrefrence}

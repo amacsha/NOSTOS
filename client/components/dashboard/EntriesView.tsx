@@ -8,11 +8,13 @@ import { SmallEntry } from '../../client-types/SmallEntry';
 import EntryCard from './EntryCard';
 import { ScrollView } from 'react-native-gesture-handler';
 
-
+import { useAppDispatch } from '../../hooks';
+import { updateFilterPreference } from '../../slices/userSlice';
+import { updatePrefrence } from './DashboardsServices';
 
 const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entries } : {entries: (SmallEntry & {avg: number})[]}) => {
-  // const filter_preference = useSelector((state: RootState) => state.user.filter_preference);
-  const [filter_preference, setFilterPrefrence] = useState("top rated")
+  const filter_preference = useSelector((state: RootState) => state.user.filter_preference);
+  const dispatch = useAppDispatch()
 
   const radioButtons: RadioButtonProps[] = useMemo(() => ([
     {
@@ -27,18 +29,14 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
     }
   ]), []);
 
-  const handlePrefrenceChange = (newPrefrence: string) => {
-    
-  }
-
   return (
     <View style={styles.entryView}>
         <View>
             <Text>Filter by: {filter_preference}</Text>
             <RadioGroup 
               radioButtons={radioButtons} 
-              onPress={setFilterPrefrence}
-              selectedId={filter_preference}
+              onPress={(newPref) => updatePrefrence(newPref, dispatch)}
+              selectedId={filter_preference == null? undefined : filter_preference}
               layout='row'
             />
         </View>
