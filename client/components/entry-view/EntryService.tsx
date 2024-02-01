@@ -40,3 +40,14 @@ export async function updateRating (entryId: number, userId: number, value: numb
 
   await axios.post(url, data)
 }
+
+export async function getComments (entryId: number) {
+const url = `http://${IP}:3000/comment/getAll/${entryId}`;
+const response = await axios.get(url);
+return response.data;
+}
+export async function getUsernameFromID (commenterId: number) {
+const url = `http://${IP}:3000/user/getUsername/${commenterId}`;
+const response = await axios.get(url);
+return response.data;
+}
