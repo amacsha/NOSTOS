@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Button, GestureResponderEvent } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import RadioGroup, {RadioButtonProps} from 'react-native-radio-buttons-group';
 
 import { SmallEntry } from '../../client-types/SmallEntry';
@@ -9,12 +9,16 @@ import EntryCard from './EntryCard';
 import { ScrollView } from 'react-native';
 
 import { useAppDispatch } from '../../hooks';
-import { updatePrefrence } from './DashboardsServices';
+import { updatePrefrence, getPrefrence } from './DashboardsServices';
 
 const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entries } : {entries: (SmallEntry & {avg: number})[]}) => {
   const filter_preference = useSelector((state: RootState) => state.user.filter_preference);
   const userId = useSelector((state: RootState) => state.user.id);
   const dispatch = useAppDispatch()
+  
+  useEffect(() => {
+    userId && getPrefrence(dispatch, userId)
+  }, [userId])
 
   const radioButtons: RadioButtonProps[] = useMemo(() => ([
     {

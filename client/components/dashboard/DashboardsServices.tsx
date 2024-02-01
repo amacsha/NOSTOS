@@ -31,12 +31,28 @@ const placeFetcher = (placeId: number, setter: React.Dispatch<React.SetStateActi
   })
 }
 
-const updatePrefrence = (newPrefrence: string, dispatch: any, userId: number) => {
-  axios.put(`${base_url}/user/setUserFilterPreference/${userId}`, {filter_preference: newPrefrence}).then(() => {
+const updatePrefrence = async (newPrefrence: string, dispatch: any, userId: number) => {
+  await axios.put(`${base_url}/user/setUserFilterPreference/${userId}`, {filter_preference: newPrefrence}).then(() => {
     dispatch(updateFilterPreference(newPrefrence))
   }).catch((err) => {
     console.log(err)
   })
 }
 
-export {cityFetcher, updatePrefrence, placeFetcher}
+const getPrefrence = async (dispatch: any, userId: number) => {
+  await axios.get(`${base_url}/user/getUserFilterPreference/${userId}`).then((res) => {
+    dispatch(updateFilterPreference(res.data.filter_preference))
+  }).catch((err) => {
+    console.log(err)
+  })
+}
+
+const getActiveMissions = async (userId: number, setter: any) => {
+  await axios.get(`${base_url}/place/getRecent/${userId}`).then((res) => {
+    setter(res.data)
+  }).catch((err) => {
+    console.log(err)
+  })
+}
+
+export {cityFetcher, updatePrefrence, getPrefrence, placeFetcher, getActiveMissions}

@@ -59,3 +59,31 @@ export async function getPlacesForCity(ctx: Context): Promise<void> {
         console.log(error);
     }
 }
+
+export async function getRecentPlaces(ctx: Context): Promise<void> {
+    try {
+        const cutoffTime = new Date()
+        cutoffTime.setHours(cutoffTime.getHours() - 48);
+        
+        const missionsIds = (await db.lastVisited.findMany({
+        where: { 
+            userId: Number(ctx.params.userId) ,
+                visit_time: {
+                    gte: cutoffTime
+                },
+            },
+        })).map((mission) => mission.placeId);
+        
+        const recent = await db.place.findMany({
+            where: {
+                id: {
+                    in : missionsIds
+                }
+            }
+        })
+        ctx.response.status = 200;
+        ctx.response.body = recent;
+    } catch (error) {
+        console.log(error);
+    }
+}

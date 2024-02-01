@@ -7,7 +7,7 @@ import {authMiddleware} from './middlewares/auth'
 
 import {getEntry, postEntry, getCityEntries, getPlaceEntries} from './controllers/entry.controller'
 import {getAvgEntryRating, getAvgInCity, getAvgInPlace, getUserRating, setUserRating} from './controllers/rating.controller'
-import { addManyPlaces, addNewPlace, getAllPlaces, getPlacesForCity } from './controllers/place.controller';
+import { addManyPlaces, addNewPlace, getAllPlaces, getPlacesForCity, getRecentPlaces } from './controllers/place.controller';
 import { addNewComment, deleteComment, getAllCommentsByEntry } from './controllers/comment.controller';
 
 
@@ -49,6 +49,7 @@ router.post('/place/addNew', addNewPlace);
 router.get('/place/getAll', getAllPlaces);
 router.get('/place/getByCity/:cityName', getPlacesForCity);
 router.post('/place/addMany', addManyPlaces);
+router.get('/place/getRecent/:userId', getRecentPlaces)
 
 // COMMENT
 
