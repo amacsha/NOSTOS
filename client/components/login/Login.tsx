@@ -9,6 +9,7 @@ import { setAuth, initialState } from '../../slices/authSlice';
 import { save } from "../../utils/secureStorage";
 
 
+
 const Login: React.FC = ({navigation}: any) => {
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
   container: {},
   head: {},
   input: {},
-  error: {}
+  error: {},
 })
 
 export default Login;

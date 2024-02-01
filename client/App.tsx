@@ -4,13 +4,10 @@ import UserStart from "./components/login/UserStart";
 import store from "./store";
 import { Provider } from "react-redux";
 
-import Main from "./components/dashboard/Main";
-
 export default function App() {
   return (
     <Provider store={store}>
       <UserStart />
-      {/* <Main/> */}
     </Provider>
   );
 }
@@ -22,4 +19,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  map: {
+    width: '100%',
+    height: '100%'
+  }
 });

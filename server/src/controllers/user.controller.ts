@@ -4,6 +4,8 @@ import { UserType } from '../../server-types/types';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+
+//TODO update tests for getUsernamefromID
 const createOneUser = async (ctx: Koa.Context) => {
   const body = <UserType>ctx.request.body;
 
@@ -84,6 +86,20 @@ const getOneUser = async (ctx: Koa.Context) => {
   }
 };
 
+const getUsernameByID = async (ctx: Koa.Context) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: Number(ctx.params.id) },
+    });
+    ctx.status = 200;
+    ctx.body = user?.username;
+  } catch (error) {
+    console.error(error);
+    ctx.status = 500;
+    ctx.body = { error: 'Server error' };
+  }
+};
+
 const deleteUser = async (ctx: Koa.Context) => {
   try {
     const user = await prisma.user.delete({
@@ -137,6 +153,7 @@ const logoutUser = (ctx: Koa.Context) => {
 export {
   createOneUser,
   getOneUser,
+  getUsernameByID,
   setUserFilterPreference,
   getUserFilterPreference,
   deleteUser,
