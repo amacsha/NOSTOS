@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import React, { useEffect, useMemo, useState } from 'react';
 import RadioGroup, {RadioButtonProps} from 'react-native-radio-buttons-group';
+import MultiSelect from 'react-native-multiple-select';
 
 import { SmallEntry } from '../../client-types/SmallEntry';
 import EntryCard from './EntryCard';
@@ -11,11 +12,41 @@ import { ScrollView } from 'react-native';
 import { useAppDispatch } from '../../hooks';
 import { updatePrefrence, getPrefrence } from './DashboardsServices';
 
+const items = [{
+    id: '92iijs7yta',
+    name: 'Ondo'
+  }, {
+    id: 'a0s0a8ssbsd',
+    name: 'Ogun'
+  }, {
+    id: '16hbajsabsd',
+    name: 'Calabar'
+  }, {
+    id: 'nahs75a5sg',
+    name: 'Lagos'
+  }, {
+    id: '667atsas',
+    name: 'Maiduguri'
+  }, {
+    id: 'hsyasajs',
+    name: 'Anambra'
+  }, {
+    id: 'djsjudksjd',
+    name: 'Benue'
+  }, {
+    id: 'sdhyaysdj',
+    name: 'Kaduna'
+  }, {
+    id: 'suudydjsjd',
+    name: 'Abuja'
+    }
+];
+
 const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entries } : {entries: (SmallEntry & {avg: number})[]}) => {
   const filter_preference = useSelector((state: RootState) => state.user.filter_preference);
   const userId = useSelector((state: RootState) => state.user.id);
   const dispatch = useAppDispatch()
-  
+  const [selected, setSelected] = useState([])
   useEffect(() => {
     userId && getPrefrence(dispatch, userId)
   }, [userId])
@@ -42,6 +73,11 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
               onPress={(newPref) => userId != null && updatePrefrence(newPref, dispatch, userId)}
               selectedId={filter_preference == null? undefined : filter_preference}
               layout='row'
+            />
+            <MultiSelect
+              onSelectedItemsChange={(e) => console.log(e)}
+              selectedItems={selected}
+              items={items}
             />
         </View>
         <ScrollView>

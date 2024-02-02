@@ -30,7 +30,7 @@ const Location: React.FC = ({navigation}: any) => {
   return (
     <View style={styles.container}>
       {placeId ? (
-        <View style={{flex: 7, borderColor: 'green',
+        <View style={{flex: 8, borderColor: 'green',
         borderWidth: 2,}}>
           <EntriesView entries={placeEntries}></EntriesView>
         </View>
