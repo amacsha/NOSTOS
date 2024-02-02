@@ -2,17 +2,22 @@ import React from 'react';
 import { Alert, Pressable, StyleSheet, Text } from 'react-native';
 import { useAppDispatch } from '../../hooks';
 import { setAuth, initialState } from '../../slices/authSlice';
-import { getValueFor, save } from "../../utils/secureStorage";
 import { deleteItemAsync } from 'expo-secure-store';
+import { updateUserDetails, initialState as userInitials } from '../../slices/userSlice';
 
 
 const Logout: React.FC = () => {
 
     const dispatch = useAppDispatch();
 
-    async function logout() {
-        await deleteItemAsync('accessToken');
+    function logout() {
+        deleteItemAsync('accessToken');
+        deleteItemAsync('userId');
+        deleteItemAsync('email');
+        deleteItemAsync('username');
+        deleteItemAsync('filter_preference');
         dispatch(setAuth(initialState));
+        dispatch(updateUserDetails(userInitials))
         // Alert.alert('token destroyed');
     }
 

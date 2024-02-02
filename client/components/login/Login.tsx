@@ -10,6 +10,8 @@ import { updateUserDetails } from "../../slices/userSlice";
 import { save } from "../../utils/secureStorage";
 import { LoginValues } from "../../client-types/LoginValues";
 import { UserResponse } from "../../client-types/UserResponse";
+import { RootState } from "../../store";
+import { useSelector } from "react-redux";
 
 type LoginProps = {
   navigation: NativeStackNavigationProp<any>
@@ -36,15 +38,18 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
     } else {
       Alert.alert('login 👍')
       dispatch(setAuth({ isAuthenticated: true, token: res.data.accessToken }))
-      dispatch(updateUserDetails({
-        id: res.data.userId, email: res.data.email, username: res.data.username
-      }))
       save('accessToken', res.data.accessToken);
       save('userId', res.data.userId.toString());
       save('email', res.data.email);
       save('username', res.data.username);
+      save('filter_preference', res.data.filter_preference);
     }
   }
+
+  const user = useSelector(
+    (state: RootState) => state.user.filter_preference
+  )
+  console.log(user)
 
   return (
     <View style={styles.container}>

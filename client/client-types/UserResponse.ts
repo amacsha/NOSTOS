@@ -4,6 +4,7 @@ export interface UserResponse {
         userId: number,
         email: string,
         username: string,
+        filter_preference: string,
     };
     status: number;
     error: string;

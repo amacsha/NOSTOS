@@ -27,29 +27,26 @@ export default function UserStart() {
   let userId = Number(getValueFor('userId'))
   let email = getValueFor('email')
   let username = getValueFor('username')
+
   if (token) {
     dispatch(setAuth({ isAuthenticated: true, token: token }))
     dispatch(updateUserDetails({ id: userId, email: email, username: username }))
   }
-
+  // console.log(filter_preference)
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
-  const user = useSelector(
-    (state: RootState) => state.user.email
-  )
 
-  console.log(user)
   return (
     <NavigationContainer>
       <Stack.Navigator>
         {isAuthenticated ? (
           <>
+            <Stack.Screen name="NewEntryForm" component={NewEntryForm} />
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Mission" component={Mission} />
             <Stack.Screen name="Location" component={Location} />
             <Stack.Screen name="EntryView" component={EntryView} />
-            <Stack.Screen name="NewEntryForm" component={NewEntryForm} />
             <Stack.Screen name="New Comment" component={NewComment} />
             <Stack.Screen name="Logout" component={Logout} />
           </>

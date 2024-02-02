@@ -38,12 +38,16 @@ const Register: React.FC = () => {
       Alert.alert('user created 👍')
       dispatch(setAuth({ isAuthenticated: true, token: res.data.accessToken }))
       dispatch(updateUserDetails({
-        id: res.data.userId, email: res.data.email, username: res.data.username
+        id: res.data.userId,
+        email: res.data.email,
+        username: res.data.username,
+        filter_preference: res.data.filter_preference
       }))
       save('accessToken', res.data.accessToken);
       save('userId', res.data.userId.toString());
       save('email', res.data.email);
       save('username', res.data.username);
+      save('filter_preference', res.data.filter_preference);
     }
   }
 

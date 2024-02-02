@@ -8,7 +8,7 @@ import Logout from '../logout/Logout';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { Entry } from '../../client-types/Entry';
-
+import { useNavigation } from '@react-navigation/native';
 
 const NewEntryForm: React.FC = () => {
     const [tags, setTags] = useState<string | never>('')
@@ -21,6 +21,8 @@ const NewEntryForm: React.FC = () => {
     const placeId: string | null = useSelector(
         (state: RootState) => state.places.selectedPlaceId
     )
+    const navigation = useNavigation()
+
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required('Choose a nice title to your story'),
@@ -31,11 +33,9 @@ const NewEntryForm: React.FC = () => {
 
     const handleSubmit = async (values: Entry) => {
         values.authorId = userId
-        values.placeId = placeId
-        console.log(values)
-        const res = await NewEntryService(values)
-        values.tag = []
-        console.log('form', res.data)
+        values.placeId = 'ChIJ0160ScQEdkgR3zgV673t8yU'
+        // const res = await NewEntryService(values)
+
     }
 
     return (
@@ -50,6 +50,7 @@ const NewEntryForm: React.FC = () => {
                             actions.resetForm()
                             actions.setFieldValue('tag', [])
                             setTags('')
+                            navigation.navigate('Main' as never)
                         })
                 }}
             >

@@ -40,7 +40,7 @@ const createOneUser = async (ctx: Koa.Context) => {
     const accessToken = jwt.sign(user, process.env.SECRET_KEY!);
 
     ctx.status = 201;
-    ctx.body = { accessToken: accessToken, userId: user.id, email: user.email, username: user.username };
+    ctx.body = { accessToken: accessToken, userId: user.id, email: user.email, username: user.username, filter_preference: user.filter_preference };
   } catch (error) {
     console.error(error);
     ctx.status = 500;
@@ -64,7 +64,7 @@ const loginUser = async (ctx: Koa.Context) => {
     if (!validatedPass) throw new Error();
     const accessToken = jwt.sign(user, process.env.SECRET_KEY!);
     ctx.status = 200;
-    ctx.body = { accessToken: accessToken, userId: user.id, email: user.email, username: user.username };
+    ctx.body = { accessToken: accessToken, userId: user.id, email: user.email, username: user.username, filter_preference: user.filter_preference };
   } catch (error) {
     console.error(error);
     ctx.status = 404;
