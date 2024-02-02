@@ -31,7 +31,7 @@ const Register: React.FC = () => {
   const handleSubmit = async (values: RegisterValues) => {
 
     const res: UserResponse = await RegisterService(values)
-    if (res.message) {
+    if (res.error) {
       Alert.alert(`${res.message}`);
       dispatch(setAuth(initialState));
     } else {
@@ -41,6 +41,9 @@ const Register: React.FC = () => {
         id: res.data.userId, email: res.data.email, username: res.data.username
       }))
       save('accessToken', res.data.accessToken);
+      save('userId', res.data.userId.toString());
+      save('email', res.data.email);
+      save('username', res.data.username);
     }
   }
 

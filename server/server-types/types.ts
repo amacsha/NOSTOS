@@ -5,7 +5,7 @@ interface rating {
 }
 interface entry {
   id: number,
-  placeId: number,
+  placeId: string,
   authorId: number,
   title: string,
   content: string,
@@ -14,7 +14,7 @@ interface entry {
 }
 
 interface newEntry {
-  placeId: number,
+  placeId: string,
   authorId: number,
   title: string,
   content: string,
@@ -29,10 +29,11 @@ interface SmallEntry {
 }
 
 interface NewPlace {
-    lat: number,
-    lng: number,
-    name: string,
-    city: string
+  id: string,
+  lat: number,
+  lng: number,
+  name: string,
+  city: string
 }
 interface Comment {
   commenterId: number,
@@ -42,11 +43,11 @@ interface Comment {
 }
 
 interface Place {
+  id: string,
   lat: number,
   lng: number,
   name: string,
   city: string,
-  id: number,
 }
 
 interface UserType {
@@ -59,7 +60,7 @@ interface UserType {
 
 interface LastVisited {
   userId: number;
-  placeId: number;
+  placeId: string;
   visit_time: Date;
 }
 

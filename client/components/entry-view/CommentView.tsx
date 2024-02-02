@@ -12,15 +12,19 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import OneComment from "./OneComment";
 import { getUsernameFromID } from "./EntryService";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { Comment } from "../../client-types/Comment";
 
-export default function CommentView({ comments }: any) {
-  const [commentsWithUsernames, setCommentsWithUsernames] = useState<any>([]);
+export default function CommentView() {
+  const comments = useSelector((state: RootState) => state.comments);
+  const [commentsWithUsernames, setCommentsWithUsernames] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
     async function load() {
       const renderPromises = comments.map(
-        async (comment: any, index: number) => {
-          const userName = await getUsernameFromID(comment.commenterId);
+        async (comment: Comment, index: number) => {
+          const userName: string = await getUsernameFromID(comment.commenterId);
           return (
             <View style={styles.comment} key={index}>
               <OneComment
@@ -38,7 +42,7 @@ export default function CommentView({ comments }: any) {
     }
 
     load();
-  }, []);
+  }, [comments]);
 
   if (commentsWithUsernames.length > 0) {
     return (

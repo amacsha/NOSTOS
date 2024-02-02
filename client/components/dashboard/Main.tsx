@@ -10,20 +10,21 @@ import EntriesView from './EntriesView';
 import { cityFetcher, getActiveMissions } from './DashboardsServices';
 import { Place } from '../../client-types/Place';
 import MissionView from './MissionView';
+import Logout from '../logout/Logout';
 
-const Main: React.FC = ({navigation}: any) => {
+const Main: React.FC = ({ navigation }: any) => {
   const fetchLocation = GeoLocation();
   const location = useSelector((state: RootState) => state.location);
-  const userId =  useSelector((state: RootState) => state.user.id);
-  const [cityEntries, setCityEntries] = useState<(SmallEntry & {avg: number})[]>([])
+  const userId = useSelector((state: RootState) => state.user.id);
+  const [cityEntries, setCityEntries] = useState<(SmallEntry & { avg: number })[]>([])
   const [activeMissions, setActiveMissions] = useState<Place[]>([])
 
-  const asyncFetchLocation =  async() => {
+  const asyncFetchLocation = async () => {
     await fetchLocation()
   }
 
-  useEffect(() => {asyncFetchLocation()}, [])
-  
+  useEffect(() => { asyncFetchLocation() }, [])
+
   useEffect(() => {
     location.value?.cityName != undefined && cityFetcher(location.value?.cityName, setCityEntries)
   }, [location]);
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontFamily: 'Gruppe_A'
   },
-  bottom : {
+  bottom: {
     alignItems: 'center',
     justifyContent: 'center',
     fontFamily: 'Gruppe_A'

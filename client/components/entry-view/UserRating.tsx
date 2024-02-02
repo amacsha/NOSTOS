@@ -18,10 +18,8 @@ export default function UserRating({ userId, entryId }: any) {
     if (currentRatingResponse.data) {
       setRating(currentRatingResponse.data.value);
     }
-
     setAvgRating(averageRatingResponse);
   }
-
 
   useEffect(() => { load() }, [rating]);
 
@@ -29,15 +27,6 @@ export default function UserRating({ userId, entryId }: any) {
     await updateRating(entryId, userId, value)
     await load();
   }
-
-  // if (rating == undefined || avgRating == undefined){
-  //   return (
-  //     <>
-  //       <Text>No ratings yet, be the first one to rate this entry!</Text>
-  //       {/* <ActivityIndicator /> */}
-  //     </>
-  //   )
-  // }
 
   return (
     <View style={styles.container}>

@@ -5,7 +5,7 @@ import { updateFilterPreference } from '../../slices/userSlice';
 
 const base_url = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000`
 
-const cityFetcher = (cityName: String, setter: React.Dispatch<React.SetStateAction<(SmallEntry & {avg: number})[]>>) => {
+const cityFetcher = (cityName: string, setter: React.Dispatch<React.SetStateAction<(SmallEntry & {avg: number})[]>>) => {
   const rawentries = axios.get<SmallEntry[]>(`${base_url}/entry/getMany/byCity/${cityName}`)
   const avgs = axios.get<{entryId: number, _avg: {value: number}}[]>(`${base_url}/rating/AveragesForCity/${cityName}`)
   
@@ -18,7 +18,7 @@ const cityFetcher = (cityName: String, setter: React.Dispatch<React.SetStateActi
   })
 }
 
-const placeFetcher = (placeId: number, setter: React.Dispatch<React.SetStateAction<(SmallEntry & {avg: number})[]>>) => {
+const placeFetcher = (placeId: string, setter: React.Dispatch<React.SetStateAction<(SmallEntry & {avg: number})[]>>) => {
   const rawentries = axios.get<SmallEntry[]>(`${base_url}/entry/getMany/byPlace/${placeId}`)
   const avgs = axios.get<{entryId: number, _avg: {value: number}}[]>(`${base_url}/rating/AveragesForPlace/${placeId}`)
   

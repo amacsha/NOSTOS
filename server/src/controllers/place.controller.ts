@@ -1,15 +1,15 @@
 "use strict";
-
+import _ from 'underscore'
 import { Context } from 'koa';
 import db from '../models/db';
 import {Place, NewPlace} from '../../server-types/types'
 
 export async function addNewPlace(ctx: Context): Promise<void> {
     // console.log('Creating new place.');
-    const { lat, lng, name, city } = <NewPlace> ctx.request.body;
+    const { id, lat, lng, name, city } = <NewPlace> ctx.request.body;
     try {
         await db.place.create({
-            data: { lat, lng, name, city }
+            data: { id, lat, lng, name, city }
         });
         ctx.response.status = 201;
         ctx.response.body = 'OK';
@@ -46,7 +46,6 @@ export async function getAllPlaces(ctx: Context): Promise<void> {
 
 export async function getPlacesForCity(ctx: Context): Promise<void> {
     const city = ctx.params.cityName;
-    // console.log(`Getting places for ${city}.`);
     try {
         const places = await db.place.findMany({
             where: {
@@ -55,6 +54,21 @@ export async function getPlacesForCity(ctx: Context): Promise<void> {
         })
         ctx.response.status = 200;
         ctx.response.body = places;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function getSamplePlacesForCity(ctx: Context): Promise<void> {
+    const city = ctx.params.cityName;
+    try {
+        const places = await db.place.findMany({
+            where: {
+                city: city
+            }
+        })
+        ctx.response.status = 200;
+        ctx.response.body = _.sample(places, Number(ctx.params.numOfPlaces));
     } catch (error) {
         console.log(error);
     }

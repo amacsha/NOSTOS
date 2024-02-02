@@ -5,22 +5,18 @@ import React, { useEffect, useMemo, useState } from 'react';
 import RadioGroup, {RadioButtonProps} from 'react-native-radio-buttons-group';
 import MultiSelect from 'react-native-multiple-select';
 
-
 import { SmallEntry } from '../../client-types/SmallEntry';
 import EntryCard from './EntryCard';
 import { ScrollView } from 'react-native';
 
 import { useAppDispatch } from '../../hooks';
 import { updatePrefrence, getPrefrence } from './DashboardsServices';
-import { exists } from 'fs';
-import { text } from 'stream/consumers';
 
 const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entries } : {entries: (SmallEntry & {avg: number})[]}) => {
   const filter_preference = useSelector((state: RootState) => state.user.filter_preference);
   const userId = useSelector((state: RootState) => state.user.id);
   const dispatch = useAppDispatch()
   const [selected, setSelected] = useState([])
- 
   useEffect(() => {
     userId && getPrefrence(dispatch, userId)
   }, [userId])
@@ -52,10 +48,16 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
             />
             <MultiSelect
               items={
-                [... new Set(entries.reduce((entryTags, entry) => 
-                  entryTags.concat(entry.tag as never[]),
-                []))].map((tag) => {
-                  return {id: tag, name: tag}
+                [
+                  ... new Set(entries.filter((entry) => 
+                    selected.every(tag => 
+                      entry.tag.includes(tag))
+                  ).reduce((entryTags, entry) => 
+                      entryTags.concat(entry.tag as never[]
+                    ),[]
+                  ))
+                ].map((tag) => {
+                    return {id: tag, name: tag}
                 })
               }
               uniqueKey="id"

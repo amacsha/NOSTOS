@@ -49,7 +49,7 @@ const getPlaceEntries= async (ctx : Koa.Context) => {
     try {
         let entries = <SmallEntry[]> await prisma.entry.findMany({
             where: {
-              placeId: Number(ctx.params.placeID),
+              placeId: ctx.params.placeID,
             },
             select: {
                 "authorId": true,

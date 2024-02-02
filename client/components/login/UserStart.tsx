@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./Login";
 import Register from "../register/Register";
-import { RootState } from "../../store";
-import { useSelector } from "react-redux";
 import Main from "../dashboard/Main";
 import Mission from "../mission/Mission";
 import { NavigationContainer } from "@react-navigation/native";
@@ -12,16 +10,36 @@ import Location from "../dashboard/Location";
 import EntryView from "../entry-view/EntryView";
 import NewEntryForm from "../new-entry/NewEntryForm";
 import NewComment from "../entry-view/NewComment";
+import { getValueFor } from "../../utils/secureStorage";
+import Logout from "../logout/Logout";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { setAuth } from "../../slices/authSlice";
+import { updateUserDetails } from "../../slices/userSlice";
 
 const Stack = createNativeStackNavigator();
 
 export default function UserStart() {
+
+  const dispatch = useDispatch()
+
+  let token = getValueFor('accessToken')
+  let userId = Number(getValueFor('userId'))
+  let email = getValueFor('email')
+  let username = getValueFor('username')
+  if (token) {
+    dispatch(setAuth({ isAuthenticated: true, token: token }))
+    dispatch(updateUserDetails({ id: userId, email: email, username: username }))
+  }
+
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
+  const user = useSelector(
+    (state: RootState) => state.user.email
+  )
 
-  
-
+  console.log(user)
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -33,6 +51,7 @@ export default function UserStart() {
             <Stack.Screen name="EntryView" component={EntryView} />
             <Stack.Screen name="NewEntryForm" component={NewEntryForm} />
             <Stack.Screen name="New Comment" component={NewComment} />
+            <Stack.Screen name="Logout" component={Logout} />
           </>
         ) : (
           <>

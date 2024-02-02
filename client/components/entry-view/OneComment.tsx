@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native"
+import React from "react";
 
 export default function OneComment({ content, userName }: any) {
   if (content) {
