@@ -14,13 +14,15 @@ import { RootState } from "../../store";
 import { selectPlace, setPlaces } from "../../slices/placesSlice";
 import { GooglePlaceResponse, Place } from "../../client-types/Place";
 import AddPlacesService from "../../service/AddPlacesService";
+import { fetchNewMissions } from "../../service/NewMissionService";
 
 const GOOGLE_KEY = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
 const Mission: React.FC = ({ navigation }: any) => {
   const dispatch = useDispatch();
   const location = useSelector((state: RootState) => state.location);
-  const places = useSelector((state: RootState) => state.places);
+  const places = useSelector((state: RootState) => state.places.places);
+  const city = useSelector((state: RootState) => state.location.value?.cityName);
 
   const [selectedMarker, setSelectedMarker] = useState(false);
   const [selectedCoord, setSelectedCoord] = useState<number[]>([]);
@@ -54,7 +56,9 @@ const Mission: React.FC = ({ navigation }: any) => {
   //     .catch((error) => console.log(error));
   // }, []);
 
-  console.log("places:", places.places)
+  useEffect(() => {
+    city && fetchNewMissions(city, dispatch)
+  }, [city])
 
   function handleMarkerPress(place: Place, latitude: number, longitude: number) {
     axios
@@ -77,7 +81,7 @@ const Mission: React.FC = ({ navigation }: any) => {
         longitudeDelta: 0.0421,
       }}
     >
-      {places.places.map((place, index) => (
+      {places.map((place, index) => (
         <Marker
           key={index}
           coordinate={{ latitude: place.lat, longitude: place.lng }}

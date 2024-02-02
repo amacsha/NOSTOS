@@ -13,10 +13,11 @@ const useCurrentLocation = () => {
     }
 
     let location = await Location.getCurrentPositionAsync({});
+    let fullAddress = await Location.reverseGeocodeAsync({latitude: location.coords.latitude, longitude: location.coords.longitude});
     dispatch(setLocation({
       lat: location.coords.latitude,
       lng: location.coords.longitude,
-      cityName: "London"
+      cityName: fullAddress[0].city || '',
     }));
   };
 

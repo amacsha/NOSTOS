@@ -36,9 +36,7 @@ const Main: React.FC = ({navigation}: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <LogoutService></LogoutService>
       <View>
-        <LogoutService></LogoutService>
       <Button title='Go to mission' onPress={() => navigation.navigate('Mission')} />
         <Text>City: {location.value?.cityName}</Text>
         {activeMissions.length == 0 ?

@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Coords } from "../client-types/Coords";
 
 type PositionState = {
-  value: Coords & {cityName: String} | null;
+  value: Coords & {cityName: string} | null;
 };
 
 const initialState: PositionState = {
@@ -13,7 +13,7 @@ export const locationSlice = createSlice({
   name: "locationSlice",
   initialState,
   reducers: {
-    setLocation: (state, action: PayloadAction<Coords  & {cityName: String} | null>) => {
+    setLocation: (state, action: PayloadAction<Coords  & {cityName: string} | null>) => {
       state.value = action.payload;
     },
   },
