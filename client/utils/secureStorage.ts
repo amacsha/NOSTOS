@@ -7,19 +7,15 @@ export async function save(key: string, value: string | null) {
     await SecureStore.setItemAsync(key, value!);
 }
 
-export async function getValueFor(key: string): Promise<boolean> {
-    try {
-        let result = await SecureStore!.getItemAsync(key);
-        if (result) {
-            Alert.alert("🔐 Here's your value 🔐 \n" + result);
-            return true
-        } else {
-            Alert.alert('No values stored under that key.');
-            return false
-        }
-        console.log('getValue', result)
-    } catch (error) {
-        console.log('Failed to get value for key:', error);
-        return false;
+
+export function getValueFor(key: string): boolean {
+    let result = SecureStore.getItem(key);
+    if (result != null) {
+        // Alert.alert("🔐 Here's your value 🔐 \n" + result);
+        return true
+    } else {
+        // Alert.alert('No values stored under that key.');
+        return false
     }
+    console.log('getValue', result)
 }
