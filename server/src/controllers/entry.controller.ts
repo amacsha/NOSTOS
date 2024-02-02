@@ -5,6 +5,7 @@ import { Place, newEntry, SmallEntry } from '../../server-types/types'
 
 const postEntry = async (ctx : Koa.Context) => {
     try {
+        console.log("BODY", ctx.request.body)
         const newEntry = await prisma.entry.create({
             data : <newEntry> ctx.request.body,
         });

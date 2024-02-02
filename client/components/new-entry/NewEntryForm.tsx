@@ -31,13 +31,19 @@ const NewEntryForm: React.FC = () => {
             .max(3, 'You can add 3 tags max')
     })
 
+    const userIdState = useSelector(
+        (state: RootState) => state.user.id
+    );
+
     const handleSubmit = async (values: Entry) => {
-        values.authorId = userId
-        values.placeId = 'ChIJ0160ScQEdkgR3zgV673t8yU'
-        // const res = await NewEntryService(values)
-
+        if (userIdState) {
+            values.authorId = userId
+            values.placeId = 'ChIJ0-48HywBdkgRh7MH0Igd1f4'
+            const res = await NewEntryService(values)
+            console.log(res)
+        }
     }
-
+    
     return (
         <View style={styles.container}>
             <Text>Create a new Entry</Text>
@@ -46,12 +52,11 @@ const NewEntryForm: React.FC = () => {
                 validationSchema={validationSchema}
                 onSubmit={(values, actions) => {
                     handleSubmit(values)
-                        .then(() => {
-                            actions.resetForm()
-                            actions.setFieldValue('tag', [])
-                            setTags('')
-                            navigation.navigate('Main' as never)
-                        })
+                    actions.resetForm()
+                    actions.setFieldValue('tag', [])
+                    setTags('')
+                    navigation.navigate('Main' as never)
+
                 }}
             >
                 {({ handleChange, handleSubmit, handleBlur, setFieldValue, values, touched, errors }) => (
