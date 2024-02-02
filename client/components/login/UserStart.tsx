@@ -44,12 +44,12 @@ export default function UserStart() {
       <Stack.Navigator>
         {isAuthenticated ? (
           <>
-            <Stack.Screen name="NewEntryForm" component={NewEntryForm} />
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Mission" component={Mission} />
             <Stack.Screen name="Location" component={Location} />
             <Stack.Screen name="EntryView" component={EntryView} />
             <Stack.Screen name="New Comment" component={NewComment} />
+            <Stack.Screen name="NewEntryForm" component={NewEntryForm} />
             <Stack.Screen name="Logout" component={Logout} />
           </>
         ) : (
