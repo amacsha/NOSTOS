@@ -4,6 +4,7 @@ import { SmallEntry } from '../../client-types/SmallEntry';
 
 import { useAppDispatch } from '../../hooks';
 import { selectEntry } from '../../slices/entriesSlice';
+import React from 'react';
 
 
 
