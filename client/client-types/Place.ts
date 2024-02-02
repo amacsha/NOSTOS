@@ -1,5 +1,4 @@
 export interface Place {
-  geometry: any;
   id: string;
   lat: number;
   lng: number;

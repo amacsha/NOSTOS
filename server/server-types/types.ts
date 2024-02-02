@@ -29,10 +29,11 @@ interface SmallEntry {
 }
 
 interface NewPlace {
-    lat: number,
-    lng: number,
-    name: string,
-    city: string
+  id: string,
+  lat: number,
+  lng: number,
+  name: string,
+  city: string
 }
 interface Comment {
   commenterId: number,
@@ -42,11 +43,11 @@ interface Comment {
 }
 
 interface Place {
+  id: string,
   lat: number,
   lng: number,
   name: string,
   city: string,
-  id: number,
 }
 
 interface UserType {

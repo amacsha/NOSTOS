@@ -19,7 +19,8 @@ import { RootState } from "../../store";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useAppDispatch } from "../../hooks";
-import { addOneComment } from "../../slices/commentsSlice";
+import { setComments } from "../../slices/commentsSlice";
+import { Comment } from "../../client-types/Comment";
 
 export default function NewComment({ route }: any) {
   const navigation = useNavigation();
@@ -27,22 +28,35 @@ export default function NewComment({ route }: any) {
     (state: RootState) => state.entries.selectedEntryID
   );
   const userId = useSelector((state: RootState) => state.user.id);
+  const comments = useSelector((state: RootState) => state.comments);
+
   const dispatch = useAppDispatch();
 
   async function handleSubmit(values: { content: string }) {
-    if (values.content) {
-      await postComment(entryId as number, userId as number, values.content);
-      dispatch(
-        addOneComment({
-          commenterId: userId as number,
-          content: values.content,
-          entryId: entryId as number,
-        })
-      );
-    }
 
-    navigation.navigate("EntryView" as never);
-  }
+    if (values.content) {
+      let newState;
+      await postComment(entryId as number, userId as number, values.content);
+
+      let commentExists = comments.some(comment => comment.commenterId === userId && comment.entryId === entryId);
+      let newObject: Comment = {
+        commenterId: userId as number,
+        content: values.content,
+        entryId: entryId as number
+      }
+
+      if (commentExists) {
+        const commentIndex = comments.findIndex(comment => comment.commenterId === userId && comment.entryId === entryId);
+        newState = comments.slice(0, commentIndex).concat([newObject]).concat(comments.slice(commentIndex + 1));
+      } else {
+        newState = comments.slice().concat([newObject]);
+      }
+
+      dispatch(setComments(newState))
+      }
+
+      navigation.navigate("EntryView" as never);
+    }
 
   return (
     <View>

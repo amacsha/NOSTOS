@@ -1,19 +1,27 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Button, Text, Pressable, StyleSheet, View, TouchableOpacity, Linking } from "react-native";
+import {
+  Button,
+  Text,
+  Pressable,
+  StyleSheet,
+  View,
+  Linking,
+} from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { selectPlace, setPlaces } from "../../slices/placesSlice";
 import { GooglePlaceResponse, Place } from "../../client-types/Place";
-import { blue } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
+import AddPlacesService from "../../service/AddPlacesService";
 
 const GOOGLE_KEY = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
 const Mission: React.FC = ({ navigation }: any) => {
   const dispatch = useDispatch();
   const location = useSelector((state: RootState) => state.location);
-  const [placesFromGoogle, setPlacesFromGoogle] = useState<Place[]>([]);
+  const places = useSelector((state: RootState) => state.places);
+
   const [selectedMarker, setSelectedMarker] = useState(false);
   const [selectedCoord, setSelectedCoord] = useState<number[]>([]);
 
@@ -25,32 +33,35 @@ const Mission: React.FC = ({ navigation }: any) => {
       .get("https://maps.googleapis.com/maps/api/place/nearbysearch/json", {
         params: {
           location: `${lat},${lng}`,
-          radius: 1000,
-          type: "museum",
+          radius: 10000,
+          type: "airport",
           key: GOOGLE_KEY,
         },
       })
       .then((response) => {
         const places: Place[] = response.data.results.map(
           (place: GooglePlaceResponse) => ({
-            geometry: place.geometry,
             id: place.place_id,
             lat: place.geometry.location.lat,
             lng: place.geometry.location.lng,
             name: place.name,
+            city: "London", // TODO receive actual city upon location at login (get from state)
           })
         );
-        setPlacesFromGoogle(places);
+        AddPlacesService(places);
+        dispatch(setPlaces(places));
       })
       .catch((error) => console.log(error));
   }, []);
+
+  console.log("places:", places.places)
 
   function handleMarkerPress(place: Place, latitude: number, longitude: number) {
     axios
       .get(`https://maps.googleapis.com/maps/api/directions/json?destination=${latitude},${longitude}&origin=${lat},${lng}&key=${GOOGLE_KEY}`)
       .then((response) => console.log(response))
-      .catch((error) => console.log(error))
-    setSelectedCoord([latitude, longitude])  
+      .catch((error) => console.log(error));
+    setSelectedCoord([latitude, longitude]);
     setSelectedMarker(true);
   }
 
@@ -66,7 +77,7 @@ const Mission: React.FC = ({ navigation }: any) => {
         longitudeDelta: 0.0421,
       }}
     >
-      {placesFromGoogle.map((place, index) => (
+      {places.places.map((place, index) => (
         <Marker
           key={index}
           coordinate={{ latitude: place.lat, longitude: place.lng }}
@@ -88,18 +99,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   pressable: {
-    position: 'absolute',
+    position: "absolute",
     top: 20,
     width: 200,
     height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   text: {
     fontSize: 30,
-    color: 'blue',
-    backgroundColor: 'green',
-  }
+    color: "blue",
+    backgroundColor: "green",
+  },
 });
 
 export default Mission;

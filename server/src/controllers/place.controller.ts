@@ -6,10 +6,10 @@ import {Place, NewPlace} from '../../server-types/types'
 
 export async function addNewPlace(ctx: Context): Promise<void> {
     // console.log('Creating new place.');
-    const { lat, lng, name, city } = <NewPlace> ctx.request.body;
+    const { id, lat, lng, name, city } = <NewPlace> ctx.request.body;
     try {
         await db.place.create({
-            data: { lat, lng, name, city }
+            data: { id, lat, lng, name, city }
         });
         ctx.response.status = 201;
         ctx.response.body = 'OK';

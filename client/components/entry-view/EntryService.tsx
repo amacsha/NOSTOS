@@ -1,12 +1,6 @@
 import axios from 'axios';
 const IP: string | undefined = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
-/*
-router.post('/rating/setUserRating', setUserRating)
-router.get('/rating/onEntry/:entryID/byUser/:userID', getUserRating)
-router.get('/rating/AverageEntryRating/:entryID', getAvgEntryRating)
-*/
-
 export async function getOneEntry (entryId: number) {
   const url = `http://${IP}:3000/entry/getOne/${entryId}`;
 
@@ -52,7 +46,6 @@ export async function postComment (entryId: number, commenterId: number, content
     commenterId,
     content
   }
-  
   const url = `http://${IP}:3000/comment/addNew/${entryId}`;
   const response = axios.post(url, data)
 }
