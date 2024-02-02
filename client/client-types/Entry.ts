@@ -1,6 +1,6 @@
 export interface Entry {
   id?: number;
-  placeId: number | null;
+  placeId: string | null;
   authorId: number | null;
   title: string;
   content: string;

@@ -59,7 +59,7 @@ const getAvgInPlace = async (ctx : Koa.Context) => {
     try {
         const entryIds = (await prisma.entry.findMany({
             where: {
-              placeId: Number(ctx.params.placeID),
+              placeId: ctx.params.placeID,
             },
         })).map(entry => entry.id)
 

@@ -5,7 +5,7 @@ interface rating {
 }
 interface entry {
   id: number,
-  placeId: number,
+  placeId: string,
   authorId: number,
   title: string,
   content: string,
@@ -14,7 +14,7 @@ interface entry {
 }
 
 interface newEntry {
-  placeId: number,
+  placeId: string,
   authorId: number,
   title: string,
   content: string,
@@ -60,7 +60,7 @@ interface UserType {
 
 interface LastVisited {
   userId: number;
-  placeId: number;
+  placeId: string;
   visit_time: Date;
 }
 

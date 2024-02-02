@@ -10,6 +10,7 @@ import EntriesView from './EntriesView';
 import { cityFetcher, getActiveMissions } from './DashboardsServices';
 import { Place } from '../../client-types/Place';
 import MissionView from './MissionView';
+import LogoutService from '../logout/Logout';
 
 const Main: React.FC = ({navigation}: any) => {
   const fetchLocation = GeoLocation();
@@ -36,6 +37,7 @@ const Main: React.FC = ({navigation}: any) => {
   return (
     <SafeAreaView style={styles.container}>
       <View>
+        <LogoutService></LogoutService>
       <Button title='Go to mission' onPress={() => navigation.navigate('Mission')} />
         <Text>City: {location.value?.cityName}</Text>
         {activeMissions.length == 0 ?
