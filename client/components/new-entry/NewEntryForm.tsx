@@ -18,7 +18,7 @@ const NewEntryForm: React.FC = () => {
     const username: string | null = useSelector(
         (state: RootState) => state.user.username
     );
-    const placeId: number | null = useSelector(
+    const placeId: string | null = useSelector(
         (state: RootState) => state.places.selectedPlaceId
     )
 
@@ -31,7 +31,7 @@ const NewEntryForm: React.FC = () => {
 
     const handleSubmit = async (values: Entry) => {
         values.authorId = userId
-        values.placeId = 1
+        values.placeId = placeId
         console.log(values)
         const res = await NewEntryService(values)
         values.tag = []

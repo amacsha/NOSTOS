@@ -31,8 +31,8 @@ const Register: React.FC = () => {
   const handleSubmit = async (values: RegisterValues) => {
 
     const res: UserResponse = await RegisterService(values)
-    if (res.message) {
-      Alert.alert(`${res.message}`);
+    if (res.error) {
+      Alert.alert(`${res.error}`);
       dispatch(setAuth(initialState));
     } else {
       Alert.alert('user created 👍')

@@ -3,7 +3,7 @@ import { Place } from "../client-types/Place";
 
 type PlacesState = {
   places: Place[];
-  selectedPlaceId: number | null;
+  selectedPlaceId: string | null;
 };
 
 const initialState: PlacesState = {
@@ -18,7 +18,7 @@ export const PlacesSlice = createSlice({
     setPlaces: (state, action: PayloadAction<Place[]>) => {
       state.places = action.payload;
     },
-    selectPlace: (state, action: PayloadAction<number>) => {
+    selectPlace: (state, action: PayloadAction<string>) => {
       state.selectedPlaceId = action.payload;
     },
     clearSelectedPlace: (state) => {
