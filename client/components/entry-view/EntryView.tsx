@@ -13,21 +13,26 @@ import UserRating from "./UserRating";
 import CommentView from "./CommentView";
 import { RootState } from "../../store";
 import NewComment from "./NewComment";
-
+import { useAppDispatch } from "../../hooks";
+import { commentsSlice } from "../../slices/commentsSlice";
+import { setComments } from "../../slices/commentsSlice";
 
 const EntryView: React.FC = ({ navigation }: any) => {
   const id = useSelector((state: RootState) => state.entries.selectedEntryID);
   const userId = useSelector((state: RootState) => state.user.id);
+  const comments = useSelector((state: RootState) => state.comments);
 
+  const dispatch = useAppDispatch();
+
+  // TODO change to redux
   const [entryDetails, setEntryDetails] = useState<any>(undefined);
-  const [comments, setComments] = useState<any[]>([]);
-
-  let usersExistingComment: string = "";
+  let usersExistingComment: string | undefined = "";
 
   async function load() {
     const update = await getOneEntry(id as number);
-    const comments: [] = await getComments(id as number);
-    setComments(comments);
+    const commentsFromAPI: [] = await getComments(id as number);
+    console.log(commentsFromAPI)
+    dispatch(setComments(commentsFromAPI))
     setEntryDetails(update);
   }
 
@@ -36,10 +41,18 @@ const EntryView: React.FC = ({ navigation }: any) => {
   }, []);
 
   if (!entryDetails) return <ActivityIndicator />;
-  if (comments.length > 0) {
-    usersExistingComment = comments.find(
-      (comment) => comment.commenterId === userId
-    )?.content;
+  // if (comments.length > 0) {
+  //   usersExistingComment = comments.find(
+  //     (comment) => comment.commenterId === userId
+  //   )?.content;
+  // }
+
+  if (comments.length > 0) console.log(comments)
+  if (comments.some(comment => comment.entryId === id)) {
+    usersExistingComment = comments.find(comment => {
+      comment.commenterId === userId && comment.entryId === id
+    })?.content
+
   }
 
   return (
@@ -63,15 +76,14 @@ const EntryView: React.FC = ({ navigation }: any) => {
             title="EDIT COMMENT"
             onPress={() =>
               navigation.navigate("New Comment", {
-                defaultContent: usersExistingComment,
-                load
+                defaultContent: usersExistingComment
               })
             }
           />
         ) : (
           <Button
             title="NEW COMMENT"
-            onPress={() => navigation.navigate("New Comment", {load})}
+            onPress={() => navigation.navigate("New Comment")}
           />
         )}
         {comments.length === 0 ? <Text>No comments!</Text> :
