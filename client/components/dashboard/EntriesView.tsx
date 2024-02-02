@@ -11,36 +11,7 @@ import { ScrollView } from 'react-native';
 
 import { useAppDispatch } from '../../hooks';
 import { updatePrefrence, getPrefrence } from './DashboardsServices';
-
-const items = [{
-    id: '92iijs7yta',
-    name: 'Ondo'
-  }, {
-    id: 'a0s0a8ssbsd',
-    name: 'Ogun'
-  }, {
-    id: '16hbajsabsd',
-    name: 'Calabar'
-  }, {
-    id: 'nahs75a5sg',
-    name: 'Lagos'
-  }, {
-    id: '667atsas',
-    name: 'Maiduguri'
-  }, {
-    id: 'hsyasajs',
-    name: 'Anambra'
-  }, {
-    id: 'djsjudksjd',
-    name: 'Benue'
-  }, {
-    id: 'sdhyaysdj',
-    name: 'Kaduna'
-  }, {
-    id: 'suudydjsjd',
-    name: 'Abuja'
-    }
-];
+import { exists } from 'fs';
 
 const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entries } : {entries: (SmallEntry & {avg: number})[]}) => {
   const filter_preference = useSelector((state: RootState) => state.user.filter_preference);
@@ -75,13 +46,20 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
               layout='row'
             />
             <MultiSelect
-              onSelectedItemsChange={(e) => console.log(e)}
+              items={
+                [... new Set(entries.reduce((accumulator, currentValue) => 
+                  accumulator.concat(currentValue.tag as never[]),
+                []))].map((tag) => {
+                  return {id: tag, name: tag}
+                })
+              }
+              uniqueKey="id"
+              onSelectedItemsChange={(selectedItems) => {setSelected(selectedItems as never[])}}
               selectedItems={selected}
-              items={items}
             />
         </View>
         <ScrollView>
-        {entries.sort((a, b) => {
+        {entries.filter((entry) => selected.every(tag => entry.tag.includes(tag))).sort((a, b) => {
             return filter_preference == 'recent' ? 
             new Date(b.creation_date).getTime() - new Date(a.creation_date).getTime()  :
             b.avg - a.avg
