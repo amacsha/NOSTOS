@@ -15,6 +15,7 @@ import Logout from "../logout/Logout";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { setAuth } from "../../slices/authSlice";
+import { updateUserDetails } from "../../slices/userSlice";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,15 +24,22 @@ export default function UserStart() {
   const dispatch = useDispatch()
 
   let token = getValueFor('accessToken')
+  let userId = Number(getValueFor('userId'))
+  let email = getValueFor('email')
+  let username = getValueFor('username')
   if (token) {
     dispatch(setAuth({ isAuthenticated: true, token: token }))
+    dispatch(updateUserDetails({ id: userId, email: email, username: username }))
   }
 
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
+  const user = useSelector(
+    (state: RootState) => state.user.email
+  )
 
-  console.log(token)
+  console.log(user)
   return (
     <NavigationContainer>
       <Stack.Navigator>

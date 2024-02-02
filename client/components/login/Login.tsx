@@ -28,7 +28,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
   const dispatch = useAppDispatch();
 
   const handleSubmit = async (values: LoginValues) => {
-    
+
     const res: UserResponse = await LoginService(values)
     if (res.error) {
       Alert.alert(`${res.error}`);
@@ -40,6 +40,9 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
         id: res.data.userId, email: res.data.email, username: res.data.username
       }))
       save('accessToken', res.data.accessToken);
+      save('userId', res.data.userId.toString());
+      save('email', res.data.email);
+      save('username', res.data.username);
     }
   }
 
