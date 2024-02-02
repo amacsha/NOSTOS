@@ -42,28 +42,33 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     height: 80, 
     justifyContent: 'flex-start',
-    alignItems: 'flex-start', 
+    alignItems: 'flex-start',
+    fontFamily: 'Gruppe_A', 
   },
   entryContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     width: '100%',
+    fontFamily: 'Gruppe_A',
   },
   entryTitle: {
     fontSize: 15,
     color: '#ffffff',
     fontWeight: 'bold',
-    flex: 1, 
+    flex: 1,
+    fontFamily: 'Gruppe_A',
   },
   entryDetails: {
     alignItems: 'flex-end',
-    flex: 1, 
+    flex: 1,
+    fontFamily: 'Gruppe_A',
   },
   entrySmallText: {
     fontSize: 10,
     color: '#ffffff', 
     marginTop: 4, 
+    fontFamily: 'Gruppe_A',
   },
 });
 

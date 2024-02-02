@@ -97,20 +97,25 @@ const styles = StyleSheet.create({
   container: {
     borderWidth: 2,
     margin: 5,
+    color: 'white',
+    fontFamily: 'Gruppe_A', 
   },
   commentContainer: {
     borderWidth: 2,
     margin: 5,
     maxHeight: 350,
+    fontFamily: 'Gruppe_A', 
   },
   title: {
     fontWeight: "bold",
     fontSize: 28,
     margin: 15,
+    fontFamily: 'Gruppe_A', 
   },
   content: {
     fontSize: 18,
     margin: 35,
+    fontFamily: 'Gruppe_A', 
   },
   ratings: {},
 });

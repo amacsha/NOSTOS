@@ -86,6 +86,7 @@ const Mission: React.FC = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   map: {
     flex: 1,
+    fontFamily: 'Gruppe_A', 
   },
   pressable: {
     position: 'absolute',
@@ -94,11 +95,13 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
+    fontFamily: 'Gruppe_A', 
   },
   text: {
     fontSize: 30,
     color: 'blue',
     backgroundColor: 'green',
+    fontFamily: 'Gruppe_A', 
   }
 });
 

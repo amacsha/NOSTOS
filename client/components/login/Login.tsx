@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#081116',
     height: '100%',
-    color: '#D4D5D6'
+    color: '#D4D5D6',
+    fontFamily: 'Gruppe_A', 
   },
   head: {},
   input: {
@@ -103,6 +104,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     height: 30,
     fontSize: 17,
+    fontFamily: 'Gruppe_A', 
   },
   error: {
     backgroundColor: '#341717',
@@ -111,6 +113,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     height: 30,
     fontSize: 17,
+    fontFamily: 'Gruppe_A', 
   },
   button: {
     backgroundColor: '#45417B',
@@ -121,10 +124,12 @@ const styles = StyleSheet.create({
     padding: 3,
     height: 30,
     width: 80,
+    fontFamily: 'Gruppe_A', 
   },
   buttonText: {
     color: '#9578F8',
     fontSize: 17,
+    fontFamily: 'Gruppe_A', 
   }
 })
 

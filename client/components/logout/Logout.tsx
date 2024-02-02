@@ -35,10 +35,12 @@ const styles = StyleSheet.create({
         padding: 3,
         height: 30,
         width: 80,
+        fontFamily: 'Gruppe_A', 
     },
     buttonText: {
         color: '#9578F8',
         fontSize: 17,
+        fontFamily: 'Gruppe_A', 
     }
 })
 

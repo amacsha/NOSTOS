@@ -30,7 +30,7 @@ const Location: React.FC = ({navigation}: any) => {
   return (
     <View style={styles.container}>
       {placeId ? (
-        <View style={{flex: 8, borderColor: 'green',
+        <View style={{flex: 8,
         borderWidth: 2,}}>
           <EntriesView entries={placeEntries}></EntriesView>
         </View>
@@ -54,18 +54,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'stretch',
     padding: 10,
+    fontFamily: 'Gruppe_A', 
   },
   locationText: {
     fontSize: 16,
     color: 'black',
     marginBottom: 10,
+    fontFamily: 'Gruppe_A', 
   },
   fetchingText: {
     fontSize: 14,
     color: 'gray',
+    fontFamily: 'Gruppe_A', 
   },
   bottom : {
     alignItems: 'center',
     justifyContent: 'center',
+    fontFamily: 'Gruppe_A', 
   }
 });

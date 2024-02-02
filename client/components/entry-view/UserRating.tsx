@@ -77,24 +77,30 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    fontFamily: 'Gruppe_A', 
   },
   userRating: {
     alignItems: "center",
-    fontSize: 25
+    fontSize: 25,
+    fontFamily: 'Gruppe_A', 
   },
   avgRating: {
-    fontSize: 25
+    fontSize: 25,
+    fontFamily: 'Gruppe_A', 
   },
   buttonContainer: {
-    flexDirection: "row"
+    flexDirection: "row",
+    fontFamily: 'Gruppe_A', 
   },
   button: {
     borderWidth: 1,
     borderRadius: 5,
+    fontFamily: 'Gruppe_A', 
   },
   buttonText: {
     fontSize: 25,
-    margin: 5
+    margin: 5,
+    fontFamily: 'Gruppe_A', 
   }
 })

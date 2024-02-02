@@ -46,7 +46,9 @@ export default function CommentView({ comments }: any) {
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Comments: </Text>
         </View>
-        <ScrollView>{commentsWithUsernames}</ScrollView>
+        <ScrollView style={styles.commentContainer}>
+          {commentsWithUsernames}
+          </ScrollView>
       </>
     );
   } else {
@@ -58,9 +60,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     borderBottomWidth: 2,
+    fontFamily: 'Gruppe_A', 
   },
   titleContainer: {
     borderBottomWidth: 1,
+    fontFamily: 'Gruppe_A', 
   },
   title: {
     paddingLeft: 15,
@@ -68,11 +72,17 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20,
     paddingBottom: 5,
+    fontFamily: 'Gruppe_A', 
   },
   comment: {
     borderRadius: 15,
     borderWidth: 2,
-    borderColor: "purple",
+    borderColor: "w",
     margin: 5,
+    fontFamily: 'Gruppe_A', 
   },
+  commentContainer: {
+    backgroundColor: '1f1f1f',
+    fontFamily: 'Gruppe_A', 
+  }
 });

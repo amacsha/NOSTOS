@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import RadioGroup, {RadioButtonProps} from 'react-native-radio-buttons-group';
 import MultiSelect from 'react-native-multiple-select';
 
+
 import { SmallEntry } from '../../client-types/SmallEntry';
 import EntryCard from './EntryCard';
 import { ScrollView } from 'react-native';
@@ -12,12 +13,14 @@ import { ScrollView } from 'react-native';
 import { useAppDispatch } from '../../hooks';
 import { updatePrefrence, getPrefrence } from './DashboardsServices';
 import { exists } from 'fs';
+import { text } from 'stream/consumers';
 
 const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entries } : {entries: (SmallEntry & {avg: number})[]}) => {
   const filter_preference = useSelector((state: RootState) => state.user.filter_preference);
   const userId = useSelector((state: RootState) => state.user.id);
   const dispatch = useAppDispatch()
   const [selected, setSelected] = useState([])
+ 
   useEffect(() => {
     userId && getPrefrence(dispatch, userId)
   }, [userId])
@@ -27,6 +30,7 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
         id: 'top rated',
         label: 'top rated',
         value: 'top rated'
+        
     },
     {
         id: 'recent',
@@ -38,12 +42,13 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
   return (
     <View style={styles.entryView}>
         <View>
-            <Text>Filter by: {filter_preference}</Text>
+            <Text style={styles.filterStyle}>Filter by: {filter_preference}</Text>
             <RadioGroup 
               radioButtons={radioButtons} 
               onPress={(newPref) => userId != null && updatePrefrence(newPref, dispatch, userId)}
               selectedId={filter_preference == null? undefined : filter_preference}
               layout='row'
+              style={styles.filterStyle}
             />
             <MultiSelect
               items={
@@ -59,13 +64,18 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
             />
         </View>
         <ScrollView>
-        {entries.filter((entry) => selected.every(tag => entry.tag.includes(tag))).sort((a, b) => {
+
+        
+        {entries.length > 0 ? 
+        
+        entries.filter((entry) => selected.every(tag => entry.tag.includes(tag))).sort((a, b) => {
             return filter_preference == 'recent' ? 
             new Date(b.creation_date).getTime() - new Date(a.creation_date).getTime()  :
             b.avg - a.avg
         }).map((entry) => {
             return <EntryCard entry={entry} key={entry.id}/>
-        })}
+        }): <Text style={styles.pendingText}> Waiting For Entries...</Text>
+            }
         </ScrollView>
     </View>
   );
@@ -83,6 +93,15 @@ const styles = StyleSheet.create({
     borderColor: '#333',
     gap: 5,
     borderWidth: 2,
-    flexGrow: 1
+    flexGrow: 1,
+    fontFamily: 'Gruppe_A',
   },
+  pendingText: {
+    color: 'white',
+    fontFamily: 'Gruppe_A'
+  },
+  filterStyle: {
+    color: 'white',
+    fontFamily: 'Gruppe_A',
+  }
 });
