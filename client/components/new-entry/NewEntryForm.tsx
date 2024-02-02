@@ -4,7 +4,7 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import NewEntryService from '../../service/NewEntryService';
-import LogoutService from '../logout/Logout';
+import Logout from '../logout/Logout';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { Entry } from '../../client-types/Entry';
@@ -120,7 +120,7 @@ const NewEntryForm: React.FC = () => {
                     </>
                 )}
             </Formik >
-            <LogoutService />
+            <Logout />
         </View >
     )
 }

@@ -6,7 +6,7 @@ import { getValueFor, save } from "../../utils/secureStorage";
 import { deleteItemAsync } from 'expo-secure-store';
 
 
-const LogoutService: React.FC = () => {
+const Logout: React.FC = () => {
 
     const dispatch = useAppDispatch();
 
@@ -44,4 +44,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default LogoutService;
+export default Logout;
