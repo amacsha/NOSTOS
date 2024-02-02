@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { LoginValues } from '../client-types/LoginValues';
 import { UserResponse } from '../client-types/UserResponse';
 
