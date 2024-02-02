@@ -3,7 +3,6 @@ import { Alert } from 'react-native';
 
 
 export async function save(key: string, value: string | null) {
-    console.log('save', key, value)
     await SecureStore.setItemAsync(key, value!);
 }
 
@@ -17,5 +16,4 @@ export function getValueFor(key: string): string | null {
         // Alert.alert('No values stored under that key.');
         return null
     }
-    console.log('getValue', result)
 }

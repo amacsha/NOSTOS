@@ -6,11 +6,9 @@ import { RootState } from "../store";
 const IP: string | undefined = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
 const NewEntryService = async (newEntry: Entry) => {
-    
-        console.log(IP)
-        const res = await axios.post(`http://${IP}:3000/entry/addOne`, newEntry)
-        console.log(res)
-        return res
+    const res = await axios.post(`http://${IP}:3000/entry/addOne`, newEntry)
+    console.log(res)
+    return res
 }
 
 export default NewEntryService

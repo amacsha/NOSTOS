@@ -40,7 +40,6 @@ const NewEntryForm: React.FC = () => {
             values.authorId = userId
             values.placeId = 'ChIJ0-48HywBdkgRh7MH0Igd1f4'
             const res = await NewEntryService(values)
-            console.log(res)
         }
     }
     

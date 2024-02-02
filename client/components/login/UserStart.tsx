@@ -32,7 +32,7 @@ export default function UserStart() {
     dispatch(setAuth({ isAuthenticated: true, token: token }))
     dispatch(updateUserDetails({ id: userId, email: email, username: username }))
   }
-  // console.log(filter_preference)
+  
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );

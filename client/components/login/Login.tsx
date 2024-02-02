@@ -49,7 +49,6 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
   const user = useSelector(
     (state: RootState) => state.user.filter_preference
   )
-  console.log(user)
 
   return (
     <View style={styles.container}>
