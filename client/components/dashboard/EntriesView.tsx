@@ -47,8 +47,8 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
             />
             <MultiSelect
               items={
-                [... new Set(entries.reduce((accumulator, currentValue) => 
-                  accumulator.concat(currentValue.tag as never[]),
+                [... new Set(entries.reduce((entryTags, entry) => 
+                  entryTags.concat(entry.tag as never[]),
                 []))].map((tag) => {
                   return {id: tag, name: tag}
                 })
