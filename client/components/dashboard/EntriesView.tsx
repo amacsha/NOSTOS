@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import React, { useEffect, useMemo, useState } from 'react';
 import RadioGroup, {RadioButtonProps} from 'react-native-radio-buttons-group';
+import MultiSelect from 'react-native-multiple-select';
 
 import { SmallEntry } from '../../client-types/SmallEntry';
 import EntryCard from './EntryCard';
@@ -15,6 +16,7 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
   const filter_preference = useSelector((state: RootState) => state.user.filter_preference);
   const userId = useSelector((state: RootState) => state.user.id);
   const dispatch = useAppDispatch()
+  const [selected, setSelected] = useState([])
   
   useEffect(() => {
     userId && getPrefrence(dispatch, userId)
@@ -43,9 +45,27 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
               selectedId={filter_preference == null? undefined : filter_preference}
               layout='row'
             />
+            <MultiSelect
+              items={
+                [
+                  ... new Set(entries.filter((entry) => 
+                    selected.every(tag => 
+                      entry.tag.includes(tag))
+                  ).reduce((entryTags, entry) => 
+                      entryTags.concat(entry.tag as never[]
+                    ),[]
+                  ))
+                ].map((tag) => {
+                    return {id: tag, name: tag}
+                })
+              }
+              uniqueKey="id"
+              onSelectedItemsChange={(selectedItems) => {setSelected(selectedItems as never[])}}
+              selectedItems={selected}
+            />
         </View>
         <ScrollView>
-        {entries.sort((a, b) => {
+        {entries.filter((entry) => selected.every(tag => entry.tag.includes(tag))).sort((a, b) => {
             return filter_preference == 'recent' ? 
             new Date(b.creation_date).getTime() - new Date(a.creation_date).getTime()  :
             b.avg - a.avg

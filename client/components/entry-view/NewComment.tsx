@@ -18,27 +18,55 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useAppDispatch } from "../../hooks";
+import { setComments } from "../../slices/commentsSlice";
+import { Comment } from "../../client-types/Comment";
 
-export default function NewComment({route}: any) {
+export default function NewComment({ route }: any) {
   const navigation = useNavigation();
-
-  const entryId = useSelector((state: RootState) => state.entries.selectedEntryID);
+  const entryId = useSelector(
+    (state: RootState) => state.entries.selectedEntryID
+  );
   const userId = useSelector((state: RootState) => state.user.id);
+  const comments = useSelector((state: RootState) => state.comments);
 
-  async function handleSubmit(values: {content: string}) {
+  const dispatch = useAppDispatch();
+
+  async function handleSubmit(values: { content: string }) {
+
     if (values.content) {
-      await postComment(entryId as number, userId as number, values.content)
-      route.params.load();
-    }
+      let newState;
+      await postComment(entryId as number, userId as number, values.content);
 
-    navigation.navigate("EntryView" as never);
-  }
+      let commentExists = comments.some(comment => comment.commenterId === userId && comment.entryId === entryId);
+      let newObject: Comment = {
+        commenterId: userId as number,
+        content: values.content,
+        entryId: entryId as number
+      }
+
+      if (commentExists) {
+        const commentIndex = comments.findIndex(comment => comment.commenterId === userId && comment.entryId === entryId);
+        newState = comments.slice(0, commentIndex).concat([newObject]).concat(comments.slice(commentIndex + 1));
+      } else {
+        newState = comments.slice().concat([newObject]);
+      }
+
+      dispatch(setComments(newState))
+      }
+
+      navigation.navigate("EntryView" as never);
+    }
 
   return (
     <View>
       <Formik
-        initialValues={route.params?.defaultContent ? {content: route.params.defaultContent} : { content: "" }}
-        onSubmit={values => handleSubmit(values)}
+        initialValues={
+          route.params?.defaultContent
+            ? { content: route.params.defaultContent }
+            : { content: "" }
+        }
+        onSubmit={(values) => handleSubmit(values)}
       >
         {({ handleChange, handleSubmit, values }) => (
           <>
@@ -50,8 +78,14 @@ export default function NewComment({route}: any) {
               onChangeText={handleChange("content")}
             ></TextInput>
 
-            <Button title="Save" onPress={(event: GestureResponderEvent) => handleSubmit()}/>
-            <Button title="Cancel" onPress={() => navigation.navigate('EntryView' as never)}/>
+            <Button
+              title="Save"
+              onPress={(event: GestureResponderEvent) => handleSubmit()}
+            />
+            <Button
+              title="Cancel"
+              onPress={() => navigation.navigate("EntryView" as never)}
+            />
           </>
         )}
       </Formik>
