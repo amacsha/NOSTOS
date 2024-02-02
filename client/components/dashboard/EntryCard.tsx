@@ -4,6 +4,7 @@ import { SmallEntry } from '../../client-types/SmallEntry';
 
 import { useAppDispatch } from '../../hooks';
 import { selectEntry } from '../../slices/entriesSlice';
+import React from 'react';
 
 const EntryCard: React.FC<{entry: SmallEntry & {avg: number}}> = ({ entry } : {entry: SmallEntry & {avg: number}}) => {
   const navigation = useNavigation();
