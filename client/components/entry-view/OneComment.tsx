@@ -5,7 +5,7 @@ export default function OneComment({ content, userName }: any) {
   if (content) {
     return (
       <ScrollView style={styles.container}>
-        <Text>{userName}: "{content}".</Text>
+        <Text style={styles.content}>{userName}: "{content}".</Text>
       </ScrollView>
     )
   }
@@ -17,9 +17,8 @@ const styles = StyleSheet.create({
 
   },
   username: {
-
   },
   content: {
-
+    color: 'white'
   }
 })

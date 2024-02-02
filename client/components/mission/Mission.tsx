@@ -101,20 +101,23 @@ const Mission: React.FC = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   map: {
     flex: 1,
+    fontFamily: 'Gruppe_A', 
   },
   pressable: {
     position: "absolute",
     top: 20,
     width: 200,
     height: 50,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontFamily: 'Gruppe_A', 
   },
   text: {
     fontSize: 30,
-    color: "blue",
-    backgroundColor: "green",
-  },
+    color: 'blue',
+    backgroundColor: 'green',
+    fontFamily: 'Gruppe_A', 
+  }
 });
 
 export default Mission;

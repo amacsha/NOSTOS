@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     gap: 5,
     borderColor: 'black',
     borderWidth: 2,
-    flexGrow: 1
+    flexGrow: 1,
+    fontFamily: 'Gruppe_A', 
   },
 });

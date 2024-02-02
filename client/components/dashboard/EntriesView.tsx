@@ -17,7 +17,6 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
   const userId = useSelector((state: RootState) => state.user.id);
   const dispatch = useAppDispatch()
   const [selected, setSelected] = useState([])
-  
   useEffect(() => {
     userId && getPrefrence(dispatch, userId)
   }, [userId])
@@ -27,6 +26,7 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
         id: 'top rated',
         label: 'top rated',
         value: 'top rated'
+        
     },
     {
         id: 'recent',
@@ -38,12 +38,13 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
   return (
     <View style={styles.entryView}>
         <View>
-            <Text>Filter by: {filter_preference}</Text>
+            <Text style={styles.filterStyle}>Filter by: {filter_preference}</Text>
             <RadioGroup 
               radioButtons={radioButtons} 
               onPress={(newPref) => userId != null && updatePrefrence(newPref, dispatch, userId)}
               selectedId={filter_preference == null? undefined : filter_preference}
               layout='row'
+              style={styles.filterStyle}
             />
             <MultiSelect
               items={
@@ -65,13 +66,18 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
             />
         </View>
         <ScrollView>
-        {entries.filter((entry) => selected.every(tag => entry.tag.includes(tag))).sort((a, b) => {
+
+        
+        {entries.length > 0 ? 
+        
+        entries.filter((entry) => selected.every(tag => entry.tag.includes(tag))).sort((a, b) => {
             return filter_preference == 'recent' ? 
             new Date(b.creation_date).getTime() - new Date(a.creation_date).getTime()  :
             b.avg - a.avg
         }).map((entry) => {
             return <EntryCard entry={entry} key={entry.id}/>
-        })}
+        }): <Text style={styles.pendingText}> Waiting For Entries...</Text>
+            }
         </ScrollView>
     </View>
   );
@@ -82,12 +88,22 @@ export default EntriesView;
 
 const styles = StyleSheet.create({
   entryView: {
-    backgroundColor: '#ffff',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    backgroundColor: '#1f1f1f',
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
+    padding: 1,
+    borderColor: '#333',
     gap: 5,
-    borderColor: 'black',
     borderWidth: 2,
-    flexGrow: 1
+    flexGrow: 1,
+    fontFamily: 'Gruppe_A',
   },
+  pendingText: {
+    color: 'white',
+    fontFamily: 'Gruppe_A'
+  },
+  filterStyle: {
+    color: 'white',
+    fontFamily: 'Gruppe_A',
+  }
 });

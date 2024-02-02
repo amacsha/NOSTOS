@@ -31,13 +31,16 @@ const styles = StyleSheet.create({
     padding: 10,
     borderColor: 'black',
     borderWidth: 2,
+    fontFamily: 'Gruppe_A', 
   },
   entrySmallText: {
     fontSize: 11,
     color: 'black',
+    fontFamily: 'Gruppe_A', 
   },
   entryTitle: {
     fontSize: 20,
     color: 'black',
+    fontFamily: 'Gruppe_A', 
   },
 });
