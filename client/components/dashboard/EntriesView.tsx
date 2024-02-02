@@ -62,11 +62,12 @@ export default EntriesView;
 
 const styles = StyleSheet.create({
   entryView: {
-    backgroundColor: '#ffff',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    backgroundColor: '#1f1f1f',
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
+    padding: 1,
+    borderColor: '#333',
     gap: 5,
-    borderColor: 'black',
     borderWidth: 2,
     flexGrow: 1
   },

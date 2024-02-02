@@ -34,6 +34,7 @@ const Main: React.FC = ({navigation}: any) => {
 
 
   return (
+    
     <SafeAreaView style={styles.container}>
       <View>
       <Button title='Go to mission' onPress={() => navigation.navigate('Mission')} />
