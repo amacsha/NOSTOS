@@ -50,6 +50,7 @@ router.get('/place/getAll', getAllPlaces);
 router.get('/place/getByCity/:cityName', getPlacesForCity);
 router.post('/place/addMany', addManyPlaces);
 router.get('/place/getRecent/:userId', getRecentPlaces)
+router.get('/place/getByCity/:cityName/sample/:numOfPlaces')
 
 // COMMENT
 
