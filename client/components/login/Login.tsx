@@ -11,7 +11,6 @@ import { save } from "../../utils/secureStorage";
 import { LoginValues } from "../../client-types/LoginValues";
 import { UserResponse } from "../../client-types/UserResponse";
 
-
 type LoginProps = {
   navigation: NativeStackNavigationProp<any>
 }

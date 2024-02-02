@@ -31,8 +31,7 @@ const EntryView: React.FC = ({ navigation }: any) => {
   async function load() {
     const update = await getOneEntry(id as number);
     const commentsFromAPI: [] = await getComments(id as number);
-    console.log(commentsFromAPI)
-    dispatch(setComments(commentsFromAPI))
+    dispatch(setComments(commentsFromAPI));
     setEntryDetails(update);
   }
 
@@ -41,18 +40,10 @@ const EntryView: React.FC = ({ navigation }: any) => {
   }, []);
 
   if (!entryDetails) return <ActivityIndicator />;
-  // if (comments.length > 0) {
-  //   usersExistingComment = comments.find(
-  //     (comment) => comment.commenterId === userId
-  //   )?.content;
-  // }
-
-  if (comments.length > 0) console.log(comments)
-  if (comments.some(comment => comment.entryId === id)) {
-    usersExistingComment = comments.find(comment => {
-      comment.commenterId === userId && comment.entryId === id
-    })?.content
-
+  if (comments.length > 0) {
+    usersExistingComment = comments.find(
+      (comment) => comment.commenterId === userId
+    )?.content;
   }
 
   return (
@@ -76,7 +67,7 @@ const EntryView: React.FC = ({ navigation }: any) => {
             title="EDIT COMMENT"
             onPress={() =>
               navigation.navigate("New Comment", {
-                defaultContent: usersExistingComment
+                defaultContent: usersExistingComment,
               })
             }
           />
@@ -86,8 +77,11 @@ const EntryView: React.FC = ({ navigation }: any) => {
             onPress={() => navigation.navigate("New Comment")}
           />
         )}
-        {comments.length === 0 ? <Text>No comments!</Text> :
-        <CommentView comments={comments} /> }
+        {comments.length === 0 ? (
+          <Text>No comments!</Text>
+        ) : (
+          <CommentView />
+        )}
       </View>
     </>
   );
