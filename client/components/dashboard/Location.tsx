@@ -3,24 +3,17 @@ import { View, Text, StyleSheet, Button, GestureResponderEvent, SafeAreaView } f
 import GeoLocation from './GeoLocation';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-
 import { useState, useEffect } from "react";
-
 import { SmallEntry } from '../../client-types/SmallEntry';
 import EntriesView from './EntriesView';
 import { placeFetcher } from './DashboardsServices';
-import { useAppDispatch } from "../../hooks";
-import { selectPlace } from "../../slices/placesSlice";
 
 const Location: React.FC = ({navigation}: any) => {
   const placeId = useSelector((state: RootState) => state.places.selectedPlaceId);
   const userId =  useSelector((state: RootState) => state.user.id);
   const [placeEntries, setPlaceEntries] = useState<(SmallEntry & {avg: number})[]>([])
 
-  const dispatch = useAppDispatch()
-  useEffect(() => {
-    dispatch(selectPlace(1))
-  })
+  console.log(placeId)
 
   useEffect(() => {
     placeId != null && placeFetcher(placeId, setPlaceEntries)
