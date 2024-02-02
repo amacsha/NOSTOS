@@ -29,6 +29,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
   const dispatch = useAppDispatch();
 
   const handleSubmit = async (values: LoginValues) => {
+    
     const res: UserResponse = await LoginService(values)
     if (res.error) {
       Alert.alert(`${res.error}`);
