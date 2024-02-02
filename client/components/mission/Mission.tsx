@@ -28,31 +28,31 @@ const Mission: React.FC = ({ navigation }: any) => {
   const lat = location.value?.lat;
   const lng = location.value?.lng;
 
-  useEffect(() => {
-    axios
-      .get("https://maps.googleapis.com/maps/api/place/nearbysearch/json", {
-        params: {
-          location: `${lat},${lng}`,
-          radius: 10000,
-          type: "airport",
-          key: GOOGLE_KEY,
-        },
-      })
-      .then((response) => {
-        const places: Place[] = response.data.results.map(
-          (place: GooglePlaceResponse) => ({
-            id: place.place_id,
-            lat: place.geometry.location.lat,
-            lng: place.geometry.location.lng,
-            name: place.name,
-            city: "London", // TODO receive actual city upon location at login (get from state)
-          })
-        );
-        AddPlacesService(places);
-        dispatch(setPlaces(places));
-      })
-      .catch((error) => console.log(error));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("https://maps.googleapis.com/maps/api/place/nearbysearch/json", {
+  //       params: {
+  //         location: `${lat},${lng}`,
+  //         radius: 10000,
+  //         type: "hindu_temple",
+  //         key: GOOGLE_KEY,
+  //       },
+  //     })
+  //     .then((response) => {
+  //       const places: Place[] = response.data.results.map(
+  //         (place: GooglePlaceResponse) => ({
+  //           id: place.place_id,
+  //           lat: place.geometry.location.lat,
+  //           lng: place.geometry.location.lng,
+  //           name: place.name,
+  //           city: "London", // TODO receive actual city upon location at login (get from state)
+  //         })
+  //       );
+  //       AddPlacesService(places);
+  //       dispatch(setPlaces(places));
+  //     })
+  //     .catch((error) => console.log(error));
+  // }, []);
 
   console.log("places:", places.places)
 
