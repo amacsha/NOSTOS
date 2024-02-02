@@ -128,7 +128,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#081116',
         height: '100%',
         color: '#D4D5D6',
-        padding: 10
+        padding: 10,
+        fontFamily: 'Gruppe_A', 
     },
     head: {},
     input: {
@@ -137,7 +138,8 @@ const styles = StyleSheet.create({
         marginVertical: 2,
         height: 30,
         fontSize: 17,
-        paddingLeft: 10
+        paddingLeft: 10,
+        fontFamily: 'Gruppe_A', 
     },
     error: {
         backgroundColor: '#341717',
@@ -146,6 +148,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         height: 30,
         fontSize: 17,
+        fontFamily: 'Gruppe_A', 
     },
     button: {
         backgroundColor: '#45417B',
@@ -156,10 +159,12 @@ const styles = StyleSheet.create({
         padding: 3,
         height: 30,
         width: 80,
+        fontFamily: 'Gruppe_A', 
     },
     buttonText: {
         color: '#9578F8',
         fontSize: 17,
+        fontFamily: 'Gruppe_A', 
     },
     tag: {
         flexDirection: 'row',
@@ -169,19 +174,22 @@ const styles = StyleSheet.create({
         height: 30,
         backgroundColor: '#19222A',
         margin: 2,
+        fontFamily: 'Gruppe_A', 
 
     },
     add: {
         height: 30,
         width: 30,
-        padding: 0
+        padding: 0,
+        fontFamily: 'Gruppe_A', 
 
     },
     delete: {
         height: 30,
         width: 30,
         borderRadius: 25,
-        padding: 0
+        padding: 0,
+        fontFamily: 'Gruppe_A', 
     },
     tagInput: {
         paddingLeft: 10,
@@ -189,6 +197,7 @@ const styles = StyleSheet.create({
         marginRight: 0,
         width: 200,
         backgroundColor: '#19222A',
+        fontFamily: 'Gruppe_A', 
 
     },
     tagText: {
@@ -198,6 +207,7 @@ const styles = StyleSheet.create({
         width: 30,
         marginTop: 6,
         textAlign: 'center',
+        fontFamily: 'Gruppe_A', 
     }
 })
 

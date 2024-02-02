@@ -100,11 +100,13 @@ const styles = StyleSheet.create({
   btnContainer: {},
   container: {
     borderTopWidth: 1,
+    fontFamily: 'Gruppe_A', 
   },
   input: {
     // height: 400,
     borderWidth: 2,
     borderRadius: 15,
     margin: 5,
+    fontFamily: 'Gruppe_A', 
   },
 });

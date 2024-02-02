@@ -115,27 +115,31 @@ const Mission: React.FC = ({ navigation }: any) => {
 const styles = StyleSheet.create({
   map: {
     flex: 1,
+    fontFamily: 'Gruppe_A', 
   },
   directionsButton: {
     position: "absolute",
     top: 20,
     width: 200,
     height: 50,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontFamily: 'Gruppe_A', 
   },
   missionButton: {
     position: "relative",
     bottom: 10,
     width: 200,
     height: 50,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontFamily: 'Gruppe_A', 
   },
   directionsText: {
     fontSize: 30,
-    color: "white",
-    backgroundColor: "purple",
+    color: 'white',
+    backgroundColor: 'purple',
+    fontFamily: 'Gruppe_A', 
     padding: 5
   },
   missionText: {
