@@ -12,19 +12,19 @@ import { Place } from '../../client-types/Place';
 import MissionView from './MissionView';
 import Logout from '../logout/Logout';
 
-const Main: React.FC = ({navigation}: any) => {
+const Main: React.FC = ({ navigation }: any) => {
   const fetchLocation = GeoLocation();
   const location = useSelector((state: RootState) => state.location);
-  const userId =  useSelector((state: RootState) => state.user.id);
-  const [cityEntries, setCityEntries] = useState<(SmallEntry & {avg: number})[]>([])
+  const userId = useSelector((state: RootState) => state.user.id);
+  const [cityEntries, setCityEntries] = useState<(SmallEntry & { avg: number })[]>([])
   const [activeMissions, setActiveMissions] = useState<Place[]>([])
 
-  const asyncFetchLocation =  async() => {
+  const asyncFetchLocation = async () => {
     await fetchLocation()
   }
 
-  useEffect(() => {asyncFetchLocation()}, [])
-  
+  useEffect(() => { asyncFetchLocation() }, [])
+
   useEffect(() => {
     location.value?.cityName != undefined && cityFetcher(location.value?.cityName, setCityEntries)
   }, [location]);
@@ -38,17 +38,18 @@ const Main: React.FC = ({navigation}: any) => {
     <SafeAreaView style={styles.container}>
       <Logout />
       <View>
-        <LogoutService></LogoutService>
-      <Button title='Go to mission' onPress={() => navigation.navigate('Mission')} />
+        <Button title='Go to mission' onPress={() => navigation.navigate('Mission')} />
         <Text>City: {location.value?.cityName}</Text>
         {activeMissions.length == 0 ?
-          <Text>No active missions available</Text>:
+          <Text>No active missions available</Text> :
           <MissionView places={activeMissions}></MissionView>
         }
       </View>
       {location ? (
-        <View style={{flex: 7, borderColor: 'green',
-        borderWidth: 2,}}>
+        <View style={{
+          flex: 7, borderColor: 'green',
+          borderWidth: 2,
+        }}>
           <EntriesView entries={cityEntries}></EntriesView>
         </View>
       ) : (
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'gray',
   },
-  bottom : {
+  bottom: {
     alignItems: 'center',
     justifyContent: 'center',
   }
