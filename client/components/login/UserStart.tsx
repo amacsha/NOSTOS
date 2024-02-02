@@ -24,19 +24,12 @@ export default function UserStart() {
 
   let token = getValueFor('accessToken')
   if (token) {
-    dispatch(setAuth({ isAuthenticated: true, token: 'string' }))
+    dispatch(setAuth({ isAuthenticated: true, token: token }))
   }
 
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
-
-
-  // const [token, setToken] = useState<boolean>(false)
-
-  // useEffect(() => {
-  //   setToken(getValueFor('accessToken'))
-  // }, [token])
 
   console.log(token)
   return (
