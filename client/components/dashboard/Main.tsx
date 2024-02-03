@@ -13,6 +13,7 @@ import MissionView from './MissionView';
 import Logout from '../logout/Logout';
 import { useAppDispatch } from '../../hooks';
 import { setLocation } from '../../slices/locationSlice';
+import { colors } from '../styles/colors';
 
 const Main: React.FC = ({ navigation }: any) => {
   const fetchLocation = GeoLocation();
@@ -66,6 +67,26 @@ const Main: React.FC = ({ navigation }: any) => {
             }
             selectedItems={[location.value?.cityName]}
             single={true}
+
+
+            selectText="select a city:"
+            noItemsText="no cities found. please validate you are on the right planet"
+
+            fontFamily={styles.whiteText.fontFamily}
+            styleItemsContainer={styles.dropdown}
+            styleTextDropdown={styles.blackText}
+            styleTextDropdownSelected={styles.blackText}
+
+            itemTextColor={styles.whiteText.color}
+            itemFontFamily={styles.whiteText.fontFamily}
+
+            submitButtonColor={styles.selectedTags.color}
+
+            selectedItemTextColor={styles.selectedTags.color}
+            selectedItemFontFamily={styles.selectedTags.fontFamily}
+            selectedItemIconColor={styles.selectedTags.color}
+
+            searchInputStyle={styles.blackText}
           />
           {activeMissions.length == 0 ?
             <Text style={styles.locationText}>No active missions available</Text>:
@@ -114,5 +135,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     fontFamily: 'Gruppe_A'
-  }
+  },
+  whiteText: {
+    color: 'white',
+    fontFamily: 'Gruppe_A',
+  },
+  blackText: {
+    color: colors.black,
+    fontFamily: 'Gruppe_A',
+  },
+  dropdown: {
+    backgroundColor: colors.black,
+    borderColor: 'white',
+    borderWidth: 1
+  },
+  selectedTags: {
+    color: colors.lighterPurple,
+    fontFamily: 'Gruppe_A',
+  },
 });
