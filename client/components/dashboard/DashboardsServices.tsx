@@ -14,7 +14,7 @@ const cityFetcher = (cityName: String, setter: React.Dispatch<React.SetStateActi
       return {...entry, avg: avgs.data.find(a => a.entryId == entry.id)?._avg.value || 0}
     }))
   }).catch((err) => {
-    console.log(err)
+    console.log(err.body)
   })
 }
 
@@ -27,7 +27,7 @@ const placeFetcher = (placeId: string, setter: React.Dispatch<React.SetStateActi
       return {...entry, avg: avgs.data.find(a => a.entryId == entry.id)?._avg.value || 0}
     }))
   }).catch((err) => {
-    console.log(err)
+    console.log(err.body)
   })
 }
 
@@ -35,7 +35,7 @@ const updatePrefrence = async (newPrefrence: string, dispatch: any, userId: numb
   await axios.put(`${base_url}/user/setUserFilterPreference/${userId}`, {filter_preference: newPrefrence}).then(() => {
     dispatch(updateFilterPreference(newPrefrence))
   }).catch((err) => {
-    console.log(err)
+    console.log(err.body)
   })
 }
 
@@ -43,7 +43,7 @@ const getPrefrence = async (dispatch: any, userId: number) => {
   await axios.get(`${base_url}/user/getUserFilterPreference/${userId}`).then((res) => {
     dispatch(updateFilterPreference(res.data.filter_preference))
   }).catch((err) => {
-    console.log(err)
+    console.log(err.body)
   })
 }
 
@@ -51,7 +51,7 @@ const getActiveMissions = async (userId: number, setter: any) => {
   await axios.get(`${base_url}/place/getRecent/${userId}`).then((res) => {
     setter(res.data)
   }).catch((err) => {
-    console.log(err)
+    console.log(err.body)
   })
 }
 

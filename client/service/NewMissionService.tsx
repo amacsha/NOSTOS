@@ -11,7 +11,7 @@ const fetchNewMissions = async (cityName: string) => {
   await axios.get(`${base_url}/place/getByCity/${cityName}/sample/${numOfPlaces}`).then((res) => {
     dispatch(setPlaces(res.data))
   }).catch((err) => {
-    console.log(err)
+    console.log(err.body)
   })
 }
 
