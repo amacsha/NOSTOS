@@ -33,7 +33,13 @@
         {
           "locationWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
-      ]
+      ],
+      [
+      "expo-font",
+        {
+          "fonts": ["./assets/fonts/Gruppe_A.ttf"]
+        }
     ]
+  ]
   }
 }

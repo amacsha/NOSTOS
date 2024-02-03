@@ -10,21 +10,21 @@ import EntriesView from './EntriesView';
 import { cityFetcher, getActiveMissions } from './DashboardsServices';
 import { Place } from '../../client-types/Place';
 import MissionView from './MissionView';
-import LogoutService from '../logout/Logout';
+import Logout from '../logout/Logout';
 
-const Main: React.FC = ({navigation}: any) => {
+const Main: React.FC = ({ navigation }: any) => {
   const fetchLocation = GeoLocation();
   const location = useSelector((state: RootState) => state.location);
-  const userId =  useSelector((state: RootState) => state.user.id);
-  const [cityEntries, setCityEntries] = useState<(SmallEntry & {avg: number})[]>([])
+  const userId = useSelector((state: RootState) => state.user.id);
+  const [cityEntries, setCityEntries] = useState<(SmallEntry & { avg: number })[]>([])
   const [activeMissions, setActiveMissions] = useState<Place[]>([])
 
-  const asyncFetchLocation =  async() => {
+  const asyncFetchLocation = async () => {
     await fetchLocation()
   }
 
-  useEffect(() => {asyncFetchLocation()}, [])
-  
+  useEffect(() => { asyncFetchLocation() }, [])
+
   useEffect(() => {
     location.value?.cityName != undefined && cityFetcher(location.value?.cityName, setCityEntries)
   }, [location]);
@@ -35,26 +35,28 @@ const Main: React.FC = ({navigation}: any) => {
 
 
   return (
-    <SafeAreaView style={styles.container}>
-      <LogoutService></LogoutService>
+    
+    <View style={styles.container}>
       <View>
-        <LogoutService></LogoutService>
+        <Logout></Logout>
       <Button title='Go to mission' onPress={() => navigation.navigate('Mission')} />
-        <Text>City: {location.value?.cityName}</Text>
+      <View style={styles.textWrapper}>
+        <Text style={styles.locationText}>CITY: {location.value?.cityName}</Text>
         {activeMissions.length == 0 ?
-          <Text>No active missions available</Text>:
+          <Text style={styles.locationText}>No active missions available</Text>:
           <MissionView places={activeMissions}></MissionView>
         }
+        </View>
       </View>
       {location ? (
-        <View style={{flex: 7, borderColor: 'green',
+        <View style={{flex: 7,
         borderWidth: 2,}}>
           <EntriesView entries={cityEntries}></EntriesView>
         </View>
       ) : (
         <Text style={styles.fetchingText}>Sending position to the Mothership...</Text>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -64,19 +66,28 @@ export default Main;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#1f1f1f',
+    justifyContent: 'flex-start',
     alignItems: 'stretch',
+    fontFamily: 'Gruppe_A'
+  },
+  textWrapper: {
+    justifyContent: 'center',
+    fontFamily: 'Gruppe_A'
   },
   locationText: {
     fontSize: 16,
-    color: 'black',
+    color: '#ffffff',
+    fontFamily: 'Gruppe_A',
   },
   fetchingText: {
     fontSize: 14,
-    color: 'gray',
+    color: '#ffffff',
+    fontFamily: 'Gruppe_A'
   },
-  bottom : {
+  bottom: {
     alignItems: 'center',
     justifyContent: 'center',
+    fontFamily: 'Gruppe_A'
   }
 });

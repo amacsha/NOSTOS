@@ -3,24 +3,17 @@ import { View, Text, StyleSheet, Button, GestureResponderEvent, SafeAreaView } f
 import GeoLocation from './GeoLocation';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-
 import { useState, useEffect } from "react";
-
 import { SmallEntry } from '../../client-types/SmallEntry';
 import EntriesView from './EntriesView';
 import { placeFetcher } from './DashboardsServices';
-import { useAppDispatch } from "../../hooks";
-import { selectPlace } from "../../slices/placesSlice";
 
 const Location: React.FC = ({navigation}: any) => {
   const placeId = useSelector((state: RootState) => state.places.selectedPlaceId);
   const userId =  useSelector((state: RootState) => state.user.id);
   const [placeEntries, setPlaceEntries] = useState<(SmallEntry & {avg: number})[]>([])
 
-  const dispatch = useAppDispatch()
-  useEffect(() => {
-    dispatch(selectPlace(1))
-  })
+  console.log(placeId)
 
   useEffect(() => {
     placeId != null && placeFetcher(placeId, setPlaceEntries)
@@ -30,7 +23,7 @@ const Location: React.FC = ({navigation}: any) => {
   return (
     <View style={styles.container}>
       {placeId ? (
-        <View style={{flex: 8, borderColor: 'green',
+        <View style={{flex: 8,
         borderWidth: 2,}}>
           <EntriesView entries={placeEntries}></EntriesView>
         </View>
@@ -54,18 +47,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'stretch',
     padding: 10,
+    fontFamily: 'Gruppe_A', 
   },
   locationText: {
     fontSize: 16,
     color: 'black',
     marginBottom: 10,
+    fontFamily: 'Gruppe_A', 
   },
   fetchingText: {
     fontSize: 14,
     color: 'gray',
+    fontFamily: 'Gruppe_A', 
   },
   bottom : {
     alignItems: 'center',
     justifyContent: 'center',
+    fontFamily: 'Gruppe_A', 
   }
 });
