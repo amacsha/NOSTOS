@@ -2,19 +2,32 @@ import prisma from '../models/db'
 import Koa from 'koa'
 
 import { Place, newEntry, SmallEntry } from '../../server-types/types'
+import { verifyUser } from './user.controller';
 
 const postEntry = async (ctx : Koa.Context) => {
-    try {
-        console.log("BODY", ctx.request.body)
-        const newEntry = await prisma.entry.create({
-            data : <newEntry> ctx.request.body,
-        });
+    if (verifyUser(ctx.request.body.token)) {
+        try {
+            let data: newEntry = {
+                placeId: ctx.request.body.newEntry.placeId,
+                authorId: ctx.request.body.newEntry.authorId,
+                title: ctx.request.body.newEntry.title,
+                content: ctx.request.body.newEntry.content
+            }
 
-        ctx.body = newEntry;
-    } catch (err) {
-        console.log(err)
-        ctx.status = 400
-        ctx.body = 'Error: could not create new entry'
+            const newEntry = await prisma.entry.create({
+                data
+            });
+
+            ctx.response.status = 201;
+            ctx.body = newEntry;
+        } catch (err) {
+            console.log(err)
+            ctx.status = 400
+            ctx.body = 'Error: could not create new entry'
+        }
+    } else {
+        ctx.response.status = 401;
+        ctx.response.body = "Access denied."
     }
 }
 
@@ -104,17 +117,22 @@ const getCityEntries= async (ctx : Koa.Context) => {
 }
 
 const deleteEntry = async (ctx: Koa.Context) => {
-    try {
-        const deleteEntry = await prisma.entry.delete({
-            where: {
-            id: ctx.params.entryID,
-            },
-        })
-        ctx.body = deleteEntry;
-    } catch (err) {
-        console.log(err)
-        ctx.status = 400
-        ctx.body = 'Error: could not delete entry'
+    if (verifyUser(ctx.request.body.token)) {
+        try {
+            const deleteEntry = await prisma.entry.delete({
+                where: {
+                id: ctx.params.entryID,
+                },
+            })
+            ctx.body = deleteEntry;
+        } catch (err) {
+            console.log(err)
+            ctx.status = 400
+            ctx.body = 'Error: could not delete entry'
+        }
+    } else {
+        ctx.response.status = 401;
+        ctx.response.body = 'Access denied.'
     }
 }
 

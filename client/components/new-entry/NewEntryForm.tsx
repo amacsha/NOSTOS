@@ -8,10 +8,12 @@ import Logout from '../logout/Logout';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { Entry } from '../../client-types/Entry';
-import { useNavigation } from '@react-navigation/native';
 import { selectEntry } from '../../slices/entriesSlice';
+import { getValueFor } from '../../utils/secureStorage';
 
-const NewEntryForm: React.FC = () => {
+
+
+const NewEntryForm: React.FC = ({ navigation }: any) => {
     const [tags, setTags] = useState<string | never>('')
     const dispatch = useDispatch()
 
@@ -21,7 +23,8 @@ const NewEntryForm: React.FC = () => {
     const placeId: string | null = useSelector(
         (state: RootState) => state.places.selectedPlaceId
     )
-    const navigation = useNavigation()
+
+    const token: string = getValueFor("accessToken") || "";
 
 
     const validationSchema = Yup.object().shape({
@@ -36,12 +39,11 @@ const NewEntryForm: React.FC = () => {
     );
 
     const handleSubmit = async (values: Entry) => {
-        if (userIdState) {
-            values.authorId = userId
-            values.placeId = placeId
-            const res = await NewEntryService(values)
-            dispatch(selectEntry(res.data.id))
-        }
+        values.authorId = userId
+        values.placeId = placeId
+        const res = await NewEntryService(values, token)
+        dispatch(selectEntry(res.data.id))
+        values.tag = []
     }
 
     return (
@@ -56,7 +58,6 @@ const NewEntryForm: React.FC = () => {
                     actions.setFieldValue('tag', [])
                     setTags('')
                     navigation.navigate('Location' as never)
-
                 }}
             >
                 {({ handleChange, handleSubmit, handleBlur, setFieldValue, values, touched, errors }) => (
