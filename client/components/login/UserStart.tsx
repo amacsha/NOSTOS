@@ -22,21 +22,25 @@ const Stack = createNativeStackNavigator();
 
 export default function UserStart() {
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  let token = getValueFor('accessToken')
-  let userId = Number(getValueFor('userId'))
-  let email = getValueFor('email')
-  let username = getValueFor('username')
+  const loadUserDetails = async () => {
+    let token = await getValueFor('accessToken');
+    let userId = Number(await getValueFor('userId'));
+    let email = await getValueFor('email');
+    let username = await getValueFor('username');
 
-  if (token) {
-    dispatch(setAuth({ isAuthenticated: true, token: token }))
-    dispatch(updateUserDetails({ id: userId, email: email, username: username }))
-  }
+    if (token) {
+      dispatch(setAuth({ isAuthenticated: true, token: token }));
+      dispatch(updateUserDetails({ id: userId, email: email, username: username }));
+    }
+  };
+  loadUserDetails()
 
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
+  console.log(isAuthenticated)
 
   return (
 

@@ -12,6 +12,7 @@ import { LoginValues } from "../../client-types/LoginValues";
 import { UserResponse } from "../../client-types/UserResponse";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
+import { TouchableHighlight } from "react-native";
 
 type LoginProps = {
   navigation: NativeStackNavigationProp<any>
@@ -36,7 +37,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
       Alert.alert(`${res.error}`);
       dispatch(setAuth(initialState));
     } else {
-      Alert.alert('login 👍')
+      // Alert.alert('login 👍')
       dispatch(setAuth({ isAuthenticated: true, token: res.data.accessToken }))
       save('accessToken', res.data.accessToken);
       save('userId', res.data.userId.toString());
@@ -83,12 +84,12 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
             {touched.password && errors.password && (
               <Text style={styles.error}>{errors.password}</Text>
             )}
-            <Pressable style={styles.button} onPress={(event: GestureResponderEvent) => handleSubmit()}>
+            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => handleSubmit()}>
               <Text style={styles.buttonText} >Login</Text>
-            </Pressable>
-            <Pressable style={styles.button} onPress={() => navigation.navigate('Register')}>
+            </TouchableHighlight>
+            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => navigation.navigate('Register')}>
               <Text style={styles.buttonText}>Register</Text>
-            </Pressable>
+            </TouchableHighlight>
           </>
         )}
       </Formik>

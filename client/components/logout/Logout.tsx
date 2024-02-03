@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Pressable, StyleSheet, Text } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, TouchableHighlight } from 'react-native';
 import { useAppDispatch } from '../../hooks';
 import { setAuth, initialState } from '../../slices/authSlice';
 import { deleteItemAsync } from 'expo-secure-store';
@@ -10,21 +10,23 @@ const Logout: React.FC = () => {
 
     const dispatch = useAppDispatch();
 
-    function logout() {
-        deleteItemAsync('accessToken');
-        deleteItemAsync('userId');
-        deleteItemAsync('email');
-        deleteItemAsync('username');
-        deleteItemAsync('filter_preference');
+    async function logout() {
+        await Promise.all([
+            deleteItemAsync('accessToken'),
+            deleteItemAsync('userId'),
+            deleteItemAsync('email'),
+            deleteItemAsync('username'),
+            deleteItemAsync('filter_preference'),
+        ])
         dispatch(setAuth(initialState));
         dispatch(updateUserDetails(userInitials))
         // Alert.alert('token destroyed');
     }
 
     return (
-        <Pressable style={styles.button} onPress={logout}>
+        <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={logout}>
             <Text style={styles.buttonText}>Logout</Text>
-        </Pressable>
+        </TouchableHighlight>
     )
 }
 
@@ -42,12 +44,12 @@ const styles = StyleSheet.create({
         padding: 3,
         height: 30,
         width: 80,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
     },
     buttonText: {
         color: '#9578F8',
         fontSize: 17,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
     }
 })
 
