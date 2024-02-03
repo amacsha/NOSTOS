@@ -10,6 +10,7 @@ import { RootState } from '../../store';
 import { Entry } from '../../client-types/Entry';
 import { selectEntry } from '../../slices/entriesSlice';
 import { getValueFor } from '../../utils/secureStorage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
@@ -47,7 +48,8 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
+
             <Text>Create a new Entry</Text>
             <Formik<Entry>
                 initialValues={{ placeId: placeId, authorId: userId, title: '', content: '', tag: [] }}
@@ -128,7 +130,7 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
                 )}
             </Formik >
             <Logout />
-        </View >
+        </SafeAreaView >
     )
 }
 

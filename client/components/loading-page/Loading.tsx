@@ -1,39 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
-import { View, Text, StyleSheet, ActivityIndicator, Animated } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import { View, StyleSheet, ActivityIndicator, Animated } from 'react-native';
 import GeoLocation from '../dashboard/GeoLocation';
-import { getValueFor } from '../../utils/secureStorage';
-import { setAuth } from '../../slices/authSlice';
-import { updateUserDetails } from '../../slices/userSlice';
 import Typewriter from '../../utils/TypewriterLoading';
-
+import { startGlitch, glitchAnimation } from '../../utils/animatedGlitch';
+import { colors } from '../styles/colors';
 
 SplashScreen.preventAutoHideAsync();
 
 const LoadingPage = ({ navigation }: any) => {
     const [appIsReady, setAppIsReady] = useState<boolean>(false);
     const fetchLocation = GeoLocation();
-    const glitchAnimation = new Animated.Value(0);
-
-    const startGlitch = () => {
-        Animated.loop(
-            Animated.sequence([
-                Animated.timing(glitchAnimation, { toValue: 5, duration: 50, useNativeDriver: true }),
-                Animated.timing(glitchAnimation, { toValue: -5, duration: 50, useNativeDriver: true }),
-                Animated.timing(glitchAnimation, { toValue: 0, duration: 50, useNativeDriver: true }),
-                Animated.delay(1000)
-            ]),
-        ).start();
-    }
 
     useEffect(() => {
         async function prepare() {
             try {
                 startGlitch();
                 await fetchLocation()
-                await new Promise(resolve => setTimeout(resolve, 2000))
             } catch (error) {
                 console.log(error)
             } finally {
@@ -74,7 +57,7 @@ const LoadingPage = ({ navigation }: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#9772b2",
+        backgroundColor: colors.basePurple,
         alignItems: "center",
         justifyContent: "center",
 
@@ -83,7 +66,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontWeight: 'bold',
         fontFamily: 'Gruppe_A',
-        color: '#26224F'
+        color: colors.darkGre7,
     }
 });
 

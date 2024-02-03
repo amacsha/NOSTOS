@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./Login";
 import Register from "../register/Register";
@@ -45,17 +45,20 @@ export default function UserStart() {
   return (
 
     <NavigationContainer>
-      <Stack.Navigator>
+
+      <Stack.Navigator
+        screenOptions={{ headerShown: false }}
+      >
         {isAuthenticated ? (
           <>
-            <Stack.Screen name="LoadingPage" component={LoadingPage} />
-            <Stack.Screen name="Main" component={Main} />
-            <Stack.Screen name="Mission" component={Mission} />
-            <Stack.Screen name="Location" component={Location} />
-            <Stack.Screen name="EntryView" component={EntryView} />
-            <Stack.Screen name="New Comment" component={NewComment} />
-            <Stack.Screen name="NewEntryForm" component={NewEntryForm} />
-            <Stack.Screen name="Logout" component={Logout} />
+              <Stack.Screen name="LoadingPage" component={LoadingPage} />
+              <Stack.Screen name="Main" component={Main} />
+              <Stack.Screen name="Mission" component={Mission} />
+              <Stack.Screen name="Location" component={Location} />
+              <Stack.Screen name="EntryView" component={EntryView} />
+              <Stack.Screen name="New Comment" component={NewComment} />
+              <Stack.Screen name="NewEntryForm" component={NewEntryForm} />
+              <Stack.Screen name="Logout" component={Logout} />
           </>
         ) : (
           <>

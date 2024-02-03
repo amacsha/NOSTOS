@@ -43,7 +43,7 @@ const Main: React.FC = ({ navigation }: any) => {
   }, [userId]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View>
         <Logout></Logout>
         <Button title='Go to mission' onPress={() => navigation.navigate('Mission')} />
@@ -106,7 +106,7 @@ const Main: React.FC = ({ navigation }: any) => {
           Sending position to the Mothership...
         </Text>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

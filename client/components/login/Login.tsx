@@ -1,6 +1,6 @@
 import React from "react";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Alert, Button, GestureResponderEvent, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Button, GestureResponderEvent, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
 import { Formik } from "formik";
 import * as Yup from 'yup';
 import LoginService from "../../service/LoginService";
@@ -13,6 +13,7 @@ import { UserResponse } from "../../client-types/UserResponse";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
 import { TouchableHighlight } from "react-native";
+import { colors } from "../styles/colors";
 
 type LoginProps = {
   navigation: NativeStackNavigationProp<any>
@@ -52,76 +53,86 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
   )
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.head}>Login</Text>
-      <Formik
-        initialValues={{ email: 'admin@nostos.com', password: 'adminadmin' }}
-        validationSchema={validationSchema}
-        onSubmit={values => handleSubmit(values)}
-      >
-        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-          <>
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              placeholderTextColor='#876FE4'
-              onChangeText={handleChange("email")}
-              onBlur={handleBlur('email')}
-              value={values.email}
-            />
-            {touched.email && errors.email && (
-              <Text style={styles.error}>{errors.email}</Text>
-            )}
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              placeholderTextColor='#876FE4'
-              onChangeText={handleChange("password")}
-              onBlur={handleBlur("password")}
-              value={values.password}
-              secureTextEntry={true}
-            />
-            {touched.password && errors.password && (
-              <Text style={styles.error}>{errors.password}</Text>
-            )}
-            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => handleSubmit()}>
-              <Text style={styles.buttonText} >Login</Text>
-            </TouchableHighlight>
-            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => navigation.navigate('Register')}>
-              <Text style={styles.buttonText}>Register</Text>
-            </TouchableHighlight>
-          </>
-        )}
-      </Formik>
-    </View >
+    <SafeAreaView style={styles.container}>
+      <View style={styles.inputArea}>
+        <Text style={styles.head}>Login</Text>
+        <Formik
+          initialValues={{ email: 'admin@nostos.com', password: 'adminadmin' }}
+          validationSchema={validationSchema}
+          onSubmit={values => handleSubmit(values)}
+        >
+          {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+            <>
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                placeholderTextColor='#876FE4'
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur('email')}
+                value={values.email}
+              />
+              {touched.email && errors.email && (
+                <Text style={styles.error}>{errors.email}</Text>
+              )}
+              <TextInput
+                style={styles.input}
+                placeholder="Password"
+                placeholderTextColor='#876FE4'
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
+                secureTextEntry={true}
+              />
+              {touched.password && errors.password && (
+                <Text style={styles.error}>{errors.password}</Text>
+              )}
+              <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => handleSubmit()}>
+                <Text style={styles.buttonText} >Login</Text>
+              </TouchableHighlight>
+              <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => navigation.navigate('Register')}>
+                <Text style={styles.buttonText}>Register</Text>
+              </TouchableHighlight>
+            </>
+          )}
+        </Formik>
+      </View>
+    </SafeAreaView >
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#081116',
+    backgroundColor: colors.darkGre7,
     height: '100%',
     color: '#D4D5D6',
     fontFamily: 'Gruppe_A',
   },
-  head: {},
+  head: {
+    fontSize: 20,
+    color: colors.gunMetalGrey,
+    fontFamily: 'Gruppe_A',
+  },
+  inputArea: {
+    marginTop: 200
+  },
   input: {
-    backgroundColor: '#19222A',
-    color: '#D4D5D6',
-    marginVertical: 2,
-    marginHorizontal: 10,
-    height: 30,
-    fontSize: 17,
+    backgroundColor: colors.gunMetalGrey,
+    color: colors.black,
+    marginVertical: 5,
+    marginHorizontal: 25,
+    height: 50,
+    fontSize: 20,
     fontFamily: 'Gruppe_A',
   },
   error: {
     backgroundColor: '#341717',
     color: '#DD7272',
     marginVertical: 2,
-    marginHorizontal: 10,
-    height: 30,
-    fontSize: 17,
+    marginHorizontal: 25,
+    height: 25,
+    fontSize: 15,
     fontFamily: 'Gruppe_A',
+    justifyContent: 'center'
   },
   button: {
     backgroundColor: '#45417B',
