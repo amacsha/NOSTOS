@@ -49,29 +49,29 @@ const Main: React.FC = ({ navigation }: any) => {
         <Button title='Go to mission' onPress={() => navigation.navigate('Mission')} />
         <View style={styles.textWrapper}>
           <Text style={styles.locationText}>CITY: {location.value?.cityName}</Text>
+          <MultiSelect
+            items={
+              cityNames.map(city=> {
+                return {name: city, id: city}
+              })
+            }
+            uniqueKey="id"
+            onSelectedItemsChange={(selectedItems) => {
+              location.value?.lat && location.value.lng && dispatch(setLocation({
+                  cityName: selectedItems[0],
+                  lng: location.value.lng,
+                  lat: location.value.lat
+                }
+              ))}
+            }
+            selectedItems={[location.value?.cityName]}
+            single={true}
+          />
           {activeMissions.length == 0 ?
             <Text style={styles.locationText}>No active missions available</Text>:
             <MissionView places={activeMissions}></MissionView>
           }
         </View>
-        <MultiSelect
-              items={
-                cityNames.map(city=> {
-                  return {name: city, id: city}
-                })
-              }
-              uniqueKey="id"
-              onSelectedItemsChange={(selectedItems) => {
-                location.value?.lat && location.value.lng && dispatch(setLocation({
-                    cityName: selectedItems[0],
-                    lng: location.value.lng,
-                    lat: location.value.lat
-                  }
-                ))}
-              }
-              selectedItems={[location.value?.cityName]}
-              single={true}
-            />
       </View>
       {location.value?.cityName ? (
         <View style={{flex: 7,
