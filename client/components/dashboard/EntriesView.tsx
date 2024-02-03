@@ -11,6 +11,7 @@ import { ScrollView } from 'react-native';
 
 import { useAppDispatch } from '../../hooks';
 import { updatePrefrence, getPrefrence } from './DashboardsServices';
+import { getValueFor } from '../../utils/secureStorage';
 
 import { colors } from '../styles/colors';
 
@@ -22,6 +23,7 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
   useEffect(() => {
     userId && getPrefrence(dispatch, userId)
   }, [userId])
+  const token: string = getValueFor("accessToken") || "";
 
   const radioButtons: RadioButtonProps[] = useMemo(() => ([
     {
@@ -44,7 +46,7 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
             <Text style={styles.whiteText}>Filter by: {filter_preference}</Text>
             <RadioGroup 
               radioButtons={radioButtons} 
-              onPress={(newPref) => userId != null && updatePrefrence(newPref, dispatch, userId)}
+              onPress={(newPref) => userId != null && updatePrefrence(newPref, dispatch, userId, token)}
               selectedId={filter_preference == null? undefined : filter_preference}
               layout='row'
               labelStyle={styles.whiteText}
@@ -52,10 +54,10 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
             <MultiSelect
               items={
                 [
-                  ... new Set(entries.filter((entry) => 
-                    selected.every(tag => 
+                  ... new Set(entries.filter((entry) =>
+                    selected.every(tag =>
                       entry.tag.includes(tag))
-                  ).reduce((entryTags, entry) => 
+                  ).reduce((entryTags, entry) =>
                       entryTags.concat(entry.tag as never[]
                     ),[]
                   ))
@@ -93,11 +95,12 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
             />
         </View>
         <ScrollView>
-        
-        {entries.length > 0 ? 
-        
+
+
+        {entries.length > 0 ?
+
         entries.filter((entry) => selected.every(tag => entry.tag.includes(tag))).sort((a, b) => {
-            return filter_preference == 'recent' ? 
+            return filter_preference == 'recent' ?
             new Date(b.creation_date).getTime() - new Date(a.creation_date).getTime()  :
             b.avg - a.avg
         }).map((entry) => {

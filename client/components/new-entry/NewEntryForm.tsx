@@ -9,6 +9,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { Entry } from '../../client-types/Entry';
 
+import { getValueFor } from '../../utils/secureStorage';
+
+
 
 const NewEntryForm: React.FC = () => {
     const [tags, setTags] = useState<string | never>('')
@@ -22,6 +25,9 @@ const NewEntryForm: React.FC = () => {
         (state: RootState) => state.places.selectedPlaceId
     )
 
+    const token: string = getValueFor("accessToken") || "";
+
+
     const validationSchema = Yup.object().shape({
         title: Yup.string().required('Choose a nice title to your story'),
         content: Yup.string().required('Tell us about your experience'),
@@ -32,7 +38,7 @@ const NewEntryForm: React.FC = () => {
     const handleSubmit = async (values: Entry) => {
         values.authorId = userId
         values.placeId = placeId
-        const res = await NewEntryService(values)
+        const res = await NewEntryService(values, token)
         values.tag = []
     }
 
@@ -129,7 +135,7 @@ const styles = StyleSheet.create({
         height: '100%',
         color: '#D4D5D6',
         padding: 10,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
     },
     head: {},
     input: {
@@ -139,7 +145,7 @@ const styles = StyleSheet.create({
         height: 30,
         fontSize: 17,
         paddingLeft: 10,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
     },
     error: {
         backgroundColor: '#341717',
@@ -148,7 +154,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         height: 30,
         fontSize: 17,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
     },
     button: {
         backgroundColor: '#45417B',
@@ -159,12 +165,12 @@ const styles = StyleSheet.create({
         padding: 3,
         height: 30,
         width: 80,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
     },
     buttonText: {
         color: '#9578F8',
         fontSize: 17,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
     },
     tag: {
         flexDirection: 'row',
@@ -174,14 +180,14 @@ const styles = StyleSheet.create({
         height: 30,
         backgroundColor: '#19222A',
         margin: 2,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
 
     },
     add: {
         height: 30,
         width: 30,
         padding: 0,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
 
     },
     delete: {
@@ -189,7 +195,7 @@ const styles = StyleSheet.create({
         width: 30,
         borderRadius: 25,
         padding: 0,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
     },
     tagInput: {
         paddingLeft: 10,
@@ -197,7 +203,7 @@ const styles = StyleSheet.create({
         marginRight: 0,
         width: 200,
         backgroundColor: '#19222A',
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
 
     },
     tagText: {
@@ -207,7 +213,7 @@ const styles = StyleSheet.create({
         width: 30,
         marginTop: 6,
         textAlign: 'center',
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
     }
 })
 

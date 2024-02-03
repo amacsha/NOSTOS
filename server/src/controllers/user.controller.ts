@@ -4,7 +4,6 @@ import { UserType } from '../../server-types/types';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-
 //TODO update tests for getUsernamefromID
 const createOneUser = async (ctx: Koa.Context) => {
   const body = <UserType>ctx.request.body;
@@ -40,7 +39,12 @@ const createOneUser = async (ctx: Koa.Context) => {
     const accessToken = jwt.sign(user, process.env.SECRET_KEY!);
 
     ctx.status = 201;
-    ctx.body = { accessToken: accessToken, userId: user.id, email: user.email, username: user.username };
+    ctx.body = {
+      accessToken: accessToken,
+      userId: user.id,
+      email: user.email,
+      username: user.username,
+    };
   } catch (error) {
     console.error(error);
     ctx.status = 500;
@@ -64,7 +68,12 @@ const loginUser = async (ctx: Koa.Context) => {
     if (!validatedPass) throw new Error();
     const accessToken = jwt.sign(user, process.env.SECRET_KEY!);
     ctx.status = 200;
-    ctx.body = { accessToken: accessToken, userId: user.id, email: user.email, username: user.username };
+    ctx.body = {
+      accessToken: accessToken,
+      userId: user.id,
+      email: user.email,
+      username: user.username,
+    };
   } catch (error) {
     console.error(error);
     ctx.status = 404;
@@ -115,18 +124,23 @@ const deleteUser = async (ctx: Koa.Context) => {
 };
 
 const setUserFilterPreference = async (ctx: Koa.Context) => {
-  const body = <UserType>ctx.request.body;
-  try {
-    const preference = await prisma.user.update({
-      where: { id: Number(ctx.params.id) },
-      data: { filter_preference: body.filter_preference },
-    });
-    ctx.status = 201;
-    ctx.body = preference;
-  } catch (error) {
-    console.error(error);
-    ctx.status = 500;
-    ctx.body = { error: 'Server error' };
+  if (verifyUser(ctx.request.body.token)) {
+    const body = <UserType>ctx.request.body;
+    try {
+      const preference = await prisma.user.update({
+        where: { id: Number(ctx.params.id) },
+        data: { filter_preference: body.filter_preference },
+      });
+      ctx.status = 201;
+      ctx.body = preference;
+    } catch (error) {
+      console.error(error);
+      ctx.status = 500;
+      ctx.body = { error: 'Server error' };
+    }
+  } else {
+    ctx.response.status = 401;
+    ctx.response.body = "Access denied."
   }
 };
 
@@ -150,6 +164,18 @@ const logoutUser = (ctx: Koa.Context) => {
   ctx.body = { accesToken: null };
 };
 
+const verifyUser = (token: string) => {
+  try {
+    jwt.verify(
+      token,
+      process.env.SECRET_KEY!,
+    );
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 export {
   createOneUser,
   getOneUser,
@@ -159,4 +185,5 @@ export {
   deleteUser,
   loginUser,
   logoutUser,
+  verifyUser,
 };

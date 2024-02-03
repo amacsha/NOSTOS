@@ -24,15 +24,16 @@ export async function countRatings(entryId: number) {
   return response.data;
 }
 
-export async function updateRating (entryId: number, userId: number, value: number) {
+export async function updateRating (entryId: number, userId: number, value: number, token: string) {
   const url = `http://${IP}:3000/rating/setUserRating`;
   const data = {
     raterId: userId,
     entryId: entryId,
-    value
+    value,
+    token
   }
 
-  await axios.post(url, data)
+  axios.post(url, data)
 }
 
 export async function getComments (entryId: number) {
@@ -41,10 +42,11 @@ const response = await axios.get(url);
 return response.data;
 }
 
-export async function postComment (entryId: number, commenterId: number, content: string) {
+export async function postComment (entryId: number, commenterId: number, content: string, token: string) {
   const data = {
     commenterId,
-    content
+    content,
+    token
   }
   const url = `http://${IP}:3000/comment/addNew/${entryId}`;
   const response = axios.post(url, data)

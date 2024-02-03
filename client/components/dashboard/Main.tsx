@@ -29,7 +29,7 @@ const Main: React.FC = ({ navigation }: any) => {
     await fetchLocation()
   }
 
-  useEffect(() => { 
+  useEffect(() => {
     asyncFetchLocation();
     getCities(setCityNames)
   }, [])
@@ -39,9 +39,8 @@ const Main: React.FC = ({ navigation }: any) => {
   }, [location.value?.cityName]);
 
   useEffect(() => {
-    userId && getActiveMissions(userId, setActiveMissions)
-  }, [userId])
-
+    userId && getActiveMissions(userId, setActiveMissions);
+  }, [userId]);
 
   return (
     <View style={styles.container}>
@@ -100,7 +99,9 @@ const Main: React.FC = ({ navigation }: any) => {
           <EntriesView entries={cityEntries}></EntriesView>
         </View>
       ) : (
-        <Text style={styles.fetchingText}>Sending position to the Mothership...</Text>
+        <Text style={styles.fetchingText}>
+          Sending position to the Mothership...
+        </Text>
       )}
     </View>
   );
@@ -108,28 +109,27 @@ const Main: React.FC = ({ navigation }: any) => {
 
 export default Main;
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1f1f1f',
-    justifyContent: 'flex-start',
-    alignItems: 'stretch',
-    fontFamily: 'Gruppe_A'
+    backgroundColor: "#1f1f1f",
+    justifyContent: "flex-start",
+    alignItems: "stretch",
+    fontFamily: "Gruppe_A",
   },
   textWrapper: {
-    justifyContent: 'center',
-    fontFamily: 'Gruppe_A'
+    justifyContent: "center",
+    fontFamily: "Gruppe_A",
   },
   locationText: {
     fontSize: 16,
-    color: '#ffffff',
-    fontFamily: 'Gruppe_A',
+    color: "#ffffff",
+    fontFamily: "Gruppe_A",
   },
   fetchingText: {
     fontSize: 14,
-    color: '#ffffff',
-    fontFamily: 'Gruppe_A'
+    color: "#ffffff",
+    fontFamily: "Gruppe_A",
   },
   bottom: {
     alignItems: 'center',
