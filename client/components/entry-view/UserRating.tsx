@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Text, View, Button, ActivityIndicator, StyleSheet, Pressable } from "react-native"
 import { getAverageRating, getRating, updateRating, countRatings } from "./EntryService"
-
+import { getValueFor } from "../../utils/secureStorage"
 // import AverageRating from "./AverageRating"
 
 import { Rating } from "react-native-ratings"
@@ -10,6 +10,8 @@ export default function UserRating({ userId, entryId }: any) {
   //TODO CHANGE TO REDUX?
   const [rating, setRating] = useState<number | undefined>(undefined)
   const [avgRating, setAvgRating] = useState<number | undefined>(undefined)
+
+  const token: string = getValueFor("accessToken") || "";
 
   async function load() {
     const currentRatingResponse = await getRating(entryId, userId);
@@ -24,7 +26,7 @@ export default function UserRating({ userId, entryId }: any) {
   useEffect(() => { load() }, [rating]);
 
   async function handleClick(value: number) {
-    await updateRating(entryId, userId, value)
+    await updateRating(entryId, userId, value, token)
     await load();
   }
 
@@ -67,29 +69,29 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    fontFamily: 'Gruppe_A', 
+    fontFamily: 'Gruppe_A',
   },
   userRating: {
     alignItems: "center",
     fontSize: 25,
-    fontFamily: 'Gruppe_A', 
+    fontFamily: 'Gruppe_A',
   },
   avgRating: {
     fontSize: 25,
-    fontFamily: 'Gruppe_A', 
+    fontFamily: 'Gruppe_A',
   },
   buttonContainer: {
     flexDirection: "row",
-    fontFamily: 'Gruppe_A', 
+    fontFamily: 'Gruppe_A',
   },
   button: {
     borderWidth: 1,
     borderRadius: 5,
-    fontFamily: 'Gruppe_A', 
+    fontFamily: 'Gruppe_A',
   },
   buttonText: {
     fontSize: 25,
     margin: 5,
-    fontFamily: 'Gruppe_A', 
+    fontFamily: 'Gruppe_A',
   }
 })
