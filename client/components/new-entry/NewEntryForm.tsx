@@ -32,10 +32,8 @@ const NewEntryForm: React.FC = () => {
     const handleSubmit = async (values: Entry) => {
         values.authorId = userId
         values.placeId = placeId
-        console.log(values)
         const res = await NewEntryService(values)
         values.tag = []
-        console.log('form', res.data)
     }
 
     return (

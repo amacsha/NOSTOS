@@ -39,7 +39,6 @@ export default function UserStart() {
     (state: RootState) => state.user.email
   )
 
-  console.log(user)
   return (
     <NavigationContainer>
       <Stack.Navigator>
