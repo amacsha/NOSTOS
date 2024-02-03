@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { setAuth } from "../../slices/authSlice";
 import { updateUserDetails } from "../../slices/userSlice";
+import LoadingPage from "../loading-page/Loading";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,7 +33,7 @@ export default function UserStart() {
     dispatch(setAuth({ isAuthenticated: true, token: token }))
     dispatch(updateUserDetails({ id: userId, email: email, username: username }))
   }
-  
+
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
@@ -42,6 +43,7 @@ export default function UserStart() {
       <Stack.Navigator>
         {isAuthenticated ? (
           <>
+            <Stack.Screen name="LoadingPage" component={LoadingPage} />
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Mission" component={Mission} />
             <Stack.Screen name="Location" component={Location} />
@@ -67,6 +69,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    fontFamily: 'Gruppe_A', 
+    fontFamily: 'Gruppe_A',
   },
 });

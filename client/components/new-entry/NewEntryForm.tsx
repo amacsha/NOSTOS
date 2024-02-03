@@ -41,10 +41,6 @@ const NewEntryForm: React.FC = () => {
             values.placeId = placeId
             const res = await NewEntryService(values)
             dispatch(selectEntry(res.data.id))
-            const idd: number | undefined = useSelector(
-                (state: RootState) => state.entries.selectedEntryID
-            )
-            console.log(idd)
         }
     }
 
@@ -59,7 +55,7 @@ const NewEntryForm: React.FC = () => {
                     actions.resetForm()
                     actions.setFieldValue('tag', [])
                     setTags('')
-                    navigation.navigate('Main' as never)
+                    navigation.navigate('Location' as never)
 
                 }}
             >
