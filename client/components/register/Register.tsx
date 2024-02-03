@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Button, GestureResponderEvent, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Button, GestureResponderEvent, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
 import { Formik } from "formik";
 import * as Yup from 'yup';
 import RegisterService from "../../service/RegisterService";
@@ -52,7 +52,7 @@ const Register: React.FC = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.head}>Register</Text>
       <Formik
         initialValues={{ username: '', email: '', password: '' }}
@@ -101,7 +101,7 @@ const Register: React.FC = () => {
           </>
         )}
       </Formik>
-    </View>
+    </SafeAreaView>
   )
 }
 

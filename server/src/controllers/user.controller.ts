@@ -44,6 +44,7 @@ const createOneUser = async (ctx: Koa.Context) => {
       userId: user.id,
       email: user.email,
       username: user.username,
+      filter_preference: user.filter_preference
     };
   } catch (error) {
     console.error(error);
@@ -73,6 +74,7 @@ const loginUser = async (ctx: Koa.Context) => {
       userId: user.id,
       email: user.email,
       username: user.username,
+      filter_preference: user.filter_preference
     };
   } catch (error) {
     console.error(error);

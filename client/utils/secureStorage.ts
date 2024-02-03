@@ -3,6 +3,7 @@ import { Alert } from 'react-native';
 
 
 export async function save(key: string, value: string | null) {
+    console.log('key', key, 'value', value, typeof value)
     await SecureStore.setItemAsync(key, value!);
 }
 
