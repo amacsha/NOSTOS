@@ -10,7 +10,6 @@ export const commentsSlice = createSlice({
   initialState,
   reducers: {
     setComments: (state, action: PayloadAction<Comment[]>) => {
-      console.log('SET COMMENTS SLICE: ', action.payload)
       return action.payload
     },
     // addOneComment: (state, action: PayloadAction<Comment>) => {

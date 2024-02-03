@@ -21,8 +21,11 @@ import { useNavigation } from "@react-navigation/native";
 import { useAppDispatch } from "../../hooks";
 import { setComments } from "../../slices/commentsSlice";
 import { Comment } from "../../client-types/Comment";
+import { getValueFor } from "../../utils/secureStorage";
 
 export default function NewComment({ route }: any) {
+  const token: string = getValueFor("accessToken") || "";
+
   const navigation = useNavigation();
   const entryId = useSelector(
     (state: RootState) => state.entries.selectedEntryID
@@ -36,7 +39,7 @@ export default function NewComment({ route }: any) {
 
     if (values.content) {
       let newState;
-      await postComment(entryId as number, userId as number, values.content);
+      await postComment(entryId as number, userId as number, values.content, token);
 
       let commentExists = comments.some(comment => comment.commenterId === userId && comment.entryId === entryId);
       let newObject: Comment = {
@@ -100,13 +103,13 @@ const styles = StyleSheet.create({
   btnContainer: {},
   container: {
     borderTopWidth: 1,
-    fontFamily: 'Gruppe_A', 
+    fontFamily: 'Gruppe_A',
   },
   input: {
     // height: 400,
     borderWidth: 2,
     borderRadius: 15,
     margin: 5,
-    fontFamily: 'Gruppe_A', 
+    fontFamily: 'Gruppe_A',
   },
 });
