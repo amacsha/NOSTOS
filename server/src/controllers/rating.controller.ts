@@ -14,6 +14,7 @@ const getUserRating = async (ctx: Koa.Context) => {
         },
       },
     });
+    ctx.response.status = 200;
     ctx.body = rating;
   } catch (err) {
     console.log(err);
