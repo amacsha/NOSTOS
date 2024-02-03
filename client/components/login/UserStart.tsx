@@ -39,6 +39,7 @@ export default function UserStart() {
   );
 
   return (
+
     <NavigationContainer>
       <Stack.Navigator>
         {isAuthenticated ? (

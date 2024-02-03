@@ -7,9 +7,9 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/alien-astronomy-space-svgrepo-com.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#9772b2"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -35,11 +35,13 @@
         }
       ],
       [
-      "expo-font",
+        "expo-font",
         {
-          "fonts": ["./assets/fonts/Gruppe_A.ttf"]
+          "fonts": [
+            "./assets/fonts/Gruppe_A.ttf"
+          ]
         }
+      ]
     ]
-  ]
   }
 }

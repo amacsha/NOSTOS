@@ -1,23 +1,24 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import SplashScreen from 'expo-splash-screen';
-import { View, Text, StyleSheet } from 'react-native';
+import * as SplashScreen from 'expo-splash-screen';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
+import GeoLocation from '../dashboard/GeoLocation';
 
 
+SplashScreen.preventAutoHideAsync();
 
 const LoadingPage = ({ navigation }: any) => {
     const [appIsReady, setAppIsReady] = useState<boolean>(false);
+    const fetchLocation = GeoLocation();
+    const asyncFetchLocation = async () => {
+        await fetchLocation()
+    }
 
     useEffect(() => {
         async function prepare() {
             try {
-                await SplashScreen.preventAutoHideAsync();
-                const loadLocation = useSelector(
-                    (state: RootState) => state.auth.isAuthenticated
-                );
-
-                await new Promise(resolve => setTimeout(resolve, 2000))
+                // await new Promise(resolve => setTimeout(resolve, 2000))
             } catch (error) {
                 console.log(error)
             } finally {
@@ -29,7 +30,8 @@ const LoadingPage = ({ navigation }: any) => {
 
     const onLayoutRootView = useCallback(async () => {
         if (appIsReady) {
-            await SplashScreen.hideAsync();
+            await asyncFetchLocation()
+            await SplashScreen.hideAsync()
             navigation.navigate('Main')
         }
     }, [appIsReady]);
@@ -43,6 +45,7 @@ const LoadingPage = ({ navigation }: any) => {
             onLayout={onLayoutRootView}
         >
             <Text style={styles.text}>NOSTOS</Text>
+            <ActivityIndicator size="large" color='45417B' />
         </View>
     )
 }
