@@ -5,18 +5,18 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import NewEntryService from '../../service/NewEntryService';
 import Logout from '../logout/Logout';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { Entry } from '../../client-types/Entry';
 import { useNavigation } from '@react-navigation/native';
+import { selectEntry } from '../../slices/entriesSlice';
 
 const NewEntryForm: React.FC = () => {
     const [tags, setTags] = useState<string | never>('')
+    const dispatch = useDispatch()
+
     const userId: number | null = useSelector(
         (state: RootState) => state.user.id
-    );
-    const username: string | null = useSelector(
-        (state: RootState) => state.user.username
     );
     const placeId: string | null = useSelector(
         (state: RootState) => state.places.selectedPlaceId
@@ -38,11 +38,16 @@ const NewEntryForm: React.FC = () => {
     const handleSubmit = async (values: Entry) => {
         if (userIdState) {
             values.authorId = userId
-            values.placeId = 'ChIJ0-48HywBdkgRh7MH0Igd1f4'
+            values.placeId = placeId
             const res = await NewEntryService(values)
+            dispatch(selectEntry(res.data.id))
+            const idd: number | undefined = useSelector(
+                (state: RootState) => state.entries.selectedEntryID
+            )
+            console.log(idd)
         }
     }
-    
+
     return (
         <View style={styles.container}>
             <Text>Create a new Entry</Text>
@@ -136,7 +141,7 @@ const styles = StyleSheet.create({
         height: '100%',
         color: '#D4D5D6',
         padding: 10,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
     },
     head: {},
     input: {
@@ -146,7 +151,7 @@ const styles = StyleSheet.create({
         height: 30,
         fontSize: 17,
         paddingLeft: 10,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
     },
     error: {
         backgroundColor: '#341717',
@@ -155,7 +160,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         height: 30,
         fontSize: 17,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
     },
     button: {
         backgroundColor: '#45417B',
@@ -166,12 +171,12 @@ const styles = StyleSheet.create({
         padding: 3,
         height: 30,
         width: 80,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
     },
     buttonText: {
         color: '#9578F8',
         fontSize: 17,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
     },
     tag: {
         flexDirection: 'row',
@@ -181,14 +186,14 @@ const styles = StyleSheet.create({
         height: 30,
         backgroundColor: '#19222A',
         margin: 2,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
 
     },
     add: {
         height: 30,
         width: 30,
         padding: 0,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
 
     },
     delete: {
@@ -196,7 +201,7 @@ const styles = StyleSheet.create({
         width: 30,
         borderRadius: 25,
         padding: 0,
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
     },
     tagInput: {
         paddingLeft: 10,
@@ -204,7 +209,7 @@ const styles = StyleSheet.create({
         marginRight: 0,
         width: 200,
         backgroundColor: '#19222A',
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
 
     },
     tagText: {
@@ -214,7 +219,7 @@ const styles = StyleSheet.create({
         width: 30,
         marginTop: 6,
         textAlign: 'center',
-        fontFamily: 'Gruppe_A', 
+        fontFamily: 'Gruppe_A',
     }
 })
 
