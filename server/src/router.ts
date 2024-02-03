@@ -7,7 +7,7 @@ import {authMiddleware} from './middlewares/auth'
 
 import {getEntry, postEntry, getCityEntries, getPlaceEntries} from './controllers/entry.controller'
 import {getAvgEntryRating, getAvgInCity, getAvgInPlace, getUserRating, setUserRating} from './controllers/rating.controller'
-import { addManyPlaces, addNewPlace, getAllPlaces, getPlacesForCity, getRecentPlaces, getSamplePlacesForCity } from './controllers/place.controller';
+import { addManyPlaces, addNewPlace, getAllPlaces, getCityNames, getPlacesForCity, getRecentPlaces, getSamplePlacesForCity } from './controllers/place.controller';
 import { addNewComment, deleteComment, getAllCommentsByEntry } from './controllers/comment.controller';
 
 
@@ -16,7 +16,7 @@ router.post('/entry/addOne', postEntry)
 router.get('/entry/getOne/:entryID', getEntry)
 router.get('/entry/getMany/byPlace/:placeID/sortBy/:sortPrefrence', getPlaceEntries)
 router.get('/entry/getMany/byPlace/:placeID', getPlaceEntries)
-router.get('/entry/getMany/byCity/:cityName/sortBy/:sortPrefrence', getCityEntries)
+// router.get('/entry/getMany/byCity/:cityName/sortBy/:sortPrefrence', getCityEntries)
 router.get('/entry/getMany/byCity/:cityName', getCityEntries)
 router.delete('/entry/delete/:entryID')
 
@@ -51,6 +51,7 @@ router.get('/place/getRandomByCity/:cityName/sample/:numOfPlaces', getSamplePlac
 router.get('/place/getByCity/:cityName', getPlacesForCity);
 router.post('/place/addMany', addManyPlaces);
 router.get('/place/getRecent/:userId', getRecentPlaces)
+router.get('/place/cities', getCityNames)
 
 // COMMENT
 

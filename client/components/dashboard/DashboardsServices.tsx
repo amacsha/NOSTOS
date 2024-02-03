@@ -5,7 +5,7 @@ import { updateFilterPreference } from '../../slices/userSlice';
 
 const base_url = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000`
 
-const cityFetcher = (cityName: string, setter: React.Dispatch<React.SetStateAction<(SmallEntry & {avg: number})[]>>) => {
+const cityFetcher = async (cityName: string, setter: React.Dispatch<React.SetStateAction<(SmallEntry & {avg: number})[]>>) => {
   const rawentries = axios.get<SmallEntry[]>(`${base_url}/entry/getMany/byCity/${cityName}`)
   const avgs = axios.get<{entryId: number, _avg: {value: number}}[]>(`${base_url}/rating/AveragesForCity/${cityName}`)
   
@@ -14,11 +14,12 @@ const cityFetcher = (cityName: string, setter: React.Dispatch<React.SetStateActi
       return {...entry, avg: avgs.data.find(a => a.entryId == entry.id)?._avg.value || 0}
     }))
   }).catch((err) => {
-    console.log(err.body)
+    console.log('cityFetcher:')
+    console.log(err)
   })
 }
 
-const placeFetcher = (placeId: string, setter: React.Dispatch<React.SetStateAction<(SmallEntry & {avg: number})[]>>) => {
+const placeFetcher = async (placeId: string, setter: React.Dispatch<React.SetStateAction<(SmallEntry & {avg: number})[]>>) => {
   const rawentries = axios.get<SmallEntry[]>(`${base_url}/entry/getMany/byPlace/${placeId}`)
   const avgs = axios.get<{entryId: number, _avg: {value: number}}[]>(`${base_url}/rating/AveragesForPlace/${placeId}`)
   
@@ -27,7 +28,8 @@ const placeFetcher = (placeId: string, setter: React.Dispatch<React.SetStateActi
       return {...entry, avg: avgs.data.find(a => a.entryId == entry.id)?._avg.value || 0}
     }))
   }).catch((err) => {
-    console.log(err.body)
+    console.log('placeFetcher:')
+    console.log(err)
   })
 }
 
@@ -35,7 +37,8 @@ const updatePrefrence = async (newPrefrence: string, dispatch: any, userId: numb
   await axios.put(`${base_url}/user/setUserFilterPreference/${userId}`, {filter_preference: newPrefrence}).then(() => {
     dispatch(updateFilterPreference(newPrefrence))
   }).catch((err) => {
-    console.log(err.body)
+    console.log('updatePrefrence:')
+    console.log(err)
   })
 }
 
@@ -43,7 +46,8 @@ const getPrefrence = async (dispatch: any, userId: number) => {
   await axios.get(`${base_url}/user/getUserFilterPreference/${userId}`).then((res) => {
     dispatch(updateFilterPreference(res.data.filter_preference))
   }).catch((err) => {
-    console.log(err.body)
+    console.log("getPrefrence")
+    console.log(err)
   })
 }
 
@@ -51,8 +55,18 @@ const getActiveMissions = async (userId: number, setter: any) => {
   await axios.get(`${base_url}/place/getRecent/${userId}`).then((res) => {
     setter(res.data)
   }).catch((err) => {
-    console.log(err.body)
+    console.log("getActiveMissions")
+    console.log(err)
   })
 }
 
-export {cityFetcher, updatePrefrence, getPrefrence, placeFetcher, getActiveMissions}
+const getCities = async (setter: React.Dispatch<React.SetStateAction<string[]>>) => {
+  axios.get<string[]>(`${base_url}/place/cities`).then((res) => {
+    setter(res.data)
+  }).catch((err) => {
+    console.log('placeFetcher:')
+    console.log(err)
+  })
+}
+
+export {cityFetcher, updatePrefrence, getPrefrence, placeFetcher, getActiveMissions, getCities}

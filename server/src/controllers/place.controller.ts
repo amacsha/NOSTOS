@@ -101,3 +101,18 @@ export async function getRecentPlaces(ctx: Context): Promise<void> {
         console.log(error);
     }
 }
+
+export async function getCityNames(ctx: Context): Promise<void> {
+    try {
+        const distinctCities = await db.place.findMany({
+            distinct: ['city'],
+            select: {
+              city: true,
+            },
+          })
+        ctx.response.status = 200;
+        ctx.response.body = distinctCities.map(city => city.city);
+    } catch (error) {
+        console.log(error);
+    }
+}
