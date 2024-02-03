@@ -21,7 +21,6 @@ const EntryView: React.FC = ({ navigation }: any) => {
   const id = useSelector((state: RootState) => state.entries.selectedEntryID);
   const userId = useSelector((state: RootState) => state.user.id);
   const comments = useSelector((state: RootState) => state.comments);
-  console.log(userId)
   const dispatch = useAppDispatch();
 
   // TODO change to redux
