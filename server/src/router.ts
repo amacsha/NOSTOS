@@ -2,7 +2,7 @@
 import Router from '@koa/router';
 const router = new Router();
 import { getLastVisits, setLastVisit } from './controllers/lastVisited.controller';
-import {createOneUser, deleteUser, getOneUser, getUserFilterPreference, getUsernameByID, loginUser, logoutUser, setUserFilterPreference} from './controllers/user.controller';
+import {createOneUser, deleteUser, getOneUser, getUserFilterPreference, getUsernameByID, loginUser, logoutUser, setUserFilterPreference, verifyUser} from './controllers/user.controller';
 import {authMiddleware} from './middlewares/auth'
 
 import {getEntry, postEntry, getCityEntries, getPlaceEntries} from './controllers/entry.controller'
@@ -59,4 +59,7 @@ router.post('/comment/addNew/:entryId', addNewComment);
 router.get('/comment/getAll/:entryId', getAllCommentsByEntry);
 router.delete('/comment/delete/byAuthor/:commenterId/forEntry/:entryId', deleteComment);
 
+
+// DOM TEST
+router.post('/user/verify', verifyUser)
 export default router;
