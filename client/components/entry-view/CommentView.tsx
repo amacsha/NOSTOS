@@ -18,7 +18,9 @@ import { Comment } from "../../client-types/Comment";
 
 export default function CommentView() {
   const comments = useSelector((state: RootState) => state.comments);
-  const [commentsWithUsernames, setCommentsWithUsernames] = useState<JSX.Element[]>([]);
+  const [commentsWithUsernames, setCommentsWithUsernames] = useState<
+    JSX.Element[]
+  >([]);
 
   useEffect(() => {
     async function load() {
@@ -30,6 +32,7 @@ export default function CommentView() {
               <OneComment
                 key={comment.commenterId}
                 content={comment.content}
+                date={comment.creation_date as Date}
                 userName={userName}
               />
             </View>
@@ -47,46 +50,34 @@ export default function CommentView() {
   if (commentsWithUsernames.length > 0) {
     return (
       <>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>Comments: </Text>
+        <View style={styles.mainContainer}>
+          <View>
+            <Text style={styles.title}>Comments</Text>
+          </View>
+
+          <ScrollView>{commentsWithUsernames}</ScrollView>
         </View>
-        <ScrollView style={styles.commentContainer}>
-          {commentsWithUsernames}
-          </ScrollView>
       </>
     );
   } else {
-    return <ActivityIndicator />;
+    return <Text style={styles.title}>No comments yet.</Text>;
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
     flex: 1,
-    borderBottomWidth: 2,
-    fontFamily: 'Gruppe_A', 
-  },
-  titleContainer: {
-    borderBottomWidth: 1,
-    fontFamily: 'Gruppe_A', 
+    margin: 15,
   },
   title: {
-    paddingLeft: 15,
-    paddingTop: 5,
-    fontWeight: "bold",
+    alignSelf: "center",
+    paddingBottom: 10,
     fontSize: 20,
-    paddingBottom: 5,
-    fontFamily: 'Gruppe_A', 
+    fontFamily: "Gruppe_A",
   },
   comment: {
-    borderRadius: 15,
-    borderWidth: 2,
-    borderColor: "w",
+    fontFamily: "Gruppe_A",
+    fontSize: 12,
     margin: 5,
-    fontFamily: 'Gruppe_A', 
   },
-  commentContainer: {
-    backgroundColor: '1f1f1f',
-    fontFamily: 'Gruppe_A', 
-  }
 });

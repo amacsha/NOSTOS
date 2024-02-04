@@ -1,15 +1,27 @@
-import React, { useEffect, useState } from "react"
-import { Text, View, Button, ActivityIndicator, StyleSheet, Pressable } from "react-native"
-import { getAverageRating, getRating, updateRating, countRatings } from "./EntryService"
-import { getValueFor } from "../../utils/secureStorage"
-// import AverageRating from "./AverageRating"
+import React, { useEffect, useState } from "react";
+import {
+  Text,
+  View,
+  ActivityIndicator,
+  StyleSheet,
+  Pressable,
+} from "react-native";
+import { getAverageRating, getRating, updateRating } from "./EntryService";
+import { getValueFor } from "../../utils/secureStorage";
 
-import { Rating } from "react-native-ratings"
+import { colors } from "../styles/colors";
 
 export default function UserRating({ userId, entryId }: any) {
   //TODO CHANGE TO REDUX?
-  const [rating, setRating] = useState<number | undefined>(undefined)
-  const [avgRating, setAvgRating] = useState<number | undefined>(undefined)
+  const [rating, setRating] = useState<number | undefined>(0);
+  const [avgRating, setAvgRating] = useState<number | undefined>(0);
+
+  const [userRatingStars, setUserRatingStars] = useState<boolean[]>(
+    Array(5).fill(false)
+  );
+  const [averageRatingStars, setAverageRatingStars] = useState<boolean[]>(
+    Array(5).fill(false)
+  );
 
   const token: string = getValueFor("accessToken") || "";
 
@@ -19,79 +31,117 @@ export default function UserRating({ userId, entryId }: any) {
 
     if (currentRatingResponse.data) {
       setRating(currentRatingResponse.data.value);
+      updateUserRatingStars(currentRatingResponse.data.value - 1);
     }
-    setAvgRating(averageRatingResponse);
+
+    if (averageRatingResponse) {
+      setAvgRating(averageRatingResponse.toFixed(0));
+      updateAverageRatingStars(averageRatingResponse.toFixed(0) - 1);
+    }
   }
 
-  useEffect(() => { load() }, [rating]);
+  useEffect(() => {
+    load();
+  }, [rating]);
+
+  function updateUserRatingStars(x: number) {
+    setUserRatingStars(() => {
+      const update = Array(5).fill("☆");
+      for (let i = 0; i <= x; i++) {
+        update[i] = true;
+      }
+      return update;
+    });
+  }
+  function updateAverageRatingStars(x: number) {
+    setAverageRatingStars(() => {
+      const update = Array(5).fill("☆");
+      for (let i = 0; i <= x; i++) {
+        update[i] = true;
+      }
+      return update;
+    });
+  }
 
   async function handleClick(value: number) {
-    await updateRating(entryId, userId, value, token)
-    await load();
+    updateUserRatingStars(value);
+    updateRating(entryId, userId, value + 1, token);
+
+    //Fake the average rating updating if there are no current ratings.
+    //Re-loading the true value from the DB causes
+    //a nasty re-render, and with enough ratings the average wouldn't shift much
+    //from just a single update
+    if (avgRating === 0) {
+      setAvgRating(value);
+      updateAverageRatingStars(value);
+    }
   }
 
+  let userRatingButtons: JSX.Element[] = [];
+  for (let i = 0; i < 5; i++) {
+    userRatingButtons.push(
+      <Pressable key={i} onPress={() => handleClick(i)}>
+        <Text style={styles.stars}>
+          {userRatingStars[i] === true ? "★" : "☆"}
+        </Text>
+      </Pressable>
+    );
+  }
+  let averageRatingButtons: JSX.Element[] = [];
+  for (let i = 0; i < 5; i++) {
+    averageRatingButtons.push(
+      <Text key={i} style={styles.stars}>
+        {averageRatingStars[i] === true ? "★" : "☆"}
+      </Text>
+    );
+  }
+  // ⭐️☆★✦✦✧
+  //◐ ○ ●
+
   return (
-    <View style={styles.container}>
-      {rating === undefined ?
-        <Text style={styles.userRating}>Choose your rating {rating}</Text>
-        :
-        <Text style={styles.userRating}>Your rating: {rating}</Text>
-      }
+    <>
+      <View style={styles.main}>
+        <View style={styles.userRatingOuter}>
+          <View>
+            <Text style={styles.text}>Your Rating</Text>
+          </View>
 
-      <View style={styles.buttonContainer}>
-        <Pressable onPress={() => handleClick(1)} style={styles.button}>
-          <Text style={styles.buttonText}>1</Text>
-        </Pressable>
-        <Pressable onPress={() => handleClick(2)} style={styles.button}>
-          <Text style={styles.buttonText}>2</Text>
-        </Pressable>
-        <Pressable onPress={() => handleClick(3)} style={styles.button}>
-          <Text style={styles.buttonText}>3</Text>
-        </Pressable>
-        <Pressable onPress={() => handleClick(4)} style={styles.button}>
-          <Text style={styles.buttonText}>4</Text>
-        </Pressable>
-        <Pressable onPress={() => handleClick(5)} style={styles.button}>
-          <Text style={styles.buttonText}>5</Text>
-        </Pressable>
+          <View style={styles.stars}>{userRatingButtons}</View>
+        </View>
+
+        <View style={styles.averageRatingOuter}>
+          <View>
+            <Text style={styles.text}>Average</Text>
+          </View>
+
+          <View style={styles.stars}>{averageRatingButtons}</View>
+        </View>
       </View>
-
-    <Text style={styles.avgRating}>Average: {avgRating?.toFixed(1)}</Text>
-    </View>
-
-//     {/* <Rating showRating startingValue={rating} onFinishRating={(val: number) => handleClick(val)} /> */}
-//     {/* <Rating readonly showRating showReadOnlyText={false} startingValue={avgRating} fractions={2} /> */}
-  )
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  main: {
+    margin: 15,
     flexDirection: "row",
+  },
+  userRatingOuter: {
+    flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-    fontFamily: 'Gruppe_A',
   },
-  userRating: {
-    alignItems: "center",
-    fontSize: 25,
-    fontFamily: 'Gruppe_A',
+  text: {
+    fontSize: 18,
+    fontFamily: "Gruppe_A",
   },
-  avgRating: {
-    fontSize: 25,
-    fontFamily: 'Gruppe_A',
-  },
-  buttonContainer: {
+  stars: {
     flexDirection: "row",
-    fontFamily: 'Gruppe_A',
-  },
-  button: {
-    borderWidth: 1,
-    borderRadius: 5,
-    fontFamily: 'Gruppe_A',
-  },
-  buttonText: {
     fontSize: 25,
-    margin: 5,
-    fontFamily: 'Gruppe_A',
-  }
-})
+    // margin: 5,
+    color: colors.basePurple,
+  },
+  averageRatingOuter: {
+    flex: 1,
+    alignItems: "center",
+  },
+});
