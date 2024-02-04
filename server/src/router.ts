@@ -9,7 +9,9 @@ import {getEntry, postEntry, getCityEntries, getPlaceEntries} from './controller
 import {getAvgEntryRating, getAvgInCity, getAvgInPlace, getUserRating, setUserRating} from './controllers/rating.controller'
 import { addManyPlaces, addNewPlace, getAllPlaces, getCityNames, getPlacesForCity, getRecentPlaces, getSamplePlacesForCity } from './controllers/place.controller';
 import { addNewComment, deleteComment, getAllCommentsByEntry } from './controllers/comment.controller';
+import { confirmSQLConnection } from './models/db';
 
+router.get('/', confirmSQLConnection);
 
 // ENTRY
 router.post('/entry/addOne', postEntry)

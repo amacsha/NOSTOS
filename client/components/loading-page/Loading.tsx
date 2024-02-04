@@ -6,6 +6,8 @@ import Typewriter from '../../utils/TypewriterLoading';
 import { startGlitch, glitchAnimation } from '../../utils/animatedGlitch';
 import { colors } from '../styles/colors';
 import TypewriterReverse from '../../utils/TypewriterLoadingReverse';
+import confirmDBIsConnected from '../../service/DBConnectedService';
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -17,6 +19,7 @@ const LoadingPage = ({ navigation }: any) => {
         async function prepare() {
             try {
                 startGlitch();
+                await confirmDBIsConnected();
                 await fetchLocation()
             } catch (error) {
                 console.log(error)
