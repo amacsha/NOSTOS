@@ -15,7 +15,6 @@ const prisma = new PrismaClient({
 
 async function confirmSQLConnection(ctx: Context) {
   try {
-    console.log(ctx)
     console.log('Attempting to connect to AWS.')
     await prisma.$connect();
     ctx.response.status = 200;
