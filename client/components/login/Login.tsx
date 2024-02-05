@@ -74,7 +74,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
               <TextInput
                 style={styles.input}
                 placeholder="Email"
-                placeholderTextColor='#876FE4'
+                placeholderTextColor={colors.lighterPurple}
                 onChangeText={handleChange("email")}
                 onBlur={handleBlur('email')}
                 value={values.email}
@@ -85,7 +85,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
               <TextInput
                 style={styles.input}
                 placeholder="Password"
-                placeholderTextColor='#876FE4'
+                placeholderTextColor={colors.lighterPurple}
                 onChangeText={handleChange("password")}
                 onBlur={handleBlur("password")}
                 value={values.password}
@@ -112,50 +112,54 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.darkGre7,
     height: '100%',
-    color: '#D4D5D6',
     fontFamily: 'Gruppe_A',
   },
   head: {
     fontSize: 20,
     color: colors.gunMetalGrey,
     fontFamily: 'Gruppe_A',
+    marginHorizontal: 25,
   },
   inputArea: {
     marginTop: 200
   },
   input: {
     backgroundColor: colors.gunMetalGrey,
-    color: colors.black,
+    color: colors.darkGre7,
     marginVertical: 5,
     marginHorizontal: 25,
+    paddingLeft: 5,
     height: 50,
     fontSize: 20,
     fontFamily: 'Gruppe_A',
   },
   error: {
-    backgroundColor: '#341717',
-    color: '#DD7272',
+    backgroundColor: colors.errorBackground,
+    color: colors.errorFont,
     marginVertical: 2,
     marginHorizontal: 25,
+    paddingTop: 5,
+    paddingLeft: 5,
     height: 25,
     fontSize: 15,
     fontFamily: 'Gruppe_A',
     justifyContent: 'center'
   },
   button: {
-    backgroundColor: '#45417B',
+    backgroundColor: colors.basePurple,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    margin: 3,
-    padding: 3,
-    height: 30,
-    width: 80,
+    marginTop: 20,
+    margin: 5,
+    padding: 5,
+    height: 40,
+    width: 130,
     fontFamily: 'Gruppe_A',
   },
   buttonText: {
-    color: '#9578F8',
-    fontSize: 17,
+    color: colors.gunMetalGrey,
+    fontSize: 20,
     fontFamily: 'Gruppe_A',
   }
 })

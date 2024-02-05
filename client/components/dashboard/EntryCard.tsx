@@ -5,6 +5,7 @@ import { SmallEntry } from '../../client-types/SmallEntry';
 import { useAppDispatch } from '../../hooks';
 import { selectEntry } from '../../slices/entriesSlice';
 import React from 'react';
+import { colors } from '../styles/colors';
 
 
 
@@ -34,7 +35,7 @@ const EntryCard: React.FC<{entry: SmallEntry & {avg: number}}> = ({ entry } : {e
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#9772b2',
+    backgroundColor: colors.basePurple,
     padding: 10,
     borderColor: 'black',
     borderWidth: 2,
