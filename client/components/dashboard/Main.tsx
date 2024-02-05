@@ -46,7 +46,6 @@ const Main: React.FC = ({ navigation }: any) => {
     <SafeAreaView style={styles.container}>
       <View>
         <Logout></Logout>
-        <Button title='Go to mission' onPress={() => navigation.navigate('Mission')} />
         <View style={styles.textWrapper}>
           <Text style={styles.locationText}>CITY: {location.value?.cityName}</Text>
           <MultiSelect
