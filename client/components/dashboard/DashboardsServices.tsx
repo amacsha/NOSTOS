@@ -69,4 +69,10 @@ const getCities = async (setter: React.Dispatch<React.SetStateAction<string[]>>)
   })
 }
 
-export {cityFetcher, updatePrefrence, getPrefrence, placeFetcher, getActiveMissions, getCities}
+const getProfile = async (userId: number, token: string) => {
+  // POST so that we can send a body, even though it's really a GET..
+  const response = await axios.post(`${base_url}/user/profile`, {userId, token});
+  return response;
+}
+
+export {cityFetcher, updatePrefrence, getPrefrence, placeFetcher, getActiveMissions, getCities, getProfile}

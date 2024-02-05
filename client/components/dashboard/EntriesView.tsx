@@ -44,8 +44,8 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
     <View style={styles.entryView}>
         <View>
             <Text style={styles.whiteText}>Filter by: {filter_preference}</Text>
-            <RadioGroup 
-              radioButtons={radioButtons} 
+            <RadioGroup
+              radioButtons={radioButtons}
               onPress={(newPref) => userId != null && updatePrefrence(newPref, dispatch, userId, token)}
               selectedId={filter_preference == null? undefined : filter_preference}
               layout='row'
