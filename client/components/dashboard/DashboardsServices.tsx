@@ -7,13 +7,13 @@ import { Profile } from '../../client-types/Profile';
 
 const base_url = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000`
 
-const cityFetcher = async (cityName: string, setter: React.Dispatch<React.SetStateAction<(SmallEntry & {avg: number})[]>>) => {
+const cityFetcher = async (cityName: string, setter: React.Dispatch<React.SetStateAction<(SmallEntry & { avg: number })[]>>) => {
   const rawentries = axios.get<SmallEntry[]>(`${base_url}/entry/getMany/byCity/${cityName}`)
-  const avgs = axios.get<{entryId: number, _avg: {value: number}}[]>(`${base_url}/rating/AveragesForCity/${cityName}`)
+  const avgs = axios.get<{ entryId: number, _avg: { value: number } }[]>(`${base_url}/rating/AveragesForCity/${cityName}`)
 
   Promise.all([rawentries, avgs]).then(([rawentries, avgs]) => {
     setter(rawentries.data.map((entry) => {
-      return {...entry, avg: avgs.data.find(a => a.entryId == entry.id)?._avg.value || 0}
+      return { ...entry, avg: avgs.data.find(a => a.entryId == entry.id)?._avg.value || 0 }
     }))
   }).catch((err) => {
     console.log('cityFetcher:')
@@ -21,13 +21,13 @@ const cityFetcher = async (cityName: string, setter: React.Dispatch<React.SetSta
   })
 }
 
-const placeFetcher = async (placeId: string, setter: React.Dispatch<React.SetStateAction<(SmallEntry & {avg: number})[]>>) => {
+const placeFetcher = async (placeId: string, setter: React.Dispatch<React.SetStateAction<(SmallEntry & { avg: number })[]>>) => {
   const rawentries = axios.get<SmallEntry[]>(`${base_url}/entry/getMany/byPlace/${placeId}`)
-  const avgs = axios.get<{entryId: number, _avg: {value: number}}[]>(`${base_url}/rating/AveragesForPlace/${placeId}`)
+  const avgs = axios.get<{ entryId: number, _avg: { value: number } }[]>(`${base_url}/rating/AveragesForPlace/${placeId}`)
 
   Promise.all([rawentries, avgs]).then(([rawentries, avgs]) => {
     setter(rawentries.data.map((entry) => {
-      return {...entry, avg: avgs.data.find(a => a.entryId == entry.id)?._avg.value || 0}
+      return { ...entry, avg: avgs.data.find(a => a.entryId == entry.id)?._avg.value || 0 }
     }))
   }).catch((err) => {
     console.log('placeFetcher:')
@@ -36,7 +36,7 @@ const placeFetcher = async (placeId: string, setter: React.Dispatch<React.SetSta
 }
 
 const updatePrefrence = async (newPrefrence: string, dispatch: any, userId: number, token: string) => {
-  await axios.put(`${base_url}/user/setUserFilterPreference/${userId}`, {filter_preference: newPrefrence, token}).then(() => {
+  await axios.put(`${base_url}/user/setUserFilterPreference/${userId}`, { filter_preference: newPrefrence, token }).then(() => {
     dispatch(updateFilterPreference(newPrefrence))
   }).catch((err) => {
     console.log('updatePrefrence:')
@@ -71,6 +71,7 @@ const getCities = async (setter: React.Dispatch<React.SetStateAction<string[]>>)
   })
 }
 
+export { cityFetcher, updatePrefrence, getPrefrence, placeFetcher, getActiveMissions, getCities }
 const getProfile = async (userId: number, token: string) => {
   // POST so that we can send a body, even though it's really a GET..
   try {
