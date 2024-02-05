@@ -59,7 +59,7 @@ export default function UserStart() {
             <Stack.Screen name="GlobeView" component={GlobeView} />
             <Stack.Screen name="Navbar" component={Navbar} />
             <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="Main" component={Main} />
+            <Stack.Screen name="Logs" component={Main} />
             <Stack.Screen name="Mission" component={Mission} />
             <Stack.Screen name="Location" component={Location} />
             <Stack.Screen name="EntryView" component={EntryView} />
