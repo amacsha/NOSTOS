@@ -17,12 +17,16 @@ import { RootState } from "../../store";
 import { setAuth } from "../../slices/authSlice";
 import { updateUserDetails } from "../../slices/userSlice";
 import LoadingPage from "../loading-page/Loading";
+import Navbar from "../navbar/Navbar";
+
 
 const Stack = createNativeStackNavigator();
 
 export default function UserStart() {
 
   const dispatch = useDispatch();
+
+
 
   const loadUserDetails = async () => {
     let token = await getValueFor('accessToken');
@@ -43,22 +47,21 @@ export default function UserStart() {
   console.log(isAuthenticated)
 
   return (
-
     <NavigationContainer>
-
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
       >
         {isAuthenticated ? (
           <>
-              <Stack.Screen name="LoadingPage" component={LoadingPage} />
-              <Stack.Screen name="Main" component={Main} />
-              <Stack.Screen name="Mission" component={Mission} />
-              <Stack.Screen name="Location" component={Location} />
-              <Stack.Screen name="EntryView" component={EntryView} />
-              <Stack.Screen name="New Comment" component={NewComment} />
-              <Stack.Screen name="NewEntryForm" component={NewEntryForm} />
-              <Stack.Screen name="Logout" component={Logout} />
+            <Stack.Screen name="LoadingPage" component={LoadingPage} />
+            <Stack.Screen name="Navbar" component={Navbar} />
+            <Stack.Screen name="Main" component={Main} />
+            <Stack.Screen name="Mission" component={Mission} />
+            <Stack.Screen name="Location" component={Location} />
+            <Stack.Screen name="EntryView" component={EntryView} />
+            <Stack.Screen name="New Comment" component={NewComment} />
+            <Stack.Screen name="NewEntryForm" component={NewEntryForm} />
+            <Stack.Screen name="Logout" component={Logout} />
           </>
         ) : (
           <>
@@ -68,6 +71,7 @@ export default function UserStart() {
         )}
       </Stack.Navigator>
     </NavigationContainer>
+
   );
 }
 

@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Button, GestureResponderEvent, StyleProp, ViewS
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import React, { useEffect, useMemo, useState } from 'react';
-import RadioGroup, {RadioButtonProps} from 'react-native-radio-buttons-group';
+import RadioGroup, { RadioButtonProps } from 'react-native-radio-buttons-group';
 import MultiSelect from 'react-native-multiple-select';
 
 import { SmallEntry } from '../../client-types/SmallEntry';
@@ -15,7 +15,7 @@ import { getValueFor } from '../../utils/secureStorage';
 
 import { colors } from '../styles/colors';
 
-const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entries } : {entries: (SmallEntry & {avg: number})[]}) => {
+const EntriesView: React.FC<{ entries: (SmallEntry & { avg: number })[] }> = ({ entries }: { entries: (SmallEntry & { avg: number })[] }) => {
   const filter_preference = useSelector((state: RootState) => state.user.filter_preference);
   const userId = useSelector((state: RootState) => state.user.id);
   const dispatch = useAppDispatch()
@@ -30,84 +30,84 @@ const EntriesView: React.FC<{entries: (SmallEntry & {avg: number})[]}> = ({ entr
       id: 'recent',
       value: 'recent',
       label: 'recent',
-      color: colors.lighterPurple,
+      color: colors.basePurple,
     },
     {
       id: 'top rated',
       value: 'top rated',
       label: 'top rated',
-      color: colors.lighterPurple,
+      color: colors.basePurple,
     },
   ]), []);
 
   return (
     <View style={styles.entryView}>
-        <View>
-            <Text style={styles.whiteText}>Filter by: {filter_preference}</Text>
-            <RadioGroup 
-              radioButtons={radioButtons} 
-              onPress={(newPref) => userId != null && updatePrefrence(newPref, dispatch, userId, token)}
-              selectedId={filter_preference == null? undefined : filter_preference}
-              layout='row'
-              labelStyle={styles.whiteText}
-            />
-            <MultiSelect
-              items={
-                [
-                  ... new Set(entries.filter((entry) =>
-                    selected.every(tag =>
-                      entry.tag.includes(tag))
-                  ).reduce((entryTags, entry) =>
-                      entryTags.concat(entry.tag as never[]
-                    ),[]
-                  ))
-                ].map((tag) => {
-                    return {
-                      id: tag,
-                      name: tag,
-                    }
-                })
+      <View>
+        <Text style={styles.whiteText}>Filter by: {filter_preference}</Text>
+        <RadioGroup
+          radioButtons={radioButtons}
+          onPress={(newPref) => userId != null && updatePrefrence(newPref, dispatch, userId, token)}
+          selectedId={filter_preference == null ? undefined : filter_preference}
+          layout='row'
+          labelStyle={styles.whiteText}
+        />
+        <MultiSelect
+          items={
+            [
+              ... new Set(entries.filter((entry) =>
+                selected.every(tag =>
+                  entry.tag.includes(tag))
+              ).reduce((entryTags, entry) =>
+                entryTags.concat(entry.tag as never[]
+                ), []
+              ))
+            ].map((tag) => {
+              return {
+                id: tag,
+                name: tag,
               }
-              uniqueKey="id"
-              onSelectedItemsChange={(selectedItems) => {setSelected(selectedItems as never[])}}
-              selectedItems={selected}
+            })
+          }
+          uniqueKey="id"
+          onSelectedItemsChange={(selectedItems) => { setSelected(selectedItems as never[]) }}
+          selectedItems={selected}
 
-              selectText="Filter by tags:"
-              noItemsText="No tags found matching your search"
-              fontFamily={styles.whiteText.fontFamily}
+          selectText="Filter by tags:"
+          noItemsText="No tags found matching your search"
+          fontFamily={styles.whiteText.fontFamily}
 
-              styleItemsContainer={styles.dropdown}
-              styleTextDropdown={styles.blackText}
-              styleTextDropdownSelected={styles.blackText}
+          styleItemsContainer={styles.dropdown}
+          styleTextDropdown={styles.blackText}
+          styleTextDropdownSelected={styles.blackText}
 
-              tagBorderColor={styles.whiteText.color}
-              tagTextColor={styles.whiteText.color}
+          tagBorderColor={styles.whiteText.color}
+          tagTextColor={styles.whiteText.color}
 
-              itemTextColor={styles.whiteText.color}
-              itemFontFamily={styles.whiteText.fontFamily}
+          itemTextColor={styles.whiteText.color}
+          itemFontFamily={styles.whiteText.fontFamily}
 
-              submitButtonColor={styles.selectedTags.color}
+          submitButtonColor={styles.selectedTags.color}
 
-              selectedItemTextColor={styles.selectedTags.color}
-              selectedItemFontFamily={styles.selectedTags.fontFamily}
-              selectedItemIconColor={styles.selectedTags.color}
-              searchInputStyle={styles.blackText}
-            />
-        </View>
-        <ScrollView>
+          selectedItemTextColor={styles.selectedTags.color}
+          selectedItemFontFamily={styles.selectedTags.fontFamily}
+          selectedItemIconColor={styles.selectedTags.color}
+          searchInputStyle={styles.blackText}
+        />
+      </View>
+      <ScrollView>
 
 
         {entries.length > 0 ?
 
-        entries.filter((entry) => selected.every(tag => entry.tag.includes(tag))).sort((a, b) => {
+          entries.filter((entry) => selected.every(tag => entry.tag.includes(tag))).sort((a, b) => {
             return filter_preference == 'recent' ?
-            new Date(b.creation_date).getTime() - new Date(a.creation_date).getTime()  :
-            b.avg - a.avg
-        }).map((entry) => {
-            return <EntryCard entry={entry} key={entry.id}/>
-        }): <Text style={styles.whiteText}> Waiting For Entries...</Text>
-            }
-        </ScrollView>
+              new Date(b.creation_date).getTime() - new Date(a.creation_date).getTime() :
+              b.avg - a.avg
+          }).map((entry) => {
+            return <EntryCard entry={entry} key={entry.id} />
+          }) : <Text style={styles.whiteText}> Waiting For Entries...</Text>
+        }
+      </ScrollView>
     </View>
   );
 };

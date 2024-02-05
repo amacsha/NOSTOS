@@ -6,8 +6,11 @@ import { useFonts } from 'expo-font';
 import store from "./store";
 import { Provider } from "react-redux";
 
+
+
 export default function App() {
-  SplashScreen.preventAutoHideAsync(); 
+  
+  SplashScreen.preventAutoHideAsync();
 
   const [fontLoaded, fontError] = useFonts({
     'Gruppe_A': require('./assets/fonts/Gruppe_A.ttf'),
@@ -15,7 +18,7 @@ export default function App() {
 
   const onLayoutRootView = useCallback(async () => {
     if (fontLoaded || fontError) {
-      await SplashScreen.hideAsync(); 
+      await SplashScreen.hideAsync();
     }
   }, [fontLoaded, fontError]);
 
@@ -24,7 +27,7 @@ export default function App() {
   }, [onLayoutRootView]);
 
   if (!fontLoaded) {
-    return null; 
+    return null;
   }
 
   return (
