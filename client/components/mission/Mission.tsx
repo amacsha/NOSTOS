@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Button, Text, Pressable, StyleSheet, View, Linking, SafeAreaView, Alert,} from "react-native";
+import { Button, Text, Pressable, StyleSheet, View, Linking, SafeAreaView, Alert, Image,} from "react-native";
 import MapView, { Circle, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -105,6 +105,12 @@ const Mission: React.FC = ({ navigation }: any) => {
   //   await Location.startGeofencingAsync("startGeofence", placesToGeofence);
   // };
 
+  const [zoomLevel, setZoomLevel] = useState(0);
+
+  const handleRegionChange = (region: any) => {
+    setZoomLevel(region.longitudeDelta);
+  };
+
   return (
     <SafeAreaProvider>
       <MapView
@@ -116,6 +122,7 @@ const Mission: React.FC = ({ navigation }: any) => {
         showsMyLocationButton={false}
         showsCompass={false}
         loadingEnabled={true}
+        onRegionChange={handleRegionChange}
         onPress={() => dispatch(selectPlace(null))}
         initialRegion={{
           latitude: location.value?.lat ?? 0,
@@ -133,14 +140,23 @@ const Mission: React.FC = ({ navigation }: any) => {
             />
             <Marker
               coordinate={{ latitude: place.lat, longitude: place.lng }}
-              icon={require("../../assets/mission-marker.png")}
+              // icon={require("../../assets/mission-marker.png")}
               title={place.name}
+              anchor={{ x: 0.5, y: 0.5 }}
+              style={{
+                transform: [{ scale: 1 + zoomLevel }],
+              }}
               onPress={(event) => {
                 event.stopPropagation();
                 handleMarkerPress(place, place.lat, place.lng);
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               }}
-            />
+              >
+              <Image
+                source={require("../../assets/mission-marker.png")}
+                style={{ width: 40, height: 40 }}
+              />
+              </Marker>
           </React.Fragment>
         ))}
       </MapView>

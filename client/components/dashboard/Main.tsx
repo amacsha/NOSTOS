@@ -23,6 +23,8 @@ const Main: React.FC = ({ navigation }: any) => {
   const [activeMissions, setActiveMissions] = useState<Place[]>([])
   const [cityNames, setCityNames] = useState<string[]>([])
 
+  console.log(location.value?.cityName)
+
   const dispatch = useAppDispatch();
 
   const asyncFetchLocation = async () => {

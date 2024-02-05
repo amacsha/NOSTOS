@@ -18,6 +18,7 @@ import { setAuth } from "../../slices/authSlice";
 import { updateUserDetails } from "../../slices/userSlice";
 import LoadingPage from "../loading-page/Loading";
 import Navbar from "../navbar/Navbar";
+import GlobeView from "../dashboard/GlobeView";
 
 
 const Stack = createNativeStackNavigator();
@@ -54,6 +55,7 @@ export default function UserStart() {
         {isAuthenticated ? (
           <>
             <Stack.Screen name="LoadingPage" component={LoadingPage} />
+            <Stack.Screen name="GlobeView" component={GlobeView} />
             <Stack.Screen name="Navbar" component={Navbar} />
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Mission" component={Mission} />
