@@ -18,7 +18,7 @@ export const PlacesSlice = createSlice({
     setPlaces: (state, action: PayloadAction<Place[]>) => {
       state.places = action.payload;
     },
-    selectPlace: (state, action: PayloadAction<string>) => {
+    selectPlace: (state, action: PayloadAction<string | null>) => {
       state.selectedPlaceId = action.payload;
     },
     clearSelectedPlace: (state) => {

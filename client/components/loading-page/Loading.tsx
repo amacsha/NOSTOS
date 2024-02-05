@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontWeight: 'bold',
         fontFamily: 'Gruppe_A',
-        color: colors.darkGre7,
+        color: colors.darkGrey,
     }
 });
 
