@@ -4,6 +4,7 @@ import { UserType } from '../../server-types/types';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { getLastVisits } from './lastVisited.controller';
+import json from 'koa-json';
 
 //TODO update tests for getUsernamefromID
 const createOneUser = async (ctx: Koa.Context) => {
@@ -113,21 +114,26 @@ const getUsernameByID = async (ctx: Koa.Context) => {
 };
 
 const deleteUser = async (ctx: Koa.Context) => {
-  try {
-    const user = await prisma.user.delete({
-      where: { id: Number(ctx.params.id) },
-    });
-    ctx.status = 200;
-    ctx.body = user;
-  } catch (error) {
-    console.error(error);
-    ctx.status = 500;
-    ctx.body = { error: 'Server error' };
+  if (verifyUser(ctx.request.body.token, Number(ctx.params.id))) {
+    try {
+      const user = await prisma.user.delete({
+        where: { id: Number(ctx.params.id) },
+      });
+      ctx.status = 200;
+      ctx.body = user;
+    } catch (error) {
+      console.error(error);
+      ctx.status = 500;
+      ctx.body = { error: 'Server error' };
+    }
+  } else {
+    ctx.response.status = 500;
+    ctx.response.body = "Access denied."
   }
 };
 
 const getProfile = async (ctx: Koa.Context) => {
-  if (verifyUser(ctx.request.body.token)) {
+  if (verifyUser(ctx.request.body.token, Number(ctx.params.id))) {
     //Retrieve all user content
     try {
       const userId: number = ctx.request.body.userId;
@@ -161,7 +167,7 @@ const getProfile = async (ctx: Koa.Context) => {
 }
 
 const setUserFilterPreference = async (ctx: Koa.Context) => {
-  if (verifyUser(ctx.request.body.token)) {
+  if (verifyUser(ctx.request.body.token, Number(ctx.params.id))) {
     const body = <UserType>ctx.request.body;
     try {
       const preference = await prisma.user.update({
@@ -170,6 +176,52 @@ const setUserFilterPreference = async (ctx: Koa.Context) => {
       });
       ctx.status = 201;
       ctx.body = preference;
+    } catch (error) {
+      console.error(error);
+      ctx.status = 500;
+      ctx.body = { error: 'Server error' };
+    }
+  } else {
+    ctx.response.status = 401;
+    ctx.response.body = "Access denied."
+  }
+};
+
+const updatePassword = async (ctx: Koa.Context) => {
+  if (verifyUser(ctx.request.body.token, Number(ctx.params.id))) {
+    const body = <UserType>ctx.request.body;
+    
+    if (body.password === '') throw new Error('Password cannot be empty');
+    const hash = await bcrypt.hash(body.password, 10);
+
+    try {
+      const updated = await prisma.user.update({
+        where: { id: Number(ctx.params.id) },
+        data: { password:  hash},
+      });
+      ctx.status = 201;
+      ctx.body = updated;
+    } catch (error) {
+      console.error(error);
+      ctx.status = 500;
+      ctx.body = { error: 'Server error' };
+    }
+  } else {
+    ctx.response.status = 401;
+    ctx.response.body = "Access denied."
+  }
+};
+
+const updateUsername = async (ctx: Koa.Context) => {
+  if (verifyUser(ctx.request.body.token, Number(ctx.params.id))) {
+    const body = <UserType>ctx.request.body;
+    try {
+      const updated = await prisma.user.update({
+        where: { id: Number(ctx.params.id) },
+        data: { username: body.username },
+      });
+      ctx.status = 201;
+      ctx.body = updated;
     } catch (error) {
       console.error(error);
       ctx.status = 500;
@@ -201,13 +253,13 @@ const logoutUser = (ctx: Koa.Context) => {
   ctx.body = { accesToken: null };
 };
 
-const verifyUser = (token: string) => {
+const verifyUser = (token: string, userId: number) => {
   try {
-    jwt.verify(
+    var decoded = jwt.verify(
       token,
       process.env.SECRET_KEY!,
     );
-    return true;
+    return (decoded as UserType).id == userId;
   } catch (error) {
     return false;
   }
@@ -223,5 +275,7 @@ export {
   loginUser,
   logoutUser,
   verifyUser,
-  getProfile
+  getProfile,
+  updateUsername,
+  updatePassword,
 };

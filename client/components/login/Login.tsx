@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: colors.gunMetalGrey,
-    color: colors.darkGre7,
+    color: colors.darkGrey,
     marginVertical: 5,
     marginHorizontal: 25,
     paddingLeft: 5,

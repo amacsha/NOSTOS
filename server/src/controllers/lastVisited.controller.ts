@@ -63,14 +63,13 @@ const lastVisitCleanupAgent = () => {
         },
       });
 
-      console.log('Deleted:', oldMissions)
+      console.log('Deleted old missions:', oldMissions)
     } catch (error) {
       console.log(error);
     }
 
-
     lastVisitCleanupAgent();
-  }, 1000 * 60 * 30);
+  }, 1000 * 60 * 10);
 }
 
 export { setLastVisit, getLastVisits, lastVisitCleanupAgent};

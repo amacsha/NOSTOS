@@ -139,7 +139,7 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: colors.darkGre7,
+        backgroundColor: colors.darkGrey,
         height: '100%',
         fontFamily: 'Gruppe_A',
     },
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     },
     input: {
         backgroundColor: colors.gunMetalGrey,
-        color: colors.darkGre7,
+        color: colors.darkGrey,
         marginVertical: 5,
         marginHorizontal: 25,
         paddingLeft: 5,
