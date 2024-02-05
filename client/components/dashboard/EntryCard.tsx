@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable, ImageBackground} from 'react-native';
+import { View, Text, StyleSheet, Pressable, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SmallEntry } from '../../client-types/SmallEntry';
 
@@ -9,23 +9,23 @@ import { colors } from '../styles/colors';
 
 
 
-const EntryCard: React.FC<{entry: SmallEntry & {avg: number}}> = ({ entry } : {entry: SmallEntry & {avg: number}}) => {
+const EntryCard: React.FC<{ entry: SmallEntry & { avg: number } }> = ({ entry }: { entry: SmallEntry & { avg: number } }) => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  
+
   return (
-    <Pressable onPress={() => {dispatch(selectEntry(entry.id));navigation.navigate("EntryView" as never)}} style={styles.card}>
+    <Pressable onPress={() => { dispatch(selectEntry(entry.id)); navigation.navigate("EntryView" as never) }} style={styles.card}>
       {entry.id ? (
         <View style={styles.entryContainer}>
-      
+
           <Text style={styles.entryTitle}>{entry.title}</Text>
-     
+
           <View style={styles.entryDetails}>
-          
+
             <Text style={styles.entrySmallText}>{entry.creation_date}</Text>
-           
+
             <Text style={styles.entrySmallText}>tags: {entry.tag.join(", ")}</Text>
-          
+
           </View>
         </View>
       ) : null}
@@ -35,23 +35,23 @@ const EntryCard: React.FC<{entry: SmallEntry & {avg: number}}> = ({ entry } : {e
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.basePurple,
+    backgroundColor: colors.darkGrey,
     padding: 10,
-    borderColor: 'black',
-    borderWidth: 2,
-    marginBottom: 4,
+    marginVertical: 7,
+    marginHorizontal: 10,
     borderRadius: 2,
-    height: 80, 
+    height: 80,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    fontFamily: 'Gruppe_A', 
+    fontFamily: 'Gruppe_A',
   },
   entryContainer: {
+    fontFamily: 'Gruppe_A',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    marginTop: 5,
     width: '100%',
-    fontFamily: 'Gruppe_A',
   },
   entryTitle: {
     fontSize: 15,
@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
   },
   entrySmallText: {
     fontSize: 10,
-    color: '#ffffff', 
-    marginTop: 4, 
+    color: '#ffffff',
+    marginTop: 4,
     fontFamily: 'Gruppe_A',
   },
 });

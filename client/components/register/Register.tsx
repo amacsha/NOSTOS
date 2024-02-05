@@ -110,7 +110,7 @@ const Register: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.darkGre7,
+    backgroundColor: colors.darkGrey,
     height: '100%',
   },
   head: {
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: colors.gunMetalGrey,
-    color: colors.darkGre7,
+    color: colors.darkGrey,
     marginVertical: 5,
     marginHorizontal: 25,
     paddingLeft: 5,

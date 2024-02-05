@@ -1,14 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Text,
-  Pressable,
-  StyleSheet,
-  View,
-  Linking,
-  SafeAreaView,
-} from "react-native";
+import { Button, Text, Pressable, StyleSheet, View, Linking, SafeAreaView, Alert,} from "react-native";
 import MapView, { Circle, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -23,6 +15,8 @@ import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { colors } from "../styles/colors";
+import { isPointWithinRadius } from 'geolib';
+import { setLastVisited } from "../../service/MissionServices";
 
 const GOOGLE_KEY = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
@@ -33,7 +27,6 @@ interface GeofencingData {
     latitude: number;
     longitude: number;
     radius: number;
-    // Add any other properties you may need
   };
 }
 
@@ -43,6 +36,8 @@ const Mission: React.FC = ({ navigation }: any) => {
   const places = useSelector((state: RootState) => state.places.places);
   const city = useSelector((state: RootState) => state.location.value?.cityName);
   const placeId = useSelector((state: RootState) => state.places.selectedPlaceId);
+  const userId =useSelector((state: RootState) => state.user.id);
+  const radius = 100;
 
   const [selectedCoord, setSelectedCoord] = useState<number[]>([]);
 
@@ -70,37 +65,45 @@ const Mission: React.FC = ({ navigation }: any) => {
     dispatch(selectPlace(place.id));
   }
 
-  TaskManager.defineTask(
-    "startGeofence",
-    ({ data, error }: { data: GeofencingData; error?: any }) => {
-      if (error) {
-        console.log(error);
-        return;
-      }
-
-      const { eventType, region } = data;
-
-      if (eventType === GeofencingEventType.Enter) {
-        console.log("You've entered region:", region);
-      } else if (eventType === GeofencingEventType.Exit) {
-        console.log("You've left region:", region);
-      }
-    }
+  const verifyLocation = () => {
+    return lat && lng && isPointWithinRadius(
+      { latitude: lat, longitude: lng },
+      { latitude: selectedCoord[0], longitude: selectedCoord[1] },
+      radius
   );
+  }
 
-  const placesToGeofence = () => {
-    places.map((place) => ({
-      latitude: place.lat,
-      longitude: place.lng,
-      radius: 100,
-    }));
-  };
 
-  console.log(placesToGeofence);
 
-  const startGeofence = async () => {
-    await Location.startGeofencingAsync("startGeofence", placesToGeofence);
-  };
+  // TaskManager.defineTask("startGeofence", ({ data, error }: { data: GeofencingData; error?: any }) => {
+  //     if (error) {
+  //       console.log(error);
+  //       return;
+  //     }
+
+  //     const { eventType, region } = data;
+
+  //     if (eventType === GeofencingEventType.Enter) {
+  //       console.log("You've entered region:", region);
+  //     } else if (eventType === GeofencingEventType.Exit) {
+  //       console.log("You've left region:", region);
+  //     }
+  //   }
+  // );
+
+  // const placesToGeofence = () => {
+  //   places.map((place) => ({
+  //     latitude: place.lat,
+  //     longitude: place.lng,
+  //     radius: radius,
+  //   }));
+  // };
+
+  // console.log(placesToGeofence);
+
+  // const startGeofence = async () => {
+  //   await Location.startGeofencingAsync("startGeofence", placesToGeofence);
+  // };
 
   return (
     <SafeAreaProvider>
@@ -146,10 +149,14 @@ const Mission: React.FC = ({ navigation }: any) => {
           <Pressable
             style={styles.button}
             onPress={() => {
-              navigation.navigate("Location");
-              Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Success
-              );
+              if (verifyLocation()) {
+                navigation.navigate("Location");
+                userId && setLastVisited(userId, placeId);
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+              } else {
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+                Alert.alert('Not inside location radius');
+              }
             }}
           >
             <Text style={styles.text}>Confirm location</Text>
@@ -168,7 +175,7 @@ const Mission: React.FC = ({ navigation }: any) => {
 
 const styles = StyleSheet.create({
   map: {
-    flex: 9,
+    flex: 15,
     fontFamily: "Gruppe_A",
   },
   buttonContainer: {
@@ -177,7 +184,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
     alignContent: "center",
-    backgroundColor: colors.darkGrey
+    backgroundColor: colors.darkGrey,
   },
   button: {
     position: "relative",
@@ -192,6 +199,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     color: "white",
+    textAlign: "center",
     backgroundColor: "purple",
     fontFamily: "Gruppe_A",
     padding: 5,
