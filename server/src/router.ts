@@ -5,7 +5,7 @@ import { getLastVisits, setLastVisit } from './controllers/lastVisited.controlle
 import {createOneUser, deleteUser, getOneUser, getProfile, getUserFilterPreference, getUsernameByID, loginUser, logoutUser, setUserFilterPreference, verifyUser} from './controllers/user.controller';
 import {authMiddleware} from './middlewares/auth'
 
-import {getEntry, postEntry, getCityEntries, getPlaceEntries} from './controllers/entry.controller'
+import {getEntry, postEntry, getCityEntries, getPlaceEntries, getManyEntries} from './controllers/entry.controller'
 import {getAvgEntryRating, getAvgInCity, getAvgInPlace, getUserRating, setUserRating} from './controllers/rating.controller'
 import { addManyPlaces, addNewPlace, getAllPlaces, getCityNames, getPlacesForCity, getRecentPlaces, getSamplePlacesForCity } from './controllers/place.controller';
 import { addNewComment, deleteComment, getAllCommentsByEntry } from './controllers/comment.controller';
@@ -16,6 +16,7 @@ router.get('/', confirmSQLConnection);
 // ENTRY
 router.post('/entry/addOne', postEntry)
 router.get('/entry/getOne/:entryID', getEntry)
+router.post('/entry/getMany', getManyEntries);
 router.get('/entry/getMany/byPlace/:placeID/sortBy/:sortPrefrence', getPlaceEntries)
 router.get('/entry/getMany/byPlace/:placeID', getPlaceEntries)
 // router.get('/entry/getMany/byCity/:cityName/sortBy/:sortPrefrence', getCityEntries)
