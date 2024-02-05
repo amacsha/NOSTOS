@@ -26,7 +26,7 @@ model Entry {
   id            Int       @id @default(autoincrement())
   atPlace       Place     @relation(fields: [placeId], references: [id])
   placeId       String
-  author        User      @relation(fields: [authorId], references: [id])
+  author        User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId      Int
   title         String
   content       String
@@ -37,28 +37,28 @@ model Entry {
 }
 
 model Rating {
-  rater    User  @relation(fields: [raterId], references: [id])
+  rater    User  @relation(fields: [raterId], references: [id], onDelete: Cascade)
   raterId  Int
   value    Int
-  ratingOf Entry @relation(fields: [entryId], references: [id])
+  ratingOf Entry @relation(fields: [entryId], references: [id], onDelete: Cascade)
   entryId  Int
 
   @@id([raterId, entryId])
 }
 
 model Comment {
-  commenter     User     @relation(fields: [commenterId], references: [id])
+  commenter     User     @relation(fields: [commenterId], references: [id], onDelete: Cascade)
   commenterId   Int
   content       String
   creation_date DateTime @default(now())
-  commentOn     Entry    @relation(fields: [entryId], references: [id])
+  commentOn     Entry    @relation(fields: [entryId], references: [id], onDelete: Cascade)
   entryId       Int
 
   @@id([commenterId, entryId])
 }
 
 model Place {
-  id          String           @id
+  id          String        @id
   lat         Float
   lng         Float
   name        String
@@ -68,7 +68,7 @@ model Place {
 }
 
 model LastVisited {
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int
   place      Place    @relation(fields: [placeId], references: [id])
   placeId    String

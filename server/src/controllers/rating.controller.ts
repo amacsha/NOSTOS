@@ -123,9 +123,10 @@ const getAvgInCity = async (ctx: Koa.Context) => {
 };
 
 const setUserRating = async (ctx: Koa.Context) => {
-  if (verifyUser(ctx.request.body.token)) {
+  const { raterId, entryId, value } = <rating>ctx.request.body;
+
+  if (verifyUser(ctx.request.body.token, raterId)) {
     try {
-      const { raterId, entryId, value } = <rating>ctx.request.body;
       const newRating = <rating>await prisma.rating.upsert({
         where: {
           raterId_entryId: {

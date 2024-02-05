@@ -6,7 +6,7 @@ import { verifyUser } from './user.controller';
 
 export async function addNewComment(ctx: Context): Promise<void> {
   const { commenterId, content } = <Comment> ctx.request.body;
-  if (verifyUser(ctx.request.body.token)){
+  if (verifyUser(ctx.request.body.token, commenterId)){
     try {
       const comment = await db.comment.upsert({
         where: {
@@ -54,7 +54,7 @@ export async function getAllCommentsByEntry(ctx: Context): Promise<void> {
 }
 
 export async function deleteComment(ctx: Context): Promise<void> {
-  if (verifyUser(ctx.request.body.token)) {
+  if (verifyUser(ctx.request.body.token, ctx.params.commenterId)) {
     try {
       await db.comment.delete({
         where: {
