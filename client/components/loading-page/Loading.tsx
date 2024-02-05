@@ -5,6 +5,9 @@ import GeoLocation from '../dashboard/GeoLocation';
 import Typewriter from '../../utils/TypewriterLoading';
 import { startGlitch, glitchAnimation } from '../../utils/animatedGlitch';
 import { colors } from '../styles/colors';
+import TypewriterReverse from '../../utils/TypewriterLoadingReverse';
+import confirmDBIsConnected from '../../service/DBConnectedService';
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -16,6 +19,7 @@ const LoadingPage = ({ navigation }: any) => {
         async function prepare() {
             try {
                 startGlitch();
+                await confirmDBIsConnected();
                 await fetchLocation()
             } catch (error) {
                 console.log(error)
@@ -47,7 +51,7 @@ const LoadingPage = ({ navigation }: any) => {
                     transform: [{ translateX: glitchAnimation }]
                 }}
             >
-                <Typewriter text="NOSTOS" delay={1300} />
+                <TypewriterReverse text="NOSTOS" delay={1300} />
             </Animated.Text>
             <ActivityIndicator size="large" color='45417B' />
         </View>

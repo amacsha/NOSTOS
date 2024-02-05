@@ -4,13 +4,14 @@ import React, { useMemo, useState } from 'react';
 import { Place } from '../../client-types/Place';
 import MissionCard from './MissionCard';
 import { ScrollView } from 'react-native';
+import { colors } from '../styles/colors';
 
 
 const MissionView: React.FC<{places: Place[]}> = ({ places } : {places: Place[]}) => {
   return (
     <View style={styles.entryView}>
-        <Text>Active Missions:</Text>
-        <ScrollView>
+        <Text style={styles.entryViewText}>Active Missions:</Text>
+        <ScrollView horizontal>
         {places.map((place) => {
             return <MissionCard place={place} key={place.id}/>
         })}
@@ -24,13 +25,16 @@ export default MissionView;
 
 const styles = StyleSheet.create({
   entryView: {
-    backgroundColor: '#ffff',
+    backgroundColor: colors.darkGre7,
     alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 5,
     borderColor: 'black',
-    borderWidth: 2,
     flexGrow: 1,
-    fontFamily: 'Gruppe_A', 
+    fontFamily: 'Gruppe_A',
   },
+  entryViewText: {
+    alignContent: "center",
+    color: "white",
+    fontFamily: 'Gruppe_A',
+    paddingBottom: 5,
+  }
 });

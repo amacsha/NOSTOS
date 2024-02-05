@@ -14,6 +14,7 @@ import { RootState } from "../../store";
 import { useSelector } from "react-redux";
 import { TouchableHighlight } from "react-native";
 import { colors } from "../styles/colors";
+import confirmDBIsConnected from "../../service/DBConnectedService";
 
 type LoginProps = {
   navigation: NativeStackNavigationProp<any>
@@ -32,26 +33,32 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
   const dispatch = useAppDispatch();
 
   const handleSubmit = async (values: LoginValues) => {
+    try {
+      await confirmDBIsConnected();
+      const res: UserResponse = await LoginService(values)
+      if (res.error) {
+        Alert.alert(`${res.error}`);
+        dispatch(setAuth(initialState));
+      } else {
+        // Alert.alert('login 👍')
+        dispatch(setAuth({ isAuthenticated: true, token: res.data.accessToken }))
+        save('accessToken', res.data.accessToken);
+        save('userId', res.data.userId.toString());
+        save('email', res.data.email);
+        save('username', res.data.username);
+        save('filter_preference', res.data.filter_preference);
+      }
 
-    const res: UserResponse = await LoginService(values)
-    // console.log(res)
-    if (res.error) {
-      Alert.alert(`${res.error}`);
-      dispatch(setAuth(initialState));
-    } else {
-      // Alert.alert('login 👍')
-      dispatch(setAuth({ isAuthenticated: true, token: res.data.accessToken }))
-      save('accessToken', res.data.accessToken);
-      save('userId', res.data.userId.toString());
-      save('email', res.data.email);
-      save('username', res.data.username);
-      save('filter_preference', res.data.filter_preference);
+    } catch (error) {
+      Alert.alert('Cannot connect to server.')
+      console.log(error)
     }
   }
 
   const user = useSelector(
     (state: RootState) => state.user.filter_preference
   )
+
 
   return (
     <SafeAreaView style={styles.container}>
