@@ -36,7 +36,7 @@ router.post('/user/profile', getProfile)
 router.post('/user/createOneUser', createOneUser);
 router.get('/user/getOneUser/:id', getOneUser);
 router.get('/user/getUsername/:id', getUsernameByID);
-router.delete('/user/deleteUser/:id', deleteUser);
+router.post('/user/deleteUser/:id', deleteUser);
 router.put('/user/setUserFilterPreference/:id', setUserFilterPreference);
 router.get('/user/getUserFilterPreference/:id', getUserFilterPreference);
 router.get('/user/updateUsername/:id', updateUsername)

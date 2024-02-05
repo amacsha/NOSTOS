@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { getValueFor } from "../../utils/secureStorage";
-import { getLastVisited, getProfile } from "./DashboardsServices";
-import { SafeAreaView, Text, Button, View, ScrollView, StyleSheet, Pressable, TouchableHighlight } from "react-native";
+import { deleteAccount, getLastVisited, getProfile } from "./DashboardsServices";
+import { SafeAreaView, Text, Button, View, ScrollView, StyleSheet, Pressable, TouchableHighlight, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SmallEntry } from "../../client-types/SmallEntry";
 import { Rating } from "../../client-types/Rating";
@@ -17,6 +17,12 @@ import { useAppDispatch } from "../../hooks";
 import { selectEntry } from '../../slices/entriesSlice';
 import { useNavigation } from "@react-navigation/native";
 import Logout from "../logout/Logout";
+import { save } from "../../utils/secureStorage";
+import { setAuth, initialState } from '../../slices/authSlice';
+import { deleteItemAsync } from 'expo-secure-store';
+import { updateUserDetails, initialState as userInitials } from '../../slices/userSlice';
+
+
 
 
 export default function UserProfile () {
@@ -123,7 +129,33 @@ export default function UserProfile () {
             <Text style={styles.mainTitleText}>Manage your profile.</Text>
             <Logout />
 
-            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {}}>
+            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
+              Alert.alert('Account Deletion', 'Are you sure you want to delete the account?', [
+                {
+                  text: 'Delete',
+                  onPress: async () => {
+                    await deleteAccount(userId as number, token);
+//admin@nostos.com
+                    await Promise.all([
+                      deleteItemAsync('accessToken'),
+                      deleteItemAsync('userId'),
+                      deleteItemAsync('email'),
+                      deleteItemAsync('username'),
+                      deleteItemAsync('filter_preference'),
+                  ])
+                  dispatch(setAuth(initialState));
+                  dispatch(updateUserDetails(userInitials))
+
+                  navigation.navigate('Register' as never);
+
+                  }
+                },
+                {
+                  text: 'Cancel',
+                  onPress: () => {}
+                }
+              ])
+            }}>
               <Text style={styles.buttonText}>
                 Delete Account
               </Text>

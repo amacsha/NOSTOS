@@ -5,7 +5,7 @@ import { Place, newEntry, SmallEntry, entry } from '../../server-types/types'
 import { verifyUser } from './user.controller';
 
 const postEntry = async (ctx : Koa.Context) => {
-    if (verifyUser(ctx.request.body.token)) {
+    if (verifyUser(ctx.request.body.token, ctx.request.body.authorId)) {
         try {
             let data: newEntry = {
                 placeId: ctx.request.body.newEntry.placeId,
@@ -132,11 +132,12 @@ const getCityEntries= async (ctx : Koa.Context) => {
 }
 
 const deleteEntry = async (ctx: Koa.Context) => {
-    if (verifyUser(ctx.request.body.token)) {
+    if (verifyUser(ctx.request.body.token, ctx.request.body.userId)) {
         try {
             const deleteEntry = await prisma.entry.delete({
                 where: {
                 id: ctx.params.entryID,
+                authorId: ctx.request.body.userId
                 },
             })
             ctx.body = deleteEntry;

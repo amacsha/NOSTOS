@@ -116,11 +116,10 @@ const getUsernameByID = async (ctx: Koa.Context) => {
 const deleteUser = async (ctx: Koa.Context) => {
   if (verifyUser(ctx.request.body.token, Number(ctx.params.id))) {
     try {
-      const user = await prisma.user.delete({
-        where: { id: Number(ctx.params.id) },
-      });
+      const userId = Number(ctx.params.id);
+      const user = await prisma.user.delete({where: {id: userId}})
       ctx.status = 200;
-      ctx.body = user;
+      ctx.body = 'Deleted';
     } catch (error) {
       console.error(error);
       ctx.status = 500;
@@ -133,10 +132,10 @@ const deleteUser = async (ctx: Koa.Context) => {
 };
 
 const getProfile = async (ctx: Koa.Context) => {
-  if (verifyUser(ctx.request.body.token, Number(ctx.params.id))) {
+  const userId: number = ctx.request.body.userId;
+  if (verifyUser(ctx.request.body.token, userId)) {
     //Retrieve all user content
     try {
-      const userId: number = ctx.request.body.userId;
       const userEntries = await prisma.entry.findMany({
         where: {authorId: userId}
       });
@@ -148,7 +147,7 @@ const getProfile = async (ctx: Koa.Context) => {
       const userRatings = await prisma.rating.findMany({
         where: {raterId: userId}
       });
-      
+
       // const userLastVisited = await prisma.lastVisited.findMany({
       //   where: {userId}
       // });
@@ -190,7 +189,7 @@ const setUserFilterPreference = async (ctx: Koa.Context) => {
 const updatePassword = async (ctx: Koa.Context) => {
   if (verifyUser(ctx.request.body.token, Number(ctx.params.id))) {
     const body = <UserType>ctx.request.body;
-    
+
     if (body.password === '') throw new Error('Password cannot be empty');
     const hash = await bcrypt.hash(body.password, 10);
 
