@@ -25,17 +25,18 @@ export default MissionView;
 
 const styles = StyleSheet.create({
   entryView: {
-    backgroundColor: colors.darkGrey,
     alignItems: 'center',
     borderColor: 'black',
     flexGrow: 1,
     fontFamily: 'Gruppe_A',
+    paddingTop: 40,
   },
   entryViewText: {
     fontFamily: 'Gruppe_A',
-    color: colors.gunMetalGrey,
-    fontSize: 20,
-    paddingTop: 80,
-    paddingBottom: 5,
+    fontSize: 16,
+    color: "#ffffff",
+    textShadowColor: 'rgba(255, 255, 255, 0.75)', 
+    textShadowOffset: {width: 0, height: 0},
+    textShadowRadius: 3, 
   }
 });

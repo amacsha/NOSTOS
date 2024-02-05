@@ -26,7 +26,7 @@ const LoadingPage = ({ navigation }: any) => {
                 console.log(error)
             } finally {
                 setAppIsReady(true)
-                navigation.navigate('Navbar')
+                navigation.navigate('GlobeView')
             }
         }
         prepare();

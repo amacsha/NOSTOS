@@ -68,24 +68,39 @@ const EntriesView: React.FC<{ entries: (SmallEntry & { avg: number })[] }> = ({ 
 
           selectText="Filter by tags:"
           noItemsText="No tags found matching your search"
+
+          styleInputGroup={styles.tagFilter}
+          styleItemsContainer={styles.tagFilter} 
+          styleDropdownMenuSubsection	={styles.tagFilter}
           fontFamily={styles.whiteText.fontFamily}
-          styleDropdownMenu={styles.dropdown}
-          styleItemsContainer={styles.dropdown}
-          styleTextDropdown={styles.blackText}
-          styleTextDropdownSelected={styles.blackText}
-
-          tagBorderColor={styles.whiteText.color}
-          tagTextColor={styles.whiteText.color}
-
-          itemTextColor={styles.whiteText.color}
           itemFontFamily={styles.whiteText.fontFamily}
-
-          submitButtonColor={styles.selectedTags.color}
-
-          selectedItemTextColor={styles.selectedTags.color}
           selectedItemFontFamily={styles.selectedTags.fontFamily}
+          selectedItemTextColor={styles.selectedTags.color}
           selectedItemIconColor={styles.selectedTags.color}
-          searchInputStyle={styles.blackText}
+          searchInputStyle={styles.tagFilter} //search text
+          itemTextColor={styles.tagFilter.color}
+          itemFontSize={styles.tagFilter.fontSize}
+      
+          tagBorderColor={styles.selectedTags.color}
+          tagTextColor={styles.selectedTags.color}
+          styleTextDropdown={styles.inputField}
+          styleTextDropdownSelected={styles.inputField}
+          hideSubmitButton={true}
+          tagRemoveIconColor={styles.selectedTags.color}
+          styleIndicator={styles.pointer}      
+      
+
+
+
+          // styleDropdownMenu={styles.dropdown}
+          // styleItemsContainer={styles.dropdown} // dropdown background
+
+
+
+          // submitButtonColor={styles.selectedTags.color}
+
+          // styleInputGroup={styles.dropdown}
+          // styleSelectorContainer={styles.blackText}
         />
       </View>
       <View style={styles.filter}>
@@ -120,10 +135,11 @@ const EntriesView: React.FC<{ entries: (SmallEntry & { avg: number })[] }> = ({ 
 export default EntriesView;
 
 
+
 const styles = StyleSheet.create({
   entryView: {
     fontFamily: 'Gruppe_A',
-    backgroundColor: colors.lighterPurple,
+    // backgroundColor: colors.lighterPurple,
     marginHorizontal: 10,
     alignItems: 'stretch',
     gap: 5,
@@ -152,16 +168,33 @@ const styles = StyleSheet.create({
     padding: 15,
     
   },
-  blackText: {
+  tagFilter: {
     fontFamily: 'Gruppe_A',
-    color: colors.black,
-    
+    color: colors.lighterPurple,
+    backgroundColor: colors.basePurple,
+    borderColor: colors.basePurple,
+    fontSize: 16,
+    padding: 8,
+  },
+  inputField: {
+    fontFamily: 'Gruppe_A',
+    color: colors.lighterPurple,
+    backgroundColor: colors.basePurple,
+    borderColor: colors.basePurple,
+    fontSize: 14,
+    padding: 5,
+    left: 5,
+  },
+  pointer: {
+    color: colors.lighterPurple,
+    fontSize: 20,
+    left: 10,
   },
   dropdown: {
-    backgroundColor: colors.black,
+    backgroundColor: colors.basePurple,
   },
   selectedTags: {
     fontFamily: 'Gruppe_A',
-    color: colors.lighterPurple,
+    color: colors.gunMetalGrey,
   },
 });

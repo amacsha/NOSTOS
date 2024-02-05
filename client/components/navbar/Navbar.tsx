@@ -14,8 +14,8 @@ export default function Navbar() {
         <Tab.Navigator
             screenOptions={{ headerShown: false }}
         >
-            <Tab.Screen name="Logs" component={Main} />
             <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Logs" component={Main} />
             <Tab.Screen name="Mission" component={Mission} />
             <Tab.Screen name="UserProfile" component={UserProfile} />
         </Tab.Navigator>

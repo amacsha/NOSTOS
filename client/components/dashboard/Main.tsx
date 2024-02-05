@@ -23,6 +23,8 @@ const Main: React.FC = ({ navigation }: any) => {
   const [activeMissions, setActiveMissions] = useState<Place[]>([])
   const [cityNames, setCityNames] = useState<string[]>([])
 
+  console.log(location.value?.cityName)
+
   const dispatch = useAppDispatch();
 
   const asyncFetchLocation = async () => {
@@ -113,7 +115,7 @@ export default Main;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.lighterPurple,
+    backgroundColor: colors.darkGrey,
     justifyContent: "flex-start",
     alignItems: "stretch",
     fontFamily: "Gruppe_A",
@@ -123,9 +125,14 @@ const styles = StyleSheet.create({
     fontFamily: "Gruppe_A",
   },
   locationText: {
+    textAlign: 'center',
+    padding: 40,
     fontSize: 16,
-    color: "#ffffff",
+    color: colors.gunMetalGrey,
     fontFamily: "Gruppe_A",
+    textShadowColor: 'rgba(255, 255, 255, 0.75)', 
+    textShadowOffset: {width: 0, height: 0},
+    textShadowRadius: 10, 
   },
   fetchingText: {
     fontSize: 14,

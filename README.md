@@ -34,3 +34,26 @@ GOOGLE API QUERY
   //     })
   //     .catch((error) => console.log(error));
   // }, []);
+
+  GOOGLE API PLACE TYPES
+  amusement_park
+  aquarium
+  art_gallery
+  bakery
+  bar
+  book_store
+  museum
+  cafe
+  park
+  church
+  restaurant
+  florist
+  tourist_attraction
+  zoo
+  cemetery
+  stadium
+  subway_station
+  shopping_mall
+  university
+  synagogue
+  hindu_temple
