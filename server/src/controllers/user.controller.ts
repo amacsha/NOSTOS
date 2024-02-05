@@ -3,6 +3,7 @@ import prisma from '../models/db';
 import { UserType } from '../../server-types/types';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { getLastVisits } from './lastVisited.controller';
 
 //TODO update tests for getUsernamefromID
 const createOneUser = async (ctx: Koa.Context) => {
@@ -141,13 +142,13 @@ const getProfile = async (ctx: Koa.Context) => {
       const userRatings = await prisma.rating.findMany({
         where: {raterId: userId}
       });
-
-      const userLastVisited = await prisma.lastVisited.findMany({
-        where: {userId}
-      });
+      
+      // const userLastVisited = await prisma.lastVisited.findMany({
+      //   where: {userId}
+      // });
 
       ctx.response.status = 200;
-      ctx.response.body = {userEntries, userComments, userRatings, userLastVisited};
+      ctx.response.body = {userEntries, userComments, userRatings} //, userLastVisited};
     } catch (error) {
       console.log('Error retrieving user data (getProfile)', error);
       ctx.response.status = 500;
@@ -222,4 +223,5 @@ export {
   loginUser,
   logoutUser,
   verifyUser,
+  getProfile
 };

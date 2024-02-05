@@ -1,6 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { SmallEntry } from '../../client-types/SmallEntry';
 import { updateFilterPreference } from '../../slices/userSlice';
+import { LastVisited } from '../../client-types/LastVisited';
+import { Profile } from '../../client-types/Profile';
 
 
 const base_url = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000`
@@ -71,8 +73,24 @@ const getCities = async (setter: React.Dispatch<React.SetStateAction<string[]>>)
 
 const getProfile = async (userId: number, token: string) => {
   // POST so that we can send a body, even though it's really a GET..
-  const response = await axios.post(`${base_url}/user/profile`, {userId, token});
-  return response;
+  try {
+    const response = await axios.post<Profile>(`${base_url}/user/profile`, {userId, token});
+    if (response.status === 200) {
+      return response.data;
+    }
+  } catch (error) {
+    console.log('Error getting profile.')
+  }
 }
 
-export {cityFetcher, updatePrefrence, getPrefrence, placeFetcher, getActiveMissions, getCities, getProfile}
+const getLastVisited = async (userId: number) => {
+  try {
+    const response = await axios.get<LastVisited[]>(`${base_url}/last-visited/getLastUserPlaces/${userId}`);
+    return response
+  } catch (error) {
+    console.log('Error getting profile.')
+    return []
+  }
+}
+
+export {cityFetcher, updatePrefrence, getPrefrence, placeFetcher, getActiveMissions, getCities, getProfile, getLastVisited}
