@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/alien-astronomy-space-svgrepo-com.png",
       "resizeMode": "contain",
-      "backgroundColor": "#642c94"
+      "backgroundColor": "#9772b2"
     },
     "assetBundlePatterns": [
       "**/*"

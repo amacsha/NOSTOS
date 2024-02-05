@@ -13,14 +13,15 @@ SplashScreen.preventAutoHideAsync();
 
 const LoadingPage = ({ navigation }: any) => {
     const [appIsReady, setAppIsReady] = useState<boolean>(false);
+    console.log('loading')
     const fetchLocation = GeoLocation();
 
     useEffect(() => {
         async function prepare() {
             try {
                 startGlitch();
-                await confirmDBIsConnected();
                 await fetchLocation()
+                await confirmDBIsConnected();
             } catch (error) {
                 console.log(error)
             } finally {
@@ -61,7 +62,7 @@ const LoadingPage = ({ navigation }: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.basePurple,
+        backgroundColor: colors.darkGrey,
         alignItems: "center",
         justifyContent: "center",
 
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontWeight: 'bold',
         fontFamily: 'Gruppe_A',
-        color: colors.darkGrey,
+        color: colors.lighterPurple,
     }
 });
 

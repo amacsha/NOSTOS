@@ -42,15 +42,9 @@ const EntriesView: React.FC<{ entries: (SmallEntry & { avg: number })[] }> = ({ 
 
   return (
     <View style={styles.entryView}>
-      <View>
-        <Text style={styles.whiteText}>Filter by: {filter_preference}</Text>
-        <RadioGroup
-          radioButtons={radioButtons}
-          onPress={(newPref) => userId != null && updatePrefrence(newPref, dispatch, userId, token)}
-          selectedId={filter_preference == null ? undefined : filter_preference}
-          layout='row'
-          labelStyle={styles.whiteText}
-        />
+      <View style={styles.logsBody}>
+        {/* <Text style={styles.whiteText}>Filter by: {filter_preference}</Text> */}
+
         <MultiSelect
           items={
             [
@@ -74,25 +68,51 @@ const EntriesView: React.FC<{ entries: (SmallEntry & { avg: number })[] }> = ({ 
 
           selectText="Filter by tags:"
           noItemsText="No tags found matching your search"
+
+          styleInputGroup={styles.tagFilter}
+          styleItemsContainer={styles.tagFilter} 
+          styleDropdownMenuSubsection	={styles.tagFilter}
           fontFamily={styles.whiteText.fontFamily}
-
-          styleItemsContainer={styles.dropdown}
-          styleTextDropdown={styles.blackText}
-          styleTextDropdownSelected={styles.blackText}
-
-          tagBorderColor={styles.whiteText.color}
-          tagTextColor={styles.whiteText.color}
-
-          itemTextColor={styles.whiteText.color}
           itemFontFamily={styles.whiteText.fontFamily}
-
-          submitButtonColor={styles.selectedTags.color}
-
-          selectedItemTextColor={styles.selectedTags.color}
           selectedItemFontFamily={styles.selectedTags.fontFamily}
+          selectedItemTextColor={styles.selectedTags.color}
           selectedItemIconColor={styles.selectedTags.color}
-          searchInputStyle={styles.blackText}
+          searchInputStyle={styles.tagFilter} //search text
+          itemTextColor={styles.tagFilter.color}
+          itemFontSize={styles.tagFilter.fontSize}
+      
+          tagBorderColor={styles.selectedTags.color}
+          tagTextColor={styles.selectedTags.color}
+          styleTextDropdown={styles.inputField}
+          styleTextDropdownSelected={styles.inputField}
+          hideSubmitButton={true}
+          tagRemoveIconColor={styles.selectedTags.color}
+          styleIndicator={styles.pointer}      
+      
+
+
+
+          // styleDropdownMenu={styles.dropdown}
+          // styleItemsContainer={styles.dropdown} // dropdown background
+
+
+
+          // submitButtonColor={styles.selectedTags.color}
+
+          // styleInputGroup={styles.dropdown}
+          // styleSelectorContainer={styles.blackText}
         />
+      </View>
+      <View style={styles.filter}>
+        {radioButtons.map((button) => (
+          <Text
+            key={button.id}
+            style={filter_preference === button.value ? styles.selectedFilter : styles.whiteText}
+            onPress={() => userId != null && updatePrefrence(button.value!, dispatch, userId, token)}
+          >
+            {button.label}
+          </Text>
+        ))}
       </View>
       <ScrollView>
 
@@ -115,33 +135,66 @@ const EntriesView: React.FC<{ entries: (SmallEntry & { avg: number })[] }> = ({ 
 export default EntriesView;
 
 
+
 const styles = StyleSheet.create({
   entryView: {
-    backgroundColor: '#1f1f1f',
-    alignItems: 'stretch',
-    justifyContent: 'flex-start',
-    padding: 1,
-    borderColor: '#333',
-    gap: 5,
-    borderWidth: 2,
-    flexGrow: 1,
     fontFamily: 'Gruppe_A',
+    // backgroundColor: colors.lighterPurple,
+    marginHorizontal: 10,
+    alignItems: 'stretch',
+    gap: 5,
+  },
+  logsBody: {
+    marginTop: 20,
+  },
+  filter: {
+    flexDirection: 'row',
+    marginBottom: 10,
   },
   whiteText: {
+    fontFamily: 'Gruppe_A',
     color: 'white',
-    fontFamily: 'Gruppe_A',
+    flex: 1,
+    textAlign: 'center',
+    padding: 15,
+    
   },
-  blackText: {
-    color: colors.black,
+  selectedFilter: {
     fontFamily: 'Gruppe_A',
+    backgroundColor: colors.basePurple,
+    color: 'white',
+    flex: 1,
+    textAlign: 'center',
+    padding: 15,
+    
+  },
+  tagFilter: {
+    fontFamily: 'Gruppe_A',
+    color: colors.lighterPurple,
+    backgroundColor: colors.basePurple,
+    borderColor: colors.basePurple,
+    fontSize: 16,
+    padding: 8,
+  },
+  inputField: {
+    fontFamily: 'Gruppe_A',
+    color: colors.lighterPurple,
+    backgroundColor: colors.basePurple,
+    borderColor: colors.basePurple,
+    fontSize: 14,
+    padding: 5,
+    left: 5,
+  },
+  pointer: {
+    color: colors.lighterPurple,
+    fontSize: 20,
+    left: 10,
   },
   dropdown: {
-    backgroundColor: colors.black,
-    borderColor: 'white',
-    borderWidth: 1
+    backgroundColor: colors.basePurple,
   },
   selectedTags: {
-    color: colors.lighterPurple,
     fontFamily: 'Gruppe_A',
+    color: colors.gunMetalGrey,
   },
 });

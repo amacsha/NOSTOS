@@ -7,15 +7,15 @@ import { ScrollView } from 'react-native';
 import { colors } from '../styles/colors';
 
 
-const MissionView: React.FC<{places: Place[]}> = ({ places } : {places: Place[]}) => {
+const MissionView: React.FC<{ places: Place[] }> = ({ places }: { places: Place[] }) => {
   return (
     <View style={styles.entryView}>
-        <Text style={styles.entryViewText}>Active Missions:</Text>
-        <ScrollView horizontal>
+      <Text style={styles.entryViewText}>Active Missions</Text>
+      <ScrollView horizontal>
         {places.map((place) => {
-            return <MissionCard place={place} key={place.id}/>
+          return <MissionCard place={place} key={place.id} />
         })}
-        </ScrollView>
+      </ScrollView>
     </View>
   );
 };
@@ -25,16 +25,18 @@ export default MissionView;
 
 const styles = StyleSheet.create({
   entryView: {
-    backgroundColor: colors.darkGrey,
     alignItems: 'center',
     borderColor: 'black',
     flexGrow: 1,
     fontFamily: 'Gruppe_A',
+    paddingTop: 40,
   },
   entryViewText: {
-    alignContent: "center",
-    color: "white",
     fontFamily: 'Gruppe_A',
-    paddingBottom: 5,
+    fontSize: 16,
+    color: "#ffffff",
+    textShadowColor: 'rgba(255, 255, 255, 0.75)', 
+    textShadowOffset: {width: 0, height: 0},
+    textShadowRadius: 3, 
   }
 });

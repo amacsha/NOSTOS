@@ -1,7 +1,7 @@
 import prisma from '../models/db'
 import Koa from 'koa'
 
-import { Place, newEntry, SmallEntry } from '../../server-types/types'
+import { Place, newEntry, SmallEntry, entry } from '../../server-types/types'
 import { verifyUser } from './user.controller';
 
 const postEntry = async (ctx : Koa.Context) => {
@@ -31,7 +31,22 @@ const postEntry = async (ctx : Koa.Context) => {
     }
 }
 
-const getEntry= async (ctx : Koa.Context) => {
+const getManyEntries = async (ctx : Koa.Context) => {
+    console.log('get many entries back end')
+    try {
+        const entryIds: number[] = ctx.request.body;
+        const entries = await Promise.all(entryIds.map(async id => await prisma.entry.findFirst({ where: { id } })));
+
+        ctx.response.status = 200;
+        ctx.response.body = entries;
+    } catch (err) {
+        console.log(err)
+        ctx.status = 400
+        ctx.body = 'Error finding entries.'
+    }
+}
+
+const getEntry = async (ctx : Koa.Context) => {
     try {
         const entry =  await prisma.entry.findUnique({
             where: {
@@ -136,4 +151,4 @@ const deleteEntry = async (ctx: Koa.Context) => {
     }
 }
 
-export {getEntry, postEntry, getCityEntries, getPlaceEntries, deleteEntry}
+export {getEntry, getManyEntries, postEntry, getCityEntries, getPlaceEntries, deleteEntry}

@@ -18,7 +18,11 @@ import { setAuth } from "../../slices/authSlice";
 import { updateUserDetails } from "../../slices/userSlice";
 import LoadingPage from "../loading-page/Loading";
 import Navbar from "../navbar/Navbar";
+<<<<<<< HEAD
 import GlobeView from "../dashboard/GlobeView";
+=======
+import Home from "../Home/Home";
+>>>>>>> dev
 
 
 const Stack = createNativeStackNavigator();
@@ -57,6 +61,7 @@ export default function UserStart() {
             <Stack.Screen name="LoadingPage" component={LoadingPage} />
             <Stack.Screen name="GlobeView" component={GlobeView} />
             <Stack.Screen name="Navbar" component={Navbar} />
+            <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Mission" component={Mission} />
             <Stack.Screen name="Location" component={Location} />
@@ -77,12 +82,12 @@ export default function UserStart() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    fontFamily: 'Gruppe_A',
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "#fff",
+//     alignItems: "center",
+//     justifyContent: "center",
+//     fontFamily: 'Gruppe_A',
+//   },
+// });

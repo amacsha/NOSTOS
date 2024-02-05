@@ -41,15 +41,17 @@ const Main: React.FC = ({ navigation }: any) => {
   }, [location.value?.cityName]);
 
   useEffect(() => {
-    userId && getActiveMissions(userId, setActiveMissions);
+    setInterval(async () => {
+      userId && await getActiveMissions(userId, setActiveMissions);
+    }, 1000 * 60)
   }, [userId]);
 
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        <Logout></Logout>
+        {/* <Logout></Logout> */}
         <View style={styles.textWrapper}>
-          <Text style={styles.locationText}>CITY: {location.value?.cityName}</Text>
+          {/* <Text style={styles.locationText}>CITY: {location.value?.cityName}</Text>
           <MultiSelect
             items={
               cityNames.map(city => {
@@ -88,7 +90,7 @@ const Main: React.FC = ({ navigation }: any) => {
             selectedItemIconColor={styles.selectedTags.color}
 
             searchInputStyle={styles.blackText}
-          />
+          /> */}
           {activeMissions.length == 0 ?
             <Text style={styles.locationText}>No active missions available</Text> :
             <MissionView places={activeMissions}></MissionView>
@@ -96,10 +98,7 @@ const Main: React.FC = ({ navigation }: any) => {
         </View>
       </View>
       {location.value?.cityName ? (
-        <View style={{
-          flex: 7,
-          borderWidth: 2,
-        }}>
+        <View>
           <EntriesView entries={cityEntries}></EntriesView>
         </View>
       ) : (
@@ -116,7 +115,7 @@ export default Main;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1f1f1f",
+    backgroundColor: colors.darkGrey,
     justifyContent: "flex-start",
     alignItems: "stretch",
     fontFamily: "Gruppe_A",
@@ -126,9 +125,14 @@ const styles = StyleSheet.create({
     fontFamily: "Gruppe_A",
   },
   locationText: {
+    textAlign: 'center',
+    padding: 40,
     fontSize: 16,
-    color: "#ffffff",
+    color: colors.gunMetalGrey,
     fontFamily: "Gruppe_A",
+    textShadowColor: 'rgba(255, 255, 255, 0.75)', 
+    textShadowOffset: {width: 0, height: 0},
+    textShadowRadius: 10, 
   },
   fetchingText: {
     fontSize: 14,
