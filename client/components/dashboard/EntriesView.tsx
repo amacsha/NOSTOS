@@ -42,15 +42,9 @@ const EntriesView: React.FC<{ entries: (SmallEntry & { avg: number })[] }> = ({ 
 
   return (
     <View style={styles.entryView}>
-      <View>
-        <Text style={styles.whiteText}>Filter by: {filter_preference}</Text>
-        <RadioGroup
-          radioButtons={radioButtons}
-          onPress={(newPref) => userId != null && updatePrefrence(newPref, dispatch, userId, token)}
-          selectedId={filter_preference == null ? undefined : filter_preference}
-          layout='row'
-          labelStyle={styles.whiteText}
-        />
+      <View style={styles.logsBody}>
+        {/* <Text style={styles.whiteText}>Filter by: {filter_preference}</Text> */}
+
         <MultiSelect
           items={
             [
@@ -75,7 +69,7 @@ const EntriesView: React.FC<{ entries: (SmallEntry & { avg: number })[] }> = ({ 
           selectText="Filter by tags:"
           noItemsText="No tags found matching your search"
           fontFamily={styles.whiteText.fontFamily}
-
+          styleDropdownMenu={styles.dropdown}
           styleItemsContainer={styles.dropdown}
           styleTextDropdown={styles.blackText}
           styleTextDropdownSelected={styles.blackText}
@@ -93,6 +87,17 @@ const EntriesView: React.FC<{ entries: (SmallEntry & { avg: number })[] }> = ({ 
           selectedItemIconColor={styles.selectedTags.color}
           searchInputStyle={styles.blackText}
         />
+      </View>
+      <View style={styles.filter}>
+        {radioButtons.map((button) => (
+          <Text
+            key={button.id}
+            style={filter_preference === button.value ? styles.selectedFilter : styles.whiteText}
+            onPress={() => userId != null && updatePrefrence(button.value!, dispatch, userId, token)}
+          >
+            {button.label}
+          </Text>
+        ))}
       </View>
       <ScrollView>
 
@@ -117,31 +122,46 @@ export default EntriesView;
 
 const styles = StyleSheet.create({
   entryView: {
-    backgroundColor: '#1f1f1f',
-    alignItems: 'stretch',
-    justifyContent: 'flex-start',
-    padding: 1,
-    borderColor: '#333',
-    gap: 5,
-    borderWidth: 2,
-    flexGrow: 1,
     fontFamily: 'Gruppe_A',
+    backgroundColor: colors.lighterPurple,
+    marginHorizontal: 10,
+    alignItems: 'stretch',
+    gap: 5,
+  },
+  logsBody: {
+    marginTop: 20,
+  },
+  filter: {
+    flexDirection: 'row',
+    marginBottom: 10,
   },
   whiteText: {
-    color: 'white',
     fontFamily: 'Gruppe_A',
+    color: 'white',
+    flex: 1,
+    textAlign: 'center',
+    padding: 15,
+    
+  },
+  selectedFilter: {
+    fontFamily: 'Gruppe_A',
+    backgroundColor: colors.basePurple,
+    color: 'white',
+    flex: 1,
+    textAlign: 'center',
+    padding: 15,
+    
   },
   blackText: {
-    color: colors.black,
     fontFamily: 'Gruppe_A',
+    color: colors.black,
+    
   },
   dropdown: {
     backgroundColor: colors.black,
-    borderColor: 'white',
-    borderWidth: 1
   },
   selectedTags: {
-    color: colors.lighterPurple,
     fontFamily: 'Gruppe_A',
+    color: colors.lighterPurple,
   },
 });

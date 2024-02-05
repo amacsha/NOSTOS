@@ -45,9 +45,9 @@ const Main: React.FC = ({ navigation }: any) => {
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        <Logout></Logout>
+        {/* <Logout></Logout> */}
         <View style={styles.textWrapper}>
-          <Text style={styles.locationText}>CITY: {location.value?.cityName}</Text>
+          {/* <Text style={styles.locationText}>CITY: {location.value?.cityName}</Text>
           <MultiSelect
             items={
               cityNames.map(city => {
@@ -86,7 +86,7 @@ const Main: React.FC = ({ navigation }: any) => {
             selectedItemIconColor={styles.selectedTags.color}
 
             searchInputStyle={styles.blackText}
-          />
+          /> */}
           {activeMissions.length == 0 ?
             <Text style={styles.locationText}>No active missions available</Text> :
             <MissionView places={activeMissions}></MissionView>
@@ -94,10 +94,7 @@ const Main: React.FC = ({ navigation }: any) => {
         </View>
       </View>
       {location.value?.cityName ? (
-        <View style={{
-          flex: 7,
-          borderWidth: 2,
-        }}>
+        <View>
           <EntriesView entries={cityEntries}></EntriesView>
         </View>
       ) : (
@@ -114,7 +111,7 @@ export default Main;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1f1f1f",
+    backgroundColor: colors.lighterPurple,
     justifyContent: "flex-start",
     alignItems: "stretch",
     fontFamily: "Gruppe_A",
