@@ -61,7 +61,7 @@ const LoadingPage = ({ navigation }: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.basePurple,
+        backgroundColor: colors.darkGre7,
         alignItems: "center",
         justifyContent: "center",
 
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontWeight: 'bold',
         fontFamily: 'Gruppe_A',
-        color: colors.darkGre7,
+        color: colors.lighterPurple,
     }
 });
 

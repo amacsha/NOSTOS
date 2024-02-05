@@ -2,6 +2,8 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Mission from '../mission/Mission';
 import Main from '../dashboard/Main';
+import Home from '../Home/Home';
+import NewEntryForm from '../new-entry/NewEntryForm';
 
 const Tab = createBottomTabNavigator();
 
@@ -11,10 +13,10 @@ export default function Navbar() {
         <Tab.Navigator
             screenOptions={{ headerShown: false }}
         >
-            <Tab.Screen name="Home" component={Main} />
+            <Tab.Screen name="Home" component={Home} />
             <Tab.Screen name="Logs" component={Main} />
             <Tab.Screen name="Mission" component={Mission} />
-            <Tab.Screen name="UserProfile" component={Main} />
+            <Tab.Screen name="UserProfile" component={NewEntryForm} />
         </Tab.Navigator>
     );
 }
