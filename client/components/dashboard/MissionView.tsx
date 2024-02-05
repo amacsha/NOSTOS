@@ -25,7 +25,7 @@ export default MissionView;
 
 const styles = StyleSheet.create({
   entryView: {
-    backgroundColor: colors.darkGre7,
+    backgroundColor: colors.darkGrey,
     alignItems: 'center',
     borderColor: 'black',
     flexGrow: 1,
