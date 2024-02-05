@@ -33,7 +33,7 @@ const getLastVisits = async (ctx: Koa.Context) => {
     const cutoffTime = new Date()
     cutoffTime.setHours(cutoffTime.getHours() - 48);
     const missions = await prisma.lastVisited.findMany({
-      where: { 
+      where: {
         userId: Number(ctx.params.userId) ,
         visit_time: {
           gte: cutoffTime
@@ -56,13 +56,13 @@ const lastVisitCleanupAgent = () => {
       const cutoffTime = new Date()
       cutoffTime.setHours(cutoffTime.getHours() - 48);
       const oldMissions = await prisma.lastVisited.deleteMany({
-        where: { 
+        where: {
           visit_time: {
             lte: cutoffTime
           },
         },
       });
-  
+
       console.log('Deleted:', oldMissions)
     } catch (error) {
       console.log(error);

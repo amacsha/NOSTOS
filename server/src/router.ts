@@ -2,7 +2,7 @@
 import Router from '@koa/router';
 const router = new Router();
 import { getLastVisits, setLastVisit } from './controllers/lastVisited.controller';
-import {createOneUser, deleteUser, getOneUser, getUserFilterPreference, getUsernameByID, loginUser, logoutUser, setUserFilterPreference, verifyUser} from './controllers/user.controller';
+import {createOneUser, deleteUser, getOneUser, getProfile, getUserFilterPreference, getUsernameByID, loginUser, logoutUser, setUserFilterPreference, verifyUser} from './controllers/user.controller';
 import {authMiddleware} from './middlewares/auth'
 
 import {getEntry, postEntry, getCityEntries, getPlaceEntries} from './controllers/entry.controller'
@@ -31,6 +31,7 @@ router.get('/rating/AveragesForCity/:cityName', getAvgInCity)
 router.get('/rating/AveragesForPlace/:placeID', getAvgInPlace)
 
 // USER
+router.post('/user/profile', getProfile)
 router.post('/user/createOneUser', createOneUser);
 router.get('/user/getOneUser/:id', getOneUser);
 router.get('/user/getUsername/:id', getUsernameByID);

@@ -3,6 +3,7 @@ import prisma from '../models/db';
 import { UserType } from '../../server-types/types';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { getLastVisits } from './lastVisited.controller';
 
 //TODO update tests for getUsernamefromID
 const createOneUser = async (ctx: Koa.Context) => {
@@ -125,6 +126,40 @@ const deleteUser = async (ctx: Koa.Context) => {
   }
 };
 
+const getProfile = async (ctx: Koa.Context) => {
+  if (verifyUser(ctx.request.body.token)) {
+    //Retrieve all user content
+    try {
+      const userId: number = ctx.request.body.userId;
+      const userEntries = await prisma.entry.findMany({
+        where: {authorId: userId}
+      });
+
+      const userComments = await prisma.comment.findMany({
+        where: {commenterId: userId}
+      });
+
+      const userRatings = await prisma.rating.findMany({
+        where: {raterId: userId}
+      });
+      
+      // const userLastVisited = await prisma.lastVisited.findMany({
+      //   where: {userId}
+      // });
+
+      ctx.response.status = 200;
+      ctx.response.body = {userEntries, userComments, userRatings} //, userLastVisited};
+    } catch (error) {
+      console.log('Error retrieving user data (getProfile)', error);
+      ctx.response.status = 500;
+      ctx.response.body = "Error"
+    }
+  } else {
+    ctx.response.status = 500;
+    ctx.response.body = "Access denied."
+  }
+}
+
 const setUserFilterPreference = async (ctx: Koa.Context) => {
   if (verifyUser(ctx.request.body.token)) {
     const body = <UserType>ctx.request.body;
@@ -188,4 +223,5 @@ export {
   loginUser,
   logoutUser,
   verifyUser,
+  getProfile
 };
