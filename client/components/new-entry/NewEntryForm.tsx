@@ -11,6 +11,7 @@ import { Entry } from '../../client-types/Entry';
 import { selectEntry } from '../../slices/entriesSlice';
 import { getValueFor } from '../../utils/secureStorage';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { colors } from '../styles/colors';
 
 
 
@@ -49,86 +50,88 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <View style={styles.inputArea}>
 
-            <Text>Create a new Entry</Text>
-            <Formik<Entry>
-                initialValues={{ placeId: placeId, authorId: userId, title: '', content: '', tag: [] }}
-                validationSchema={validationSchema}
-                onSubmit={(values, actions) => {
-                    handleSubmit(values)
-                    actions.resetForm()
-                    actions.setFieldValue('tag', [])
-                    setTags('')
-                    navigation.navigate('Location' as never)
-                }}
-            >
-                {({ handleChange, handleSubmit, handleBlur, setFieldValue, values, touched, errors }) => (
-                    <>
-                        <TextInput
-                            style={styles.input}
-                            value={values.title}
-                            onChangeText={handleChange('title')}
-                            onBlur={handleBlur('title')}
-                            placeholder='title'
-                            placeholderTextColor='#876FE4'
-                        />
-                        {touched.title && errors.title && (
-                            <Text style={styles.error}>{errors.title}</Text>
-                        )}
-                        <TextInput
-                            style={styles.input}
-                            value={values.content}
-                            onChangeText={handleChange('content')}
-                            onBlur={handleBlur('content')}
-                            placeholder='what do you see? what do you smell? what do you feel?'
-                            placeholderTextColor='#876FE4'
-                        />
-                        {touched.content && errors.content && (
-                            <Text style={styles.error}>{errors.content}</Text>
-                        )}
-                        <View style={styles.tag}>
+                <Text style={styles.head}>Create a new Entry</Text>
+                <Formik<Entry>
+                    initialValues={{ placeId: placeId, authorId: userId, title: '', content: '', tag: [] }}
+                    validationSchema={validationSchema}
+                    onSubmit={(values, actions) => {
+                        handleSubmit(values)
+                        actions.resetForm()
+                        actions.setFieldValue('tag', [])
+                        setTags('')
+                        navigation.navigate('Location' as never)
+                    }}
+                >
+                    {({ handleChange, handleSubmit, handleBlur, setFieldValue, values, touched, errors }) => (
+                        <>
                             <TextInput
-                                style={styles.tagInput}
-                                value={tags}
-                                onChangeText={text => setTags(text)}
-                                onBlur={handleBlur('tag')}
-                                placeholder='add 3 tags'
-                                placeholderTextColor='#876FE4'
+                                style={styles.input}
+                                value={values.title}
+                                onChangeText={handleChange('title')}
+                                onBlur={handleBlur('title')}
+                                placeholder='title'
+                                placeholderTextColor={colors.lighterPurple}
                             />
-                            {touched.tag && errors.tag && (
-                                <Text style={styles.error}>{errors.tag}</Text>
+                            {touched.title && errors.title && (
+                                <Text style={styles.error}>{errors.title}</Text>
                             )}
-                            <Pressable style={[styles.button, styles.add]}
-                                onPress={() => {
-                                    if (tags !== '') values.tag.push(tags.trim().toLowerCase())
-                                    setTags("")
-                                }}
-                            >
-                                <Text style={styles.buttonText}>+</Text>
+                            <TextInput
+                                style={styles.input}
+                                value={values.content}
+                                onChangeText={handleChange('content')}
+                                onBlur={handleBlur('content')}
+                                placeholder='what do you see? what do you smell? what do you feel?'
+                                placeholderTextColor={colors.lighterPurple}
+                            />
+                            {touched.content && errors.content && (
+                                <Text style={styles.error}>{errors.content}</Text>
+                            )}
+                            <View style={styles.tag}>
+                                <TextInput
+                                    style={styles.tagInput}
+                                    value={tags}
+                                    onChangeText={text => setTags(text)}
+                                    onBlur={handleBlur('tag')}
+                                    placeholder='add 3 tags'
+                                    placeholderTextColor={colors.lighterPurple}
+                                />
+                                {touched.tag && errors.tag && (
+                                    <Text style={styles.error}>{errors.tag}</Text>
+                                )}
+                                <Pressable style={[styles.button, styles.add]}
+                                    onPress={() => {
+                                        if (tags !== '') values.tag.push(tags.trim().toLowerCase())
+                                        setTags("")
+                                    }}
+                                >
+                                    <Text style={styles.buttonText}>+</Text>
+                                </Pressable>
+                            </View>
+                            {values.tag.length > 0 && values.tag.map((oneTag, index) => {
+                                return (
+                                    <View style={styles.tag} key={index}>
+                                        <Text style={styles.tagText}>{oneTag}</Text>
+                                        <Pressable style={[styles.button, styles.delete]}
+                                            onPress={() => {
+                                                const newTagArray = [...values.tag];
+                                                newTagArray.splice(index, 1);
+                                                setFieldValue('tag', newTagArray);
+                                            }}
+                                        >
+                                            <Text style={styles.buttonText} >-</Text>
+                                        </Pressable>
+                                    </View>
+                                )
+                            })}
+                            <Pressable style={styles.button} onPress={() => handleSubmit()} >
+                                <Text style={styles.buttonText}>Submit</Text>
                             </Pressable>
-                        </View>
-                        {values.tag.length > 0 && values.tag.map((oneTag, index) => {
-                            return (
-                                <View style={styles.tag} key={index}>
-                                    <Text style={styles.tagText}>{oneTag}</Text>
-                                    <Pressable style={[styles.button, styles.delete]}
-                                        onPress={() => {
-                                            const newTagArray = [...values.tag];
-                                            newTagArray.splice(index, 1);
-                                            setFieldValue('tag', newTagArray);
-                                        }}
-                                    >
-                                        <Text style={styles.buttonText} >-</Text>
-                                    </Pressable>
-                                </View>
-                            )
-                        })}
-                        <Pressable style={styles.button} onPress={() => handleSubmit()} >
-                            <Text style={styles.buttonText}>Submit</Text>
-                        </Pressable>
-                    </>
-                )}
-            </Formik >
+                        </>
+                    )}
+                </Formik >
+            </View>
             <Logout />
         </SafeAreaView >
     )
@@ -136,89 +139,96 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#081116',
+        backgroundColor: colors.darkGre7,
         height: '100%',
-        color: '#D4D5D6',
-        padding: 10,
         fontFamily: 'Gruppe_A',
     },
-    head: {},
+    head: {
+        fontSize: 20,
+        color: colors.gunMetalGrey,
+        fontFamily: 'Gruppe_A',
+        marginHorizontal: 25,
+    },
+    inputArea: {
+        marginTop: 100
+    },
     input: {
-        backgroundColor: '#19222A',
-        color: '#D4D5D6',
-        marginVertical: 2,
-        height: 30,
-        fontSize: 17,
-        paddingLeft: 10,
+        backgroundColor: colors.gunMetalGrey,
+        color: colors.darkGre7,
+        marginVertical: 5,
+        marginHorizontal: 25,
+        paddingLeft: 5,
+        height: 50,
+        fontSize: 20,
         fontFamily: 'Gruppe_A',
     },
     error: {
-        backgroundColor: '#341717',
-        color: '#DD7272',
+        backgroundColor: colors.errorBackground,
+        color: colors.errorFont,
         marginVertical: 2,
-        marginHorizontal: 10,
-        height: 30,
-        fontSize: 17,
+        marginHorizontal: 25,
+        paddingTop: 5,
+        paddingLeft: 5,
+        height: 25,
+        fontSize: 15,
         fontFamily: 'Gruppe_A',
+        justifyContent: 'center'
     },
     button: {
-        backgroundColor: '#45417B',
+        backgroundColor: colors.basePurple,
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
-        margin: 3,
-        padding: 3,
-        height: 30,
-        width: 80,
+        marginTop: 20,
+        margin: 5,
+        padding: 5,
+        height: 40,
+        width: 130,
         fontFamily: 'Gruppe_A',
     },
     buttonText: {
-        color: '#9578F8',
-        fontSize: 17,
+        color: colors.gunMetalGrey,
+        fontSize: 20,
         fontFamily: 'Gruppe_A',
     },
     tag: {
+        backgroundColor: colors.gunMetalGrey,
+        fontFamily: 'Gruppe_A',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        borderRadius: 25,
-        width: 80,
         height: 30,
-        backgroundColor: '#19222A',
-        margin: 2,
-        fontFamily: 'Gruppe_A',
-
+        width: 120,
+        marginVertical: 5,
+        marginHorizontal: 25,
+        borderRadius: 25,
+        padding: 0
     },
     add: {
-        height: 30,
-        width: 30,
-        padding: 0,
         fontFamily: 'Gruppe_A',
-
-    },
-    delete: {
         height: 30,
         width: 30,
         borderRadius: 25,
-        padding: 0,
+        // marginVertical: 5,
+        // marginHorizontal: 25,
+    },
+    delete: {
         fontFamily: 'Gruppe_A',
+        height: 30,
+        width: 30,
+        borderRadius: 25,
     },
     tagInput: {
-        paddingLeft: 10,
-        paddingRight: 0,
-        marginRight: 0,
-        width: 200,
-        backgroundColor: '#19222A',
         fontFamily: 'Gruppe_A',
+        backgroundColor: colors.gunMetalGrey,
+        paddingLeft: 5,
+        borderRadius: 25
 
     },
     tagText: {
-        paddingLeft: 10,
-        color: '#9578F8',
-        height: 30,
-        width: 30,
-        marginTop: 6,
-        textAlign: 'center',
         fontFamily: 'Gruppe_A',
+        backgroundColor: colors.gunMetalGrey,
+        paddingLeft: 5,
+        borderRadius: 25,
     }
 })
 

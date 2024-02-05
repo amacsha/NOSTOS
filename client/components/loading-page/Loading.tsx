@@ -21,7 +21,7 @@ const LoadingPage = ({ navigation }: any) => {
                 console.log(error)
             } finally {
                 setAppIsReady(true)
-                navigation.navigate('Main')
+                navigation.navigate('Navbar')
             }
         }
         prepare();
