@@ -18,11 +18,8 @@ import { setAuth } from "../../slices/authSlice";
 import { updateUserDetails } from "../../slices/userSlice";
 import LoadingPage from "../loading-page/Loading";
 import Navbar from "../navbar/Navbar";
-<<<<<<< HEAD
 import GlobeView from "../dashboard/GlobeView";
-=======
 import Home from "../Home/Home";
->>>>>>> dev
 
 
 const Stack = createNativeStackNavigator();
