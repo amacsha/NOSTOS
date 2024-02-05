@@ -39,7 +39,9 @@ const Main: React.FC = ({ navigation }: any) => {
   }, [location.value?.cityName]);
 
   useEffect(() => {
-    userId && getActiveMissions(userId, setActiveMissions);
+    setInterval(async () => {
+      userId && await getActiveMissions(userId, setActiveMissions);
+    }, 1000 * 60)
   }, [userId]);
 
   return (
