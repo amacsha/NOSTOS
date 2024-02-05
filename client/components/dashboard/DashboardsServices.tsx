@@ -3,6 +3,7 @@ import { SmallEntry } from '../../client-types/SmallEntry';
 import { updateFilterPreference } from '../../slices/userSlice';
 import { LastVisited } from '../../client-types/LastVisited';
 import { Profile } from '../../client-types/Profile';
+import { Entry } from '../../client-types/Entry';
 
 
 const base_url = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000`
@@ -94,4 +95,13 @@ const getLastVisited = async (userId: number) => {
   }
 }
 
-export {cityFetcher, updatePrefrence, getPrefrence, placeFetcher, getActiveMissions, getCities, getProfile, getLastVisited}
+const getManyEntries = async (entryIds: number[]) => {
+try {
+  const response = (await axios.post<Entry[]>(`${base_url}/entry/getMany`, entryIds)).data;
+  return response;
+} catch (error) {
+  console.log(error)
+}
+}
+
+export {cityFetcher, updatePrefrence, getPrefrence, placeFetcher, getActiveMissions, getCities, getProfile, getLastVisited, getManyEntries}
