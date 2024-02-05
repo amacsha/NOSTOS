@@ -6,11 +6,12 @@ import { useAppDispatch } from '../../hooks';
 
 import { selectPlace } from '../../slices/placesSlice';
 import React from 'react';
+import { colors } from '../styles/colors';
 
 const MissionCard: React.FC<{place: Place}> = ({ place } : {place: Place}) => {
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  
+
   return (
     <Pressable onPress={() => {dispatch(selectPlace(place.id));navigation.navigate("Location" as never)}} style={styles.card}>
       <View>
@@ -25,22 +26,15 @@ export default MissionCard;
 
 const styles = StyleSheet.create({
     card: {
-    backgroundColor: '#ebff78',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: colors.lighterPurple,
     padding: 10,
     borderColor: 'black',
-    borderWidth: 2,
-    fontFamily: 'Gruppe_A', 
-  },
-  entrySmallText: {
-    fontSize: 11,
-    color: 'black',
-    fontFamily: 'Gruppe_A', 
+    borderWidth: 1,
+    fontFamily: 'Gruppe_A',
   },
   entryTitle: {
     fontSize: 20,
-    color: 'black',
-    fontFamily: 'Gruppe_A', 
+    color: 'white',
+    fontFamily: 'Gruppe_A',
   },
 });
