@@ -58,7 +58,7 @@ const GlobeView: React.FC = ({ navigation }: any) => {
                 lat: location.value.lat,
               })
             );
-          navigation.navigate("Main");
+          navigation.navigate("Navbar");
         }}
       >
         <Text style={styles.locationButtonText}>London</Text>
@@ -74,7 +74,7 @@ const GlobeView: React.FC = ({ navigation }: any) => {
                 lat: location.value.lat,
               })
             );
-          navigation.navigate("Main");
+          navigation.navigate("Logs");
         //   console.log("City Name:", location.value?.cityName)
         }}
       >
