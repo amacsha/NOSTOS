@@ -35,7 +35,7 @@ const EntryCard: React.FC<{ entry: SmallEntry & { avg: number } }> = ({ entry }:
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.darkGre7,
+    backgroundColor: colors.darkGrey,
     padding: 10,
     marginVertical: 7,
     marginHorizontal: 10,
