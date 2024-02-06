@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { getValueFor } from "../../utils/secureStorage";
-import { deleteAccount, getLastVisited, getProfile, updatePassword } from "./DashboardsServices";
+import { deleteAccount, getLastVisited, getProfile, updatePassword, updateUsername } from "./DashboardsServices";
 import { SafeAreaView, Text, Button, View, ScrollView, StyleSheet, Pressable, TouchableHighlight, Alert, TextInput } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SmallEntry } from "../../client-types/SmallEntry";
@@ -135,9 +135,11 @@ export default function UserProfile () {
     userId != null && load();
   }, [userId])
 
-  function toggleSection(state: SectionVisibility, property: "showComments" | "showEntries" | "showRatings" | "showNewPassword" | "showNewUsername") {
-    const update: SectionVisibility = {...state};
-    update[property] = !update[property];
+  function toggleSection(property: "showComments" | "showEntries" | "showRatings" | "showNewPassword" | "showNewUsername", value: boolean) {
+    const update: SectionVisibility = {...sectionVisibility}
+    update[property] = value;
+    if (property == 'showNewPassword') update['showNewUsername'] = false
+    if (property == 'showNewUsername') update['showNewPassword'] = false
     setSectionVisibility(update)
   }
 
@@ -182,15 +184,15 @@ export default function UserProfile () {
               </Text>
             </TouchableHighlight>
             <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
-              console.log(sectionVisibility.showNewPassword)
-              toggleSection(sectionVisibility, 'showNewPassword')
-              console.log(sectionVisibility.showNewPassword)
+              toggleSection('showNewPassword', !sectionVisibility.showNewPassword)
             }}>
               <Text style={styles.buttonText}>
                 Change Password
               </Text>
             </TouchableHighlight>
-            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {}}>
+            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
+              toggleSection('showNewUsername', !sectionVisibility.showNewUsername);
+            }}>
               <Text style={styles.buttonText}>
                 Change Username
               </Text>
@@ -217,31 +219,50 @@ export default function UserProfile () {
               } else {
                 updatePassword(newPassword, oldPassword, userId as number, dispatch, token)
               }
-
             }}>
               <Text>Update Password</Text>
             </Pressable>
           </View>
           </>}
 
+          {sectionVisibility.showNewUsername &&
+          <>
+          <View style={styles.controlsContainer}>
+            <Text>Enter new username:</Text>
+            <TextInput placeholder={profileData.userName} onChangeText={setNewUsername} />
+            <Pressable onPress={() => {
+              if (newUsername === "") {
+                Alert.alert('Error', "New username cannot be empty.")
+              } else if (newUsername === profileData.userName) {
+                Alert.alert('Error', 'New username must be different from the current username.');
+              } else {
+                updateUsername(newUsername, userId as number, dispatch, token);
+              }
+            }}>
+              <Text>Update Username</Text>
+            </Pressable>
+          </View>
+          </>
+          }
+
           <View style={styles.dataContainer}>
             <ScrollView>
               <View style={styles.entriesContainer}>
-                <Pressable onPress={() => toggleSection(sectionVisibility, 'showEntries')}>
+                <Pressable onPress={() => toggleSection('showEntries', !sectionVisibility.showEntries)}>
                   {sectionVisibility.showEntries ? <Text style={styles.sectionTitleText}>Hide Your Entries</Text> : <Text style={styles.sectionTitleText}>Display Your Entries ({profileEntries.length})</Text>}
                 </Pressable>
                 {sectionVisibility.showEntries && profileEntries}
               </View>
 
               <View style={styles.commentsContainer}>
-                <Pressable onPress={() => toggleSection(sectionVisibility, 'showComments')}>
+                <Pressable onPress={() => toggleSection('showComments', !sectionVisibility.showComments)}>
                 {sectionVisibility.showComments ? <Text style={styles.sectionTitleText}>Hide Your Comments</Text> : <Text style={styles.sectionTitleText}>Display Your Comments ({profileComments.length})</Text>}
                 </Pressable>
                 {sectionVisibility.showComments && profileComments}
               </View>
 
               <View style={styles.ratingsContainer}>
-                <Pressable onPress={() => toggleSection(sectionVisibility, 'showRatings')}>
+                <Pressable onPress={() => toggleSection('showRatings', !sectionVisibility.showRatings)}>
                 {sectionVisibility.showRatings ? <Text style={styles.sectionTitleText}>Hide Your Ratings</Text> : <Text style={styles.sectionTitleText}>Display Your Ratings ({profileRatings.length})</Text>}
                 </Pressable>
                 {sectionVisibility.showRatings && profileRatings}

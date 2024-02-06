@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { SmallEntry } from '../../client-types/SmallEntry';
-import { updateFilterPreference } from '../../slices/userSlice';
+import { updateFilterPreference, updateUserDetails } from '../../slices/userSlice';
 import { LastVisited } from '../../client-types/LastVisited';
 import { Profile } from '../../client-types/Profile';
 import { Entry } from '../../client-types/Entry';
@@ -116,8 +116,18 @@ const updatePassword =  (newPassword: string, oldPassword: string, userId: numbe
        .catch((err) => {Alert.alert(err)})
 }
 
+const updateUsername = (newUsername: string, userId: number, dispatch: any, token: string) => {
+axios.post(`${base_url}/user/updateUsername/${userId}`, {newUsername, token})
+.then( (res) => {
+  dispatch(updateUserDetails({username: newUsername}))
+  save('username', newUsername);
+  Alert.alert('Success', 'Username was updated successfully.');
+})
+.catch((err) => Alert.alert('Error updating username.'))
+}
+
 const deleteAccount = async (userId: number, token: string) => {
   await axios.post(`${base_url}/user/deleteUser/${userId}`, {token});
 }
 
-export {deleteAccount, cityFetcher, updatePrefrence, getPrefrence, placeFetcher, getActiveMissions, getCities, getProfile, getLastVisited, getManyEntries, updatePassword}
+export {deleteAccount, cityFetcher, updatePrefrence, getPrefrence, placeFetcher, getActiveMissions, getCities, getProfile, getLastVisited, getManyEntries, updatePassword, updateUsername}
