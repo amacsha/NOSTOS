@@ -32,7 +32,6 @@ const postEntry = async (ctx : Koa.Context) => {
 }
 
 const getManyEntries = async (ctx : Koa.Context) => {
-    console.log('get many entries back end')
     try {
         const entryIds: number[] = ctx.request.body;
         const entries = await Promise.all(entryIds.map(async id => await prisma.entry.findFirst({ where: { id } })));
