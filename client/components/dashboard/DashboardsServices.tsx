@@ -130,4 +130,23 @@ const deleteAccount = async (userId: number, token: string) => {
   await axios.post(`${base_url}/user/deleteUser/${userId}`, {token});
 }
 
-export {deleteAccount, cityFetcher, updatePrefrence, getPrefrence, placeFetcher, getActiveMissions, getCities, getProfile, getLastVisited, getManyEntries, updatePassword, updateUsername}
+const getAverageRatingsForUsersEntries = (userId: number, setAvg: React.Dispatch<React.SetStateAction<number | null>>) => {
+ axios.get<number | null>(`${base_url}/rating/AverageForUser/${userId}`)
+             .then(res => setAvg(res.data))
+             .catch(err => console.log(err))
+}
+export {
+  getAverageRatingsForUsersEntries,
+  deleteAccount,
+  cityFetcher,
+  updatePrefrence,
+  getPrefrence,
+  placeFetcher,
+  getActiveMissions,
+  getCities,
+  getProfile,
+  getLastVisited,
+  getManyEntries,
+  updatePassword,
+  updateUsername
+}

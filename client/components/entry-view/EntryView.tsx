@@ -78,7 +78,7 @@ const EntryView: React.FC = ({ navigation }: any) => {
           </View>
 
           <View>
-            <Typewriter text={entryDetails.data.content} delay={5} />
+            <Text style={styles.content}><Typewriter text={entryDetails.data.content} delay={5} /></Text>
           </View>
         </ScrollView>
 
@@ -120,7 +120,8 @@ const styles = StyleSheet.create({
     fontFamily: "Gruppe_A",
   },
   content: {
-    fontSize: 18,
+    fontSize: 16,
+    lineHeight: 30,
     margin: 35,
     fontFamily: "Gruppe_A",
   },
