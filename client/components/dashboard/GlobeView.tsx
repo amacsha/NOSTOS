@@ -38,7 +38,7 @@ const GlobeView: React.FC = ({ navigation }: any) => {
 
       <Pressable
         style={[
-          styles.locationButtonTopLeft,
+          styles.LondonButton,
           location.value?.cityName === "London" && {
             backgroundColor: colors.lighterPurple,
           },
@@ -50,7 +50,7 @@ const GlobeView: React.FC = ({ navigation }: any) => {
 
       <Pressable
         style={[
-          styles.locationButtonBottomRight,
+          styles.BerlinButton,
           location.value?.cityName === "Berlin" && {
             backgroundColor: colors.lighterPurple,
           },
@@ -76,16 +76,16 @@ const styles = StyleSheet.create({
     height: 800,
     width: 420,
   },
-  locationButtonTopLeft: {
+  LondonButton: {
     position: "absolute",
-    top: 140,
+    bottom: 140,
     left: 40,
     padding: 10,
     height: 44,
     backgroundColor: "rgba(255, 255, 255, 0.7)",
     borderRadius: 8,
   },
-  locationButtonBottomRight: {
+  BerlinButton: {
     position: "absolute",
     bottom: 140,
     right: 40,

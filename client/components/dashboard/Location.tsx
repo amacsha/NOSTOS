@@ -1,56 +1,75 @@
 import React from "react";
-import { View, Text, StyleSheet, Button, GestureResponderEvent, SafeAreaView, Pressable } from 'react-native';
-import GeoLocation from './GeoLocation';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  GestureResponderEvent,
+  SafeAreaView,
+  Pressable,
+} from "react-native";
+import GeoLocation from "./GeoLocation";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 import { useState, useEffect } from "react";
-import { SmallEntry } from '../../client-types/SmallEntry';
-import EntriesView from './EntriesView';
-import { placeFetcher } from './DashboardsServices';
+import { SmallEntry } from "../../client-types/SmallEntry";
+import EntriesView from "./EntriesView";
+import { placeFetcher } from "./DashboardsServices";
 import { selectEntry } from "../../slices/entriesSlice";
-import { colors } from '../styles/colors';
-
-
+import { colors } from "../styles/colors";
 
 const Location: React.FC = ({ navigation }: any) => {
-  const placeId = useSelector((state: RootState) => state.places.selectedPlaceId);
-  const entryId = useSelector((state: RootState) => state.entries.selectedEntryID);
+  const placeId = useSelector(
+    (state: RootState) => state.places.selectedPlaceId
+  );
+  const entryId = useSelector(
+    (state: RootState) => state.entries.selectedEntryID
+  );
   const userId = useSelector((state: RootState) => state.user.id);
-  const [placeEntries, setPlaceEntries] = useState<(SmallEntry & { avg: number })[]>([])
+  const [placeEntries, setPlaceEntries] = useState<
+    (SmallEntry & { avg: number })[]
+  >([]);
 
-  console.log(placeId)
+  console.log(placeId);
 
   useEffect(() => {
-    placeId != null && placeFetcher(placeId, setPlaceEntries)
+    placeId != null && placeFetcher(placeId, setPlaceEntries);
   }, [placeId, entryId]);
-
 
   return (
     <View style={styles.container}>
       {placeId ? (
-        <View style={{paddingTop: 50}}>
+        <View style={{ paddingTop: 50 }}>
           <EntriesView entries={placeEntries}></EntriesView>
           <View>
-          <Pressable style={styles.entryBtn} onPress={() => navigation.navigate('NewEntryForm')}> 
-          <Text style={styles.entryTxt}> Write a new entry </Text> 
-          </Pressable>
-        </View>
+            <Pressable
+              style={styles.entryBtn}
+              onPress={() => navigation.navigate("NewEntryForm")}
+            >
+              <Text style={styles.entryTxt}> Write a new entry </Text>
+            </Pressable>
+          </View>
+
+          {placeEntries.every((entry) => entry.authorId != userId) && (
+            <View style={styles.entryBtn}>
+              <Pressable
+                style={styles.entryBtn}
+                onPress={() => navigation.navigate("NewEntryForm")}
+              >
+                {/* <Text style={styles.entryTxt}> Write a new entry </Text> */}
+              </Pressable>
+            </View>
+          )}
         </View>
 
-        
       ) : (
-        <Text style={styles.fetchingText}>Sending position to the Mothership...</Text>
+        <Text style={styles.fetchingText}>
+          Sending position to the Mothership...
+        </Text>
       )}
-      {placeEntries.every((entry) => entry.authorId != userId) &&
-        <View style={styles.entryBtn}>
-          <Pressable style={styles.entryBtn} onPress={() => navigation.navigate('NewEntryForm')}> 
-          <Text style={styles.entryTxt}> Write a new entry </Text> 
-          </Pressable>
-        </View>
-      }
     </View>
-  )
-}
+  );
+};
 
 export default Location;
 
@@ -58,9 +77,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.basePurple,
-    alignItems: 'stretch',
+    alignItems: "stretch",
     padding: 10,
-    fontFamily: 'Gruppe_A',
+    fontFamily: "Gruppe_A",
   },
   fetchingText: {
     fontSize: 14,
