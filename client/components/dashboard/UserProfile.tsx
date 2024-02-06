@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { getValueFor } from "../../utils/secureStorage";
-import { deleteAccount, getLastVisited, getProfile } from "./DashboardsServices";
-import { SafeAreaView, Text, Button, View, ScrollView, StyleSheet, Pressable, TouchableHighlight, Alert } from "react-native";
+import { deleteAccount, getLastVisited, getProfile, updatePassword } from "./DashboardsServices";
+import { SafeAreaView, Text, Button, View, ScrollView, StyleSheet, Pressable, TouchableHighlight, Alert, TextInput } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SmallEntry } from "../../client-types/SmallEntry";
 import { Rating } from "../../client-types/Rating";
@@ -21,9 +21,16 @@ import { save } from "../../utils/secureStorage";
 import { setAuth, initialState } from '../../slices/authSlice';
 import { deleteItemAsync } from 'expo-secure-store';
 import { updateUserDetails, initialState as userInitials } from '../../slices/userSlice';
+import { title } from "process";
 
 
-
+type SectionVisibility = {
+  showComments: boolean,
+  showEntries: boolean,
+  showRatings: boolean,
+  showNewPassword: boolean,
+  showNewUsername: boolean
+}
 
 export default function UserProfile () {
   const userId = useSelector((state: RootState) => state.user.id);
@@ -35,11 +42,22 @@ export default function UserProfile () {
   const [profileComments, setProfileComments] = useState<JSX.Element[]>([])
   const [profileRatings, setProfileRatings] = useState<JSX.Element[]>([]);
 
-  const [sectionVisibility, setSectionVisibility] = useState<boolean[]>(Array(3).fill(false))
+  const [sectionVisibility, setSectionVisibility] = useState<SectionVisibility>({
+    showComments: false,
+    showEntries: false,
+    showRatings: false,
+    showNewPassword: false,
+    showNewUsername: false
+  })
+
+  const [oldPassword, setOldPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+
+  const [newUsername, setNewUsername] = useState<string>("");
 
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
-
 
   async function load () {
     // const profileResponse = (await getProfile(userId as number, token));
@@ -48,23 +66,25 @@ export default function UserProfile () {
     // // const {userEntries, userComments, userRatings } = (await getProfile(userId as number, token));
     // const userLastVisited: LastVisited[] = await getLastVisited(userId as number)
 
-    const {userEntries, userComments, userRatings }: any = (await getProfile(userId as number, token));
+    const {userName, userEntries, userComments, userRatings }: any = (await getProfile(userId as number, token));
     const userLastVisited: any = await getLastVisited(userId as number)
 
-    setProfileData( () => {
-      return {
+    setProfileData(
+       {
+        userName,
         userEntries,
         userComments,
         userRatings,
         userLastVisited
       }
-    })
+    )
 
-      if (profileData.userEntries?.length > 0) {
-        const entries: JSX.Element[] = profileData.userEntries.map(entry => {
+
+      if (userEntries?.length > 0) {
+        const entries: JSX.Element[] = userEntries.map((entry: Entry) => {
           return (
             <View style={styles.singleEntryContainer}>
-              <Pressable onPress={() => {dispatch(selectEntry(entry.id));navigation.navigate("EntryView" as never)}}>
+              <Pressable onPress={() => {entry.id && dispatch(selectEntry(entry.id));navigation.navigate("EntryView" as never)}}>
                 <Text style={styles.singleEntryText}>{entry.title}, {moment(entry.creation_date).fromNow()}</Text>
               </Pressable>
             </View>
@@ -74,31 +94,33 @@ export default function UserProfile () {
         setProfileEntries(entries)
       }
 
-      if (profileData.userComments?.length > 0) {
-        const entryIds = profileData.userRatings.map(rating => rating.entryId);
-        const entries: any = await getManyEntries(entryIds);
+      if (userComments?.length > 0) {
+        const entryIds = userComments.map((comment: Comment) => comment.entryId);
+        const entries: Entry[] = await getManyEntries(entryIds) || [];
 
         const commentsWithEntryTitle: JSX.Element[] = []
-        profileData.userComments.forEach( (comment, index) => {
-          commentsWithEntryTitle.push(
-            <Pressable onPress={() => {dispatch(selectEntry(entries[index].id));navigation.navigate("EntryView" as never)}}>
-              <Text style={styles.singleCommentText}>"{comment.content}" on {entries[index].title}</Text>
-            </Pressable>
-          )
+        userComments.forEach( (comment: Comment, index:number) => {
+          const matchingEntry = entries.find((entry: Entry) => entry.id === comment.entryId)
+            commentsWithEntryTitle.push(
+              <Pressable onPress={() => {matchingEntry && dispatch(selectEntry(matchingEntry.id as number));navigation.navigate("EntryView" as never)}}>
+                <Text style={styles.singleCommentText}>"{comment.content}" on {matchingEntry?.title}</Text>
+              </Pressable>
+            )
         })
 
        setProfileComments(commentsWithEntryTitle)
     }
 
-    if (profileData.userRatings?.length > 0) {
-      const entryIds = profileData.userRatings.map(rating => rating.entryId);
-      const entries: any = await getManyEntries(entryIds);
+    if (userRatings?.length > 0) {
+      const entryIds = userRatings.map((rating: Rating) => rating.entryId);
+      const entries: Entry[] = await getManyEntries(entryIds) || [];
 
       const ratingsWithEntryTitle: JSX.Element[] = [];
-      profileData.userRatings.forEach( (rating, index) => {
+      userRatings.forEach( (rating: Rating, index: number) => {
+        const matchingEntry = entries.find((entry: Entry) => entry.id === rating.entryId)
         ratingsWithEntryTitle.push(
-          <Pressable onPress={() => {dispatch(selectEntry(entries[index].id));navigation.navigate("EntryView" as never)}}>
-            <Text style={styles.singleRatingText}>You rated {entries[index].title} {Array(rating.value).fill('★')}</Text>
+          <Pressable onPress={() => {matchingEntry && dispatch(selectEntry(matchingEntry.id as number));navigation.navigate("EntryView" as never)}}>
+            <Text style={styles.singleRatingText}>You rated {matchingEntry?.title} {Array(rating.value).fill('★')}</Text>
           </Pressable>
         )
       })
@@ -110,13 +132,13 @@ export default function UserProfile () {
   }
 
   useEffect( () => {
-    load();
-  }, [loading])
+    userId != null && load();
+  }, [userId])
 
-  function toggleSection(state: boolean[], index: number) {
-    const update = [...state];
-    update[index] = !update[index];
-    return update;
+  function toggleSection(state: SectionVisibility, property: "showComments" | "showEntries" | "showRatings" | "showNewPassword" | "showNewUsername") {
+    const update: SectionVisibility = {...state};
+    update[property] = !update[property];
+    setSectionVisibility(update)
   }
 
   if (loading) return <Text>Loading...</Text>
@@ -127,6 +149,7 @@ export default function UserProfile () {
 
           <View style={styles.controlsContainer}>
             <Text style={styles.mainTitleText}>Manage your profile.</Text>
+            <Text style={styles.mainTitleText}>You are logged in as {profileData.userName}.</Text>
             <Logout />
 
             <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
@@ -135,7 +158,6 @@ export default function UserProfile () {
                   text: 'Delete',
                   onPress: async () => {
                     await deleteAccount(userId as number, token);
-//admin@nostos.com
                     await Promise.all([
                       deleteItemAsync('accessToken'),
                       deleteItemAsync('userId'),
@@ -147,7 +169,6 @@ export default function UserProfile () {
                   dispatch(updateUserDetails(userInitials))
 
                   navigation.navigate('Register' as never);
-
                   }
                 },
                 {
@@ -160,7 +181,11 @@ export default function UserProfile () {
                 Delete Account
               </Text>
             </TouchableHighlight>
-            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {}}>
+            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
+              console.log(sectionVisibility.showNewPassword)
+              toggleSection(sectionVisibility, 'showNewPassword')
+              console.log(sectionVisibility.showNewPassword)
+            }}>
               <Text style={styles.buttonText}>
                 Change Password
               </Text>
@@ -172,27 +197,54 @@ export default function UserProfile () {
             </TouchableHighlight>
           </View>
 
+          {sectionVisibility.showNewPassword &&
+          <>
+          <View style={styles.newPasswordContainer}>
+            <Text>Enter your old password:</Text>
+            <TextInput secureTextEntry={true} placeholder="Current Password" onChangeText={setOldPassword}></TextInput>
+            <Text>Enter your new password:</Text>
+            <TextInput secureTextEntry={true} placeholder="New Password" onChangeText={setNewPassword}></TextInput>
+            <Text>Confirm your new password:</Text>
+            <TextInput secureTextEntry={true} placeholder="Confirm New Password" onChangeText={setConfirmPassword}></TextInput>
+
+            <Pressable onPress={() => {
+              if (newPassword.length == 0) {
+                Alert.alert('Error', 'Password must be entered.')
+              } else if (newPassword.length < 6) {
+                Alert.alert('Error', 'Password must be at least six characters long.')
+              } else if (newPassword !== confirmPassword) {
+                Alert.alert('Error', 'Passwords don\'t match!');
+              } else {
+                updatePassword(newPassword, oldPassword, userId as number, dispatch, token)
+              }
+
+            }}>
+              <Text>Update Password</Text>
+            </Pressable>
+          </View>
+          </>}
+
           <View style={styles.dataContainer}>
             <ScrollView>
               <View style={styles.entriesContainer}>
-                <Pressable onPress={() => setSectionVisibility(p => toggleSection(p, 0))}>
-                  {sectionVisibility[0] ? <Text style={styles.sectionTitleText}>Hide Your Entries</Text> : <Text style={styles.sectionTitleText}>Display Your Entries</Text>}
+                <Pressable onPress={() => toggleSection(sectionVisibility, 'showEntries')}>
+                  {sectionVisibility.showEntries ? <Text style={styles.sectionTitleText}>Hide Your Entries</Text> : <Text style={styles.sectionTitleText}>Display Your Entries ({profileEntries.length})</Text>}
                 </Pressable>
-                {sectionVisibility[0] && profileEntries}
+                {sectionVisibility.showEntries && profileEntries}
               </View>
 
               <View style={styles.commentsContainer}>
-                <Pressable onPress={() => setSectionVisibility(p => toggleSection(p, 1))}>
-                {sectionVisibility[1] ? <Text style={styles.sectionTitleText}>Hide Your Comments</Text> : <Text style={styles.sectionTitleText}>Display Your Comments</Text>}
+                <Pressable onPress={() => toggleSection(sectionVisibility, 'showComments')}>
+                {sectionVisibility.showComments ? <Text style={styles.sectionTitleText}>Hide Your Comments</Text> : <Text style={styles.sectionTitleText}>Display Your Comments ({profileComments.length})</Text>}
                 </Pressable>
-                {sectionVisibility[1] && profileComments}
+                {sectionVisibility.showComments && profileComments}
               </View>
 
               <View style={styles.ratingsContainer}>
-                <Pressable onPress={() => setSectionVisibility(p => toggleSection(p, 2))}>
-                {sectionVisibility[2] ? <Text style={styles.sectionTitleText}>Hide Your Ratings</Text> : <Text style={styles.sectionTitleText}>Display Your Ratings</Text>}
+                <Pressable onPress={() => toggleSection(sectionVisibility, 'showRatings')}>
+                {sectionVisibility.showRatings ? <Text style={styles.sectionTitleText}>Hide Your Ratings</Text> : <Text style={styles.sectionTitleText}>Display Your Ratings ({profileRatings.length})</Text>}
                 </Pressable>
-                {sectionVisibility[2] && profileRatings}
+                {sectionVisibility.showRatings && profileRatings}
               </View>
             </ScrollView>
           </View>
@@ -269,4 +321,5 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     margin: 3
   },
+  newPasswordContainer: {}
 })

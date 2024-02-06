@@ -4,6 +4,9 @@ import { updateFilterPreference } from '../../slices/userSlice';
 import { LastVisited } from '../../client-types/LastVisited';
 import { Profile } from '../../client-types/Profile';
 import { Entry } from '../../client-types/Entry';
+import { Alert } from 'react-native';
+import { setAuth } from '../../slices/authSlice';
+import { save } from '../../utils/secureStorage';
 
 
 const base_url = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000`
@@ -103,8 +106,18 @@ const getManyEntries = async (entryIds: number[]) => {
   }
 }
 
+const updatePassword =  (newPassword: string, oldPassword: string, userId: number, dispatch: any, token: string) => {
+    axios.post(`${base_url}/user/updatePassword/${userId}`, {newPassword, oldPassword, token})
+       .then((res) => {
+        dispatch(setAuth({ isAuthenticated: true, token: res.data }))
+        save('accessToken', res.data);
+        Alert.alert('Success', 'Password was updated successfully.')
+       })
+       .catch((err) => {Alert.alert(err)})
+}
+
 const deleteAccount = async (userId: number, token: string) => {
   await axios.post(`${base_url}/user/deleteUser/${userId}`, {token});
 }
 
-export {deleteAccount, cityFetcher, updatePrefrence, getPrefrence, placeFetcher, getActiveMissions, getCities, getProfile, getLastVisited, getManyEntries}
+export {deleteAccount, cityFetcher, updatePrefrence, getPrefrence, placeFetcher, getActiveMissions, getCities, getProfile, getLastVisited, getManyEntries, updatePassword}
