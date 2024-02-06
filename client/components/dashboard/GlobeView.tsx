@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { colors } from "../styles/colors";
@@ -16,67 +16,46 @@ const GlobeView: React.FC = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
   const location = useSelector((state: RootState) => state.location);
 
-//   useEffect(() => {
-//     axios
-//       .get("https://maps.googleapis.com/maps/api/place/nearbysearch/json", {
-//         params: {
-//           location: `52.52002328525418, 13.404801819661525`,
-//           radius: 10000,
-//           type: "hindu_temple",
-//           key: GOOGLE_KEY,
-//         },
-//       })
-//       .then((response) => {
-//         const places: Place[] = response.data.results.map(
-//           (place: GooglePlaceResponse) => ({
-//             id: place.place_id,
-//             lat: place.geometry.location.lat,
-//             lng: place.geometry.location.lng,
-//             name: place.name,
-//             city: "Berlin", // TODO receive actual city upon location at login (get from state)
-//           })
-//         );
-//         AddPlacesService(places);
-//       })
-//       .catch((error) => console.log(error));
-//   }, []);
+  const handlePress = (cityName: string) => {
+    if (location.value?.lat && location.value.lng) {
+      dispatch(
+        setLocation({
+          cityName,
+          lng: location.value.lng,
+          lat: location.value.lat,
+        })
+      );
+      navigation.navigate("Navbar");
+    }
+  };
 
   return (
     <SafeAreaProvider style={styles.container}>
       <Image
         style={styles.globe}
-        source={require("../../assets/globe-view.png")}
+        source={require("../../assets/spaceshipCloser.png")}
       />
 
       <Pressable
-        style={styles.locationButtonTopLeft}
-        onPress={() => {
-            location.value?.lat && location.value.lng && dispatch(
-              setLocation({
-                cityName: "London",
-                lng: location.value.lng,
-                lat: location.value.lat,
-              })
-            );
-          navigation.navigate("Navbar");
-        }}
+        style={[
+          styles.locationButtonTopLeft,
+          location.value?.cityName === "London" && {
+            backgroundColor: colors.lighterPurple,
+          },
+        ]}
+        onPress={() => handlePress("London")}
       >
         <Text style={styles.locationButtonText}>London</Text>
       </Pressable>
 
       <Pressable
-        style={styles.locationButtonBottomRight}
-        onPress={() => {
-          location.value?.lat && location.value.lng && dispatch(
-              setLocation({
-                cityName: "Berlin",
-                lng: location.value.lng,
-                lat: location.value.lat,
-              })
-            );
-          navigation.navigate("Navbar");
-        //   console.log("City Name:", location.value?.cityName)
-        }}
+        style={[
+          styles.locationButtonBottomRight,
+          location.value?.cityName === "Berlin" && {
+            backgroundColor: colors.lighterPurple,
+          },
+        ]}
+        onPress={() => handlePress("Berlin")}
       >
         <Text style={styles.locationButtonText}>Berlin</Text>
       </Pressable>
@@ -103,7 +82,7 @@ const styles = StyleSheet.create({
     left: 40,
     padding: 10,
     height: 44,
-    backgroundColor: colors.lighterPurple,
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
     borderRadius: 8,
   },
   locationButtonBottomRight: {
@@ -112,7 +91,7 @@ const styles = StyleSheet.create({
     right: 40,
     padding: 10,
     height: 44,
-    backgroundColor: colors.lighterPurple,
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
     borderRadius: 8,
   },
   locationButtonText: {
