@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Button,
   GestureResponderEvent,
-  SafeAreaView,
   Pressable,
 } from "react-native";
 import GeoLocation from "./GeoLocation";
@@ -17,8 +16,11 @@ import EntriesView from "./EntriesView";
 import { placeFetcher } from "./DashboardsServices";
 import { selectEntry } from "../../slices/entriesSlice";
 import { colors } from "../styles/colors";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Location: React.FC = ({ navigation }: any) => {
+  const locationName = useSelector((state: RootState) => state.places.selectedPlaceName);
+
   const placeId = useSelector(
     (state: RootState) => state.places.selectedPlaceId
   );
@@ -35,29 +37,20 @@ const Location: React.FC = ({ navigation }: any) => {
   }, [placeId, entryId]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.locationName}>{locationName}</Text>
+      
       {placeId ? (
-        <View style={{ paddingTop: 50 }}>
+        <View>
           <EntriesView entries={placeEntries}></EntriesView>
-          <View>
+          <View style={styles.addEntryContainer}>
             <Pressable
-              style={styles.entryBtn}
+              style={styles.addEntryButton}
               onPress={() => navigation.navigate("NewEntryForm")}
             >
-              <Text style={styles.entryTxt}> Write a new entry </Text>
+              <Text style={styles.addEntryButtonText}> Write a new entry </Text>
             </Pressable>
           </View>
-
-          {placeEntries.every((entry) => entry.authorId != userId) && (
-            <View style={styles.entryBtn}>
-              <Pressable
-                style={styles.entryBtn}
-                onPress={() => navigation.navigate("NewEntryForm")}
-              >
-                {/* <Text style={styles.entryTxt}> Write a new entry </Text> */}
-              </Pressable>
-            </View>
-          )}
         </View>
 
       ) : (
@@ -65,7 +58,7 @@ const Location: React.FC = ({ navigation }: any) => {
           Sending position to the Mothership...
         </Text>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -74,7 +67,7 @@ export default Location;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.basePurple,
+    backgroundColor: colors.darkGrey,
     alignItems: "stretch",
     padding: 10,
     fontFamily: "Gruppe_A",
@@ -86,8 +79,9 @@ const styles = StyleSheet.create({
   },
   entryBtn: {
     backgroundColor: colors.lighterPurple,
+    height: 60,
+    bottom: 30
   },
-
   entryTxt: {
     fontSize: 14,
     color: colors.gunMetalGrey,
@@ -95,21 +89,27 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 10,
   },
-
-  // locationText: {
-  //   fontSize: 16,
-  //   color: 'black',
-  //   marginBottom: 10,
-  //   fontFamily: 'Gruppe_A',
-  // },
-  // fetchingText: {
-  //   fontSize: 14,
-  //   color: 'gray',
-  //   fontFamily: 'Gruppe_A',
-  // },
-  // bottom: {
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   fontFamily: 'Gruppe_A',
-  // }
+  locationName: {
+    fontWeight: "bold",
+    fontSize: 40,
+    margin: 15,
+    color: "white",
+    fontFamily: "Gruppe_A",
+  },
+  addEntryContainer: {
+    alignItems: "center",
+  },
+  addEntryButton: {
+    borderWidth: 2,
+    borderRadius: 0,
+    borderColor: "white"
+  },
+  addEntryButtonText: {
+    margin: 5,
+    marginLeft: 10,
+    marginRight: 10,
+    fontFamily: "Gruppe_A",
+    fontSize: 20,
+    color: "white"
+  },
 });

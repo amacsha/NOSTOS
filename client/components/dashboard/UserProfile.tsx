@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { getValueFor } from "../../utils/secureStorage";
 import { deleteAccount, getLastVisited, getProfile, updatePassword, updateUsername } from "./DashboardsServices";
-import { SafeAreaView, Text, Button, View, ScrollView, StyleSheet, Pressable, TouchableHighlight, Alert, TextInput } from "react-native";
+import { Text, Button, View, ScrollView, StyleSheet, Pressable, TouchableHighlight, Alert, TextInput } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SmallEntry } from "../../client-types/SmallEntry";
 import { Rating } from "../../client-types/Rating";
@@ -22,6 +22,7 @@ import { setAuth, initialState } from '../../slices/authSlice';
 import { deleteItemAsync } from 'expo-secure-store';
 import { updateUserDetails, initialState as userInitials } from '../../slices/userSlice';
 import { title } from "process";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 type SectionVisibility = {

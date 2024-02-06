@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { ImageBackground, Pressable, StyleSheet, Text, View } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../styles/colors";
 import { useAppDispatch } from "../../hooks";
 import { setLocation } from "../../slices/locationSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-
-const GOOGLE_KEY = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
 const GlobeViewApp: React.FC = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
@@ -27,8 +25,9 @@ const GlobeViewApp: React.FC = ({ navigation }: any) => {
   };
 
   return (
-    <SafeAreaProvider style={styles.container}>
-      <Image
+    // <SafeAreaView style={styles.container}>
+    <>
+      <ImageBackground
         style={styles.globe}
         source={require("../../assets/spaceshipCloser.png")}
       />
@@ -56,7 +55,8 @@ const GlobeViewApp: React.FC = ({ navigation }: any) => {
       >
         <Text style={styles.locationButtonText}>Berlin</Text>
       </Pressable>
-    </SafeAreaProvider>
+    </>
+    // </SafeAreaView>
   );
 };
 
@@ -70,8 +70,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#010000",
   },
   globe: {
-    height: 800,
-    width: 420,
+    height: "100%",
+    width: "100%"
   },
   LondonButton: {
     position: "absolute",

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../styles/colors";
 import { useAppDispatch } from "../../hooks";
 import { setLocation } from "../../slices/locationSlice";
@@ -30,7 +30,7 @@ const GlobeView: React.FC = ({ navigation }: any) => {
   };
 
   return (
-    <SafeAreaProvider style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Image
         style={styles.globe}
         source={require("../../assets/spaceshipCloser.png")}
@@ -59,7 +59,7 @@ const GlobeView: React.FC = ({ navigation }: any) => {
       >
         <Text style={styles.locationButtonText}>Berlin</Text>
       </Pressable>
-    </SafeAreaProvider>
+    </SafeAreaView>
   );
 };
 

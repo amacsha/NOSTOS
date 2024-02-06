@@ -6,7 +6,6 @@ import {
   ActivityIndicator,
   TouchableHighlight,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   Pressable,
 } from "react-native";
@@ -21,6 +20,7 @@ import { commentsSlice } from "../../slices/commentsSlice";
 import { setComments } from "../../slices/commentsSlice";
 import Typewriter from "../../utils/TypewriterLoading";
 import { colors } from "../styles/colors";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const EntryView: React.FC = ({ navigation }: any) => {
   const id = useSelector((state: RootState) => state.entries.selectedEntryID);
@@ -71,7 +71,6 @@ const EntryView: React.FC = ({ navigation }: any) => {
   );
 
   return (
-    <>
       <SafeAreaView style={styles.mainContainer}>
         <ScrollView style={styles.contentContainer}>
           <View>
@@ -94,7 +93,6 @@ const EntryView: React.FC = ({ navigation }: any) => {
           </View>
         </View>
       </SafeAreaView>
-    </>
   );
 };
 
@@ -131,7 +129,7 @@ const styles = StyleSheet.create({
   },
   addCommentButton: {
     borderWidth: 2,
-    borderRadius: 15,
+    borderRadius: 0,
   },
   addCommentButtonText: {
     margin: 5,
