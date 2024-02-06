@@ -74,7 +74,7 @@ const GlobeView: React.FC = ({ navigation }: any) => {
                 lat: location.value.lat,
               })
             );
-          navigation.navigate("Logs");
+          navigation.navigate("Navbar");
         //   console.log("City Name:", location.value?.cityName)
         }}
       >

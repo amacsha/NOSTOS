@@ -49,48 +49,8 @@ const Main: React.FC = ({ navigation }: any) => {
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        {/* <Logout></Logout> */}
-        <View style={styles.textWrapper}>
-          {/* <Text style={styles.locationText}>CITY: {location.value?.cityName}</Text>
-          <MultiSelect
-            items={
-              cityNames.map(city => {
-                return { name: city, id: city }
-              })
-            }
-            uniqueKey="id"
-            onSelectedItemsChange={(selectedItems) => {
-              location.value?.lat && location.value.lng && dispatch(setLocation({
-                cityName: selectedItems[0],
-                lng: location.value.lng,
-                lat: location.value.lat
-              }
-              ))
-            }
-            }
-            selectedItems={[location.value?.cityName]}
-            single={true}
-
-
-            selectText="select a city:"
-            noItemsText="no cities found. please validate you are on the right planet"
-
-            fontFamily={styles.whiteText.fontFamily}
-            styleItemsContainer={styles.dropdown}
-            styleTextDropdown={styles.blackText}
-            styleTextDropdownSelected={styles.blackText}
-
-            itemTextColor={styles.whiteText.color}
-            itemFontFamily={styles.whiteText.fontFamily}
-
-            submitButtonColor={styles.selectedTags.color}
-
-            selectedItemTextColor={styles.selectedTags.color}
-            selectedItemFontFamily={styles.selectedTags.fontFamily}
-            selectedItemIconColor={styles.selectedTags.color}
-
-            searchInputStyle={styles.blackText}
-          /> */}
+      
+      <View style={styles.wrapper}> 
           {activeMissions.length == 0 ?
             <Text style={styles.locationText}>No active missions available</Text> :
             <MissionView places={activeMissions}></MissionView>
@@ -106,6 +66,7 @@ const Main: React.FC = ({ navigation }: any) => {
           Sending position to the Mothership...
         </Text>
       )}
+      
     </SafeAreaView>
   );
 };
@@ -113,12 +74,17 @@ const Main: React.FC = ({ navigation }: any) => {
 export default Main;
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    paddingBottom: 50,
+  },
   container: {
     flex: 1,
     backgroundColor: colors.darkGrey,
     justifyContent: "flex-start",
     alignItems: "stretch",
     fontFamily: "Gruppe_A",
+    paddingBottom: 50,
   },
   textWrapper: {
     justifyContent: "center",
