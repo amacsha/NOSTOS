@@ -17,7 +17,7 @@ export default function Navbar() {
             screenOptions={{ headerShown: false,
             tabBarActiveBackgroundColor: colors.basePurple}}
         >
-            <Tab.Screen name="Logs" component={Main} />
+            <Tab.Screen name="NewEntryFrom" component={NewEntryForm} />
             <Tab.Screen name="GlobeView" component={GlobeView} />
             <Tab.Screen name="Mission" component={Mission} />
             <Tab.Screen name="UserProfile" component={UserProfile} />
