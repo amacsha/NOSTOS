@@ -30,8 +30,6 @@ const Location: React.FC = ({ navigation }: any) => {
     (SmallEntry & { avg: number })[]
   >([]);
 
-  console.log(placeId);
-
   useEffect(() => {
     placeId != null && placeFetcher(placeId, setPlaceEntries);
   }, [placeId, entryId]);
