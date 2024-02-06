@@ -22,6 +22,7 @@ import { setAuth, initialState } from '../../slices/authSlice';
 import { deleteItemAsync } from 'expo-secure-store';
 import { updateUserDetails, initialState as userInitials } from '../../slices/userSlice';
 import { title } from "process";
+import IDCard from "./IDCard";
 
 
 type SectionVisibility = {
@@ -78,7 +79,6 @@ export default function UserProfile () {
         userLastVisited
       }
     )
-
 
       if (userEntries?.length > 0) {
         const entries: JSX.Element[] = userEntries.map((entry: Entry) => {
@@ -147,6 +147,7 @@ export default function UserProfile () {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
+      <ScrollView>
         <View>
 
           <View style={styles.controlsContainer}>
@@ -245,8 +246,9 @@ export default function UserProfile () {
           </>
           }
 
+          <IDCard profileData={profileData}/>
+
           <View style={styles.dataContainer}>
-            <ScrollView>
               <View style={styles.entriesContainer}>
                 <Pressable onPress={() => toggleSection('showEntries', !sectionVisibility.showEntries)}>
                   {sectionVisibility.showEntries ? <Text style={styles.sectionTitleText}>Hide Your Entries</Text> : <Text style={styles.sectionTitleText}>Display Your Entries ({profileEntries.length})</Text>}
@@ -267,10 +269,11 @@ export default function UserProfile () {
                 </Pressable>
                 {sectionVisibility.showRatings && profileRatings}
               </View>
-            </ScrollView>
           </View>
       </View>
+      </ScrollView>
     </SafeAreaView>
+
   )
 }
 
