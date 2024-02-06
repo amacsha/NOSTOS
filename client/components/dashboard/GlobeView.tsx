@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { colors } from "../styles/colors";
@@ -16,30 +16,7 @@ const GlobeView: React.FC = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
   const location = useSelector((state: RootState) => state.location);
 
-//   useEffect(() => {
-//     axios
-//       .get("https://maps.googleapis.com/maps/api/place/nearbysearch/json", {
-//         params: {
-//           location: `52.52002328525418, 13.404801819661525`,
-//           radius: 10000,
-//           type: "hindu_temple",
-//           key: GOOGLE_KEY,
-//         },
-//       })
-//       .then((response) => {
-//         const places: Place[] = response.data.results.map(
-//           (place: GooglePlaceResponse) => ({
-//             id: place.place_id,
-//             lat: place.geometry.location.lat,
-//             lng: place.geometry.location.lng,
-//             name: place.name,
-//             city: "Berlin", // TODO receive actual city upon location at login (get from state)
-//           })
-//         );
-//         AddPlacesService(places);
-//       })
-//       .catch((error) => console.log(error));
-//   }, []);
+  const [selectedCity, setSelectedCity] = useState("");
 
   return (
     <SafeAreaProvider style={styles.container}>
@@ -103,7 +80,7 @@ const styles = StyleSheet.create({
     left: 40,
     padding: 10,
     height: 44,
-    backgroundColor: colors.lighterPurple,
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
     borderRadius: 8,
   },
   locationButtonBottomRight: {
@@ -112,7 +89,7 @@ const styles = StyleSheet.create({
     right: 40,
     padding: 10,
     height: 44,
-    backgroundColor: colors.lighterPurple,
+    backgroundColor: "rgba(255, 255, 255, 0.7)",
     borderRadius: 8,
   },
   locationButtonText: {

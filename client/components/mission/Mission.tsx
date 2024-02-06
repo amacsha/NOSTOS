@@ -140,7 +140,7 @@ const Mission: React.FC = ({ navigation }: any) => {
         showsUserLocation={true}
         customMapStyle={mapStyle}
         toolbarEnabled={false}
-        showsMyLocationButton={false}
+        showsMyLocationButton={true}
         showsCompass={false}
         loadingEnabled={true}
         onRegionChange={handleRegionChange}
@@ -178,8 +178,8 @@ const Mission: React.FC = ({ navigation }: any) => {
                 source={require("../../assets/mission-marker.png")}
                 style={{ width: 40, height: 40 }}
               />
-              <Callout>
-                <Text style={styles.text}>z
+              <Callout style={styles.calloutContainer}>
+                <Text style={styles.calloutText}>
                   {place.name}
                 </Text>
               </Callout>
@@ -256,6 +256,13 @@ const styles = StyleSheet.create({
     fontFamily: "Gruppe_A",
     padding: 5,
   },
+  calloutContainer: {
+    minWidth: 100,
+  },
+  calloutText: {
+    fontFamily: "Gruppe_A",
+    textAlign: "auto"
+  }
 });
 
 export default Mission;
