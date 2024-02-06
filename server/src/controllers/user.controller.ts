@@ -57,7 +57,6 @@ const createOneUser = async (ctx: Koa.Context) => {
 
 const loginUser = async (ctx: Koa.Context) => {
   const body = <UserType>ctx.request.body;
-
   try {
     const user: UserType | null = await prisma.user.findUnique({
       where: { email: body.email },
@@ -136,6 +135,10 @@ const getProfile = async (ctx: Koa.Context) => {
   if (verifyUser(ctx.request.body.token, userId)) {
     //Retrieve all user content
     try {
+      const userName = (await prisma.user.findUnique({
+        where: {id: userId}
+      }))?.username;
+
       const userEntries = await prisma.entry.findMany({
         where: {authorId: userId}
       });
@@ -153,7 +156,7 @@ const getProfile = async (ctx: Koa.Context) => {
       // });
 
       ctx.response.status = 200;
-      ctx.response.body = {userEntries, userComments, userRatings} //, userLastVisited};
+      ctx.response.body = {userName, userEntries, userComments, userRatings} //, userLastVisited};
     } catch (error) {
       console.log('Error retrieving user data (getProfile)', error);
       ctx.response.status = 500;
@@ -187,23 +190,34 @@ const setUserFilterPreference = async (ctx: Koa.Context) => {
 };
 
 const updatePassword = async (ctx: Koa.Context) => {
+  console.log('backend update pass hit')
   if (verifyUser(ctx.request.body.token, Number(ctx.params.id))) {
-    const body = <UserType>ctx.request.body;
+    const {newPassword, oldPassword} = ctx.request.body;
 
-    if (body.password === '') throw new Error('Password cannot be empty');
-    const hash = await bcrypt.hash(body.password, 10);
-
+    if (newPassword === '') throw new Error('Password cannot be empty');
+    const hash = await bcrypt.hash(newPassword, 10);
     try {
+      const user = await prisma.user.findUnique({where: {id: Number(ctx.params.id)}})
+      const validatedPass = await bcrypt.compare(oldPassword, user?.password || "");
+      if (!validatedPass || !user) throw new Error("Incorrect existing password.");
+      const accessToken = jwt.sign(user, process.env.SECRET_KEY!);
+
       const updated = await prisma.user.update({
         where: { id: Number(ctx.params.id) },
         data: { password:  hash},
       });
+
       ctx.status = 201;
-      ctx.body = updated;
-    } catch (error) {
-      console.error(error);
-      ctx.status = 500;
-      ctx.body = { error: 'Server error' };
+      ctx.body = accessToken;
+    } catch (error: any) {
+      if (error.message == 'Password cannot be empty' || 'Incorrect existing password.') {
+        ctx.body = error
+        ctx.status = 400;
+      } else {
+        console.error(error);
+        ctx.status = 500;
+        ctx.body = 'Error updating password';
+      }
     }
   } else {
     ctx.response.status = 401;
@@ -213,14 +227,14 @@ const updatePassword = async (ctx: Koa.Context) => {
 
 const updateUsername = async (ctx: Koa.Context) => {
   if (verifyUser(ctx.request.body.token, Number(ctx.params.id))) {
-    const body = <UserType>ctx.request.body;
+    const username: string = ctx.request.body.newUsername;
     try {
       const updated = await prisma.user.update({
         where: { id: Number(ctx.params.id) },
-        data: { username: body.username },
+        data: { username },
       });
       ctx.status = 201;
-      ctx.body = updated;
+      ctx.body = "OK";
     } catch (error) {
       console.error(error);
       ctx.status = 500;
