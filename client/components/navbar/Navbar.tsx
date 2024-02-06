@@ -14,6 +14,7 @@ export default function Navbar() {
 
     return (
         <Tab.Navigator
+            backBehavior='none'
             screenOptions={{
                 headerShown: false,
                 tabBarActiveTintColor: colors.basePurple,
