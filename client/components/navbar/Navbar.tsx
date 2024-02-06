@@ -7,6 +7,7 @@ import Home from '../Home/Home';
 import GlobeView from '../dashboard/GlobeView';
 import NewEntryForm from '../new-entry/NewEntryForm';
 import { colors } from '../styles/colors';
+import GlobeViewApp from '../dashboard/GlobeViewApp';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +34,7 @@ export default function Navbar() {
             }}
         >
             <Tab.Screen name="Logs" component={Main} />
-            <Tab.Screen name="GlobeView" component={GlobeView} />
+            <Tab.Screen name="GlobeViewApp" component={GlobeViewApp} />
             <Tab.Screen name="Mission" component={Mission} />
             <Tab.Screen name="UserProfile" component={UserProfile} />
         </Tab.Navigator>

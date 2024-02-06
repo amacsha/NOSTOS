@@ -58,7 +58,6 @@ export default function UserStart() {
             <Stack.Screen name="LoadingPage" component={LoadingPage} />
             <Stack.Screen name="GlobeView" component={GlobeView} options={{gestureEnabled: false}}/>
             <Stack.Screen name="Navbar" component={Navbar} options={{gestureEnabled: false}}/>
-            <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Logs" component={Main} options={{gestureEnabled: false}}/>
             <Stack.Screen name="Mission" component={Mission} />
             <Stack.Screen name="Location" component={Location} />
