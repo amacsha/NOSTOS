@@ -39,8 +39,8 @@ router.get('/user/getUsername/:id', getUsernameByID);
 router.post('/user/deleteUser/:id', deleteUser);
 router.put('/user/setUserFilterPreference/:id', setUserFilterPreference);
 router.get('/user/getUserFilterPreference/:id', getUserFilterPreference);
-router.get('/user/updateUsername/:id', updateUsername)
-router.get('/user/updatePassword/:id', updatePassword)
+router.post('/user/updateUsername/:id', updateUsername)
+router.post('/user/updatePassword/:id', updatePassword)
 
 // LAST-VISITED
 router.get('/last-visited/getLastUserPlaces/:userId', getLastVisits);
