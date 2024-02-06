@@ -96,36 +96,6 @@ const Mission: React.FC = ({ navigation }: any) => {
     );
   };
 
-  // TaskManager.defineTask("startGeofence", ({ data, error }: { data: GeofencingData; error?: any }) => {
-  //     if (error) {
-  //       console.log(error);
-  //       return;
-  //     }
-
-  //     const { eventType, region } = data;
-
-  //     if (eventType === GeofencingEventType.Enter) {
-  //       console.log("You've entered region:", region);
-  //     } else if (eventType === GeofencingEventType.Exit) {
-  //       console.log("You've left region:", region);
-  //     }
-  //   }
-  // );
-
-  // const placesToGeofence = () => {
-  //   places.map((place) => ({
-  //     latitude: place.lat,
-  //     longitude: place.lng,
-  //     radius: radius,
-  //   }));
-  // };
-
-  // console.log(placesToGeofence);
-
-  // const startGeofence = async () => {
-  //   await Location.startGeofencingAsync("startGeofence", placesToGeofence);
-  // };
-
   const [zoomLevel, setZoomLevel] = useState(0);
 
   const handleRegionChange = (region: any) => {
@@ -231,15 +201,16 @@ const styles = StyleSheet.create({
     fontFamily: "Gruppe_A",
   },
   buttonContainer: {
-    flex: 1,
+    flex: 1.5,
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     alignItems: "center",
     alignContent: "center",
     backgroundColor: colors.darkGrey,
   },
   button: {
     position: "relative",
+    marginHorizontal: 15,
     flexDirection: "row",
     maxWidth: 500,
     height: 50,
@@ -247,12 +218,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     fontFamily: "Gruppe_A",
+    verticalAlign: "middle"
   },
   text: {
-    fontSize: 20,
+    fontSize: 18,
     color: "white",
     textAlign: "center",
-    backgroundColor: "purple",
+    backgroundColor: colors.basePurple,
     fontFamily: "Gruppe_A",
     padding: 5,
   },

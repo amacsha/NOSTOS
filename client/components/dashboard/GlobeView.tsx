@@ -16,7 +16,18 @@ const GlobeView: React.FC = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
   const location = useSelector((state: RootState) => state.location);
 
-  const [selectedCity, setSelectedCity] = useState("");
+  const handlePress = (cityName: string) => {
+    if (location.value?.lat && location.value.lng) {
+      dispatch(
+        setLocation({
+          cityName,
+          lng: location.value.lng,
+          lat: location.value.lat,
+        })
+      );
+      navigation.navigate("Navbar");
+    }
+  };
 
   return (
     <SafeAreaProvider style={styles.container}>
@@ -26,34 +37,25 @@ const GlobeView: React.FC = ({ navigation }: any) => {
       />
 
       <Pressable
-        style={styles.locationButtonTopLeft}
-        onPress={() => {
-            location.value?.lat && location.value.lng && dispatch(
-              setLocation({
-                cityName: "London",
-                lng: location.value.lng,
-                lat: location.value.lat,
-              })
-            );
-          navigation.navigate("Navbar");
-        }}
+        style={[
+          styles.locationButtonTopLeft,
+          location.value?.cityName === "London" && {
+            backgroundColor: colors.lighterPurple,
+          },
+        ]}
+        onPress={() => handlePress("London")}
       >
         <Text style={styles.locationButtonText}>London</Text>
       </Pressable>
 
       <Pressable
-        style={styles.locationButtonBottomRight}
-        onPress={() => {
-          location.value?.lat && location.value.lng && dispatch(
-              setLocation({
-                cityName: "Berlin",
-                lng: location.value.lng,
-                lat: location.value.lat,
-              })
-            );
-          navigation.navigate("Navbar");
-        //   console.log("City Name:", location.value?.cityName)
-        }}
+        style={[
+          styles.locationButtonBottomRight,
+          location.value?.cityName === "Berlin" && {
+            backgroundColor: colors.lighterPurple,
+          },
+        ]}
+        onPress={() => handlePress("Berlin")}
       >
         <Text style={styles.locationButtonText}>Berlin</Text>
       </Pressable>
