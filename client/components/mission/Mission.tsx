@@ -1,7 +1,22 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Button, Text, Pressable, StyleSheet, View, Linking, SafeAreaView, Alert, Image,} from "react-native";
-import MapView, { Circle, Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import {
+  Button,
+  Text,
+  Pressable,
+  StyleSheet,
+  View,
+  Linking,
+  SafeAreaView,
+  Alert,
+  Image,
+} from "react-native";
+import MapView, {
+  Callout,
+  Circle,
+  Marker,
+  PROVIDER_GOOGLE,
+} from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { selectPlace, setPlaces } from "../../slices/placesSlice";
@@ -15,7 +30,7 @@ import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { colors } from "../styles/colors";
-import { isPointWithinRadius } from 'geolib';
+import { isPointWithinRadius } from "geolib";
 import { setLastVisited } from "../../service/MissionServices";
 
 const GOOGLE_KEY = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
@@ -34,9 +49,13 @@ const Mission: React.FC = ({ navigation }: any) => {
   const dispatch = useDispatch();
   const location = useSelector((state: RootState) => state.location);
   const places = useSelector((state: RootState) => state.places.places);
-  const city = useSelector((state: RootState) => state.location.value?.cityName);
-  const placeId = useSelector((state: RootState) => state.places.selectedPlaceId);
-  const userId =useSelector((state: RootState) => state.user.id);
+  const city = useSelector(
+    (state: RootState) => state.location.value?.cityName
+  );
+  const placeId = useSelector(
+    (state: RootState) => state.places.selectedPlaceId
+  );
+  const userId = useSelector((state: RootState) => state.user.id);
   const radius = 100;
 
   const [selectedCoord, setSelectedCoord] = useState<number[]>([]);
@@ -66,14 +85,16 @@ const Mission: React.FC = ({ navigation }: any) => {
   }
 
   const verifyLocation = () => {
-    return lat && lng && isPointWithinRadius(
-      { latitude: lat, longitude: lng },
-      { latitude: selectedCoord[0], longitude: selectedCoord[1] },
-      radius
-  );
-  }
-
-
+    return (
+      lat &&
+      lng &&
+      isPointWithinRadius(
+        { latitude: lat, longitude: lng },
+        { latitude: selectedCoord[0], longitude: selectedCoord[1] },
+        radius
+      )
+    );
+  };
 
   // TaskManager.defineTask("startGeofence", ({ data, error }: { data: GeofencingData; error?: any }) => {
   //     if (error) {
@@ -136,12 +157,13 @@ const Mission: React.FC = ({ navigation }: any) => {
             <Circle
               center={{ latitude: place.lat, longitude: place.lng }}
               radius={200}
-              fillColor="rgba(255, 0, 0, 0.3)"
+              fillColor="rgba(127, 17, 224, 0.3)"
+              strokeColor="rgba(255, 255, 255, 0.6)"
+              strokeWidth={2}
             />
             <Marker
               coordinate={{ latitude: place.lat, longitude: place.lng }}
-              // icon={require("../../assets/mission-marker.png")}
-              title={place.name}
+              // title={place.name}
               anchor={{ x: 0.5, y: 0.5 }}
               style={{
                 transform: [{ scale: 1 + zoomLevel }],
@@ -151,16 +173,21 @@ const Mission: React.FC = ({ navigation }: any) => {
                 handleMarkerPress(place, place.lat, place.lng);
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               }}
-              >
+            >
               <Image
                 source={require("../../assets/mission-marker.png")}
                 style={{ width: 40, height: 40 }}
               />
-              </Marker>
+              <Callout>
+                <Text style={styles.text}>z
+                  {place.name}
+                </Text>
+              </Callout>
+            </Marker>
           </React.Fragment>
         ))}
       </MapView>
-      {(placeId !== null) && (
+      {placeId !== null && (
         <View style={styles.buttonContainer}>
           <Pressable
             style={styles.button}
@@ -168,10 +195,14 @@ const Mission: React.FC = ({ navigation }: any) => {
               if (verifyLocation()) {
                 navigation.navigate("Location");
                 userId && setLastVisited(userId, placeId);
-                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                Haptics.notificationAsync(
+                  Haptics.NotificationFeedbackType.Success
+                );
               } else {
-                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
-                Alert.alert('Not inside location radius');
+                Haptics.notificationAsync(
+                  Haptics.NotificationFeedbackType.Error
+                );
+                Alert.alert("Not inside location radius");
               }
             }}
           >
@@ -180,7 +211,12 @@ const Mission: React.FC = ({ navigation }: any) => {
 
           <Pressable
             style={styles.button}
-            onPress={() => Linking.openURL(`https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${selectedCoord[0]},${selectedCoord[1]}&travelmode=walking`)}>
+            onPress={() =>
+              Linking.openURL(
+                `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${selectedCoord[0]},${selectedCoord[1]}&travelmode=walking`
+              )
+            }
+          >
             <Text style={styles.text}>Get directions</Text>
           </Pressable>
         </View>
@@ -219,7 +255,7 @@ const styles = StyleSheet.create({
     backgroundColor: "purple",
     fontFamily: "Gruppe_A",
     padding: 5,
-  }
+  },
 });
 
 export default Mission;

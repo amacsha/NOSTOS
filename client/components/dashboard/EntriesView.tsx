@@ -114,7 +114,7 @@ const EntriesView: React.FC<{ entries: (SmallEntry & { avg: number })[] }> = ({ 
           </Text>
         ))}
       </View>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: 320 }}>
 
 
         {entries.length > 0 ?
@@ -165,8 +165,8 @@ const styles = StyleSheet.create({
     color: 'white',
     flex: 1,
     textAlign: 'center',
-    padding: 15,
-    
+    padding: 15,  
+    fontSize: 16,
   },
   tagFilter: {
     fontFamily: 'Gruppe_A',

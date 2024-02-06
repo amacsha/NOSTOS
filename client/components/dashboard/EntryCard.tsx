@@ -35,7 +35,9 @@ const EntryCard: React.FC<{ entry: SmallEntry & { avg: number } }> = ({ entry }:
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.lighterPurple,
+    backgroundColor: colors.darkGrey,
+    borderBottomColor: colors.basePurple,
+    borderBottomWidth: 2, 
     padding: 10,
     marginVertical: 7,
     marginHorizontal: 10,
@@ -43,7 +45,6 @@ const styles = StyleSheet.create({
     height: 80,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    fontFamily: 'Gruppe_A',
   },
   entryContainer: {
     fontFamily: 'Gruppe_A',
