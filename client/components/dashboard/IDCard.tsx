@@ -39,7 +39,7 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
     setBadges([
       {
         // Making connections
-        image: '',
+        image: require('../../assets/badges/making-connections.png'),
         description: 'You commented for the first time.',
         condition: (profileData) => {
           if (profileData.userComments.length > 1) {return true}
@@ -48,7 +48,7 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
       },
       {
         //Opinionated
-        image: '',
+        image: require('../../assets/badges/opinionated.png'),
         description: 'You like to comment!',
         condition: (profileData) => {
           if (profileData.userComments.length > 20) {return true}
@@ -57,7 +57,7 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
       },
       {
         // Fresh Out The Academy
-        image: '',
+        image: require('../../assets/badges/out-the-academy.png'),
         description: 'You made your first entry',
         condition: (profileData) => {
           if (profileData.userEntries.length > 1) {return true}
@@ -66,7 +66,7 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
       },
       {
         // Expert Researcher
-        image: '',
+        image: require('../../assets/badges/expert-researcher.png'),
         description: 'You made a lot of entries!.',
         condition: (profileData) => {
           if (profileData.userComments.length > 25) {return true}
@@ -75,7 +75,7 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
       },
       {
         // Harsh Critic
-        image: '',
+        image: require('../../assets/badges/harsh-critic.png'),
         description: 'You rate entries low!',
         condition: (profileData) => {
           const avg: number = profileData.userRatings.reduce( (acc: number ,current) => {
@@ -87,7 +87,7 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
       },
       {
         // Delighted
-        image: '',
+        image: require('../../assets/badges/easily-delighted.png'),
         description: 'You rate entries highly!',
         condition: (profileData) => {
           const avg: number = profileData.userRatings.reduce( (acc: number ,current) => {
@@ -99,7 +99,7 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
       },
       {
         // Normal Distribution
-        image: '',
+        image: require('../../assets/badges/normal-distribution.png'),
         description: 'You rate at exactly 2.5!',
         condition: (profileData) => {
           const avg: number = profileData.userRatings.reduce( (acc: number ,current) => {
@@ -110,7 +110,7 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
         }
       },
       { // Highly Esteemed
-        image: '',
+        image: require('../../assets/badges/highly-esteemed.png'),
         description: 'People like your entries!',
         condition: (profileData) => {
           if (avg && avg > 4 ) {return true}
@@ -167,9 +167,7 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
 
   const styles = StyleSheet.create({
     mainContainer: {
-      borderWidth: 1,
       margin: 20,
-      height: 250,
     },
     mainTitleContainer: {
       alignItems: "center",
@@ -181,14 +179,15 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
       margin: 5,
     },
     topHalfContainer: {
-      borderWidth: 1,
+      // borderWidth: 1,
+      borderLeftWidth: 1,
+      borderRightWidth: 1,
       flexDirection: "row",
-      flex: 1,
+      // flex: 1,
       justifyContent: "space-between"
     },
     detailsContainer: {
       fontFamily: "Gruppe_A",
-      borderWidth: 1,
       margin: 5,
     },
     topHalfSpacer:{
@@ -196,7 +195,6 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
     },
     bottomHalfContainer: {
       borderWidth: 1,
-      flex: 1
     },
     detailsNameText: {
       fontFamily: "Gruppe_A",
@@ -208,12 +206,8 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
     },
     faceImage: {
       flex: 1,
-      borderWidth: 1
-    },
-    stampsContainer: {
-
-    },
-    oneStamp: {},
+      borderLeftWidth: 1
+    }
 
   })
 

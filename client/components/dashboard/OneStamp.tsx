@@ -1,29 +1,22 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+// import 1 from '../../assets/badges/'
 
-export default function OneStamp ({image, description}: {image: string, description: string}) {
-
+export default function OneStamp ({image, description}: {image: any, description: string}) {
+  // const path = '../../assets/badges' + image;
  return (
   <View style={styles.mainContainer}>
-    <View style={styles.stampContainer}>
-      <Text style={styles.stamp}>{image}</Text>
-    </View>
-
-    <View style={styles.textContainer}>
-
-      <Text style={styles.text}>
+    <Image source={image} style={styles.stamp}/>
+    <Text style={styles.text}>
         {description}
       </Text>
 
-    </View>
   </View>
  )
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
-    borderWidth: 1,
-    width: 100,
     margin: 5,
   },
   stampContainer: {
@@ -33,13 +26,16 @@ const styles = StyleSheet.create({
   textContainer: {
     fontFamily: "Gruppe_A",
     alignItems: 'center'
-
   },
   text: {
+    paddingTop: 8,
     fontFamily: "Gruppe_A",
     fontSize: 10,
+    maxWidth: 100,
+    textAlign: 'center'
   },
   stamp: {
-    fontSize: 50
+    height: 100,
+    width: 100,
   }
 })
