@@ -69,45 +69,45 @@ const EntriesView: React.FC<{ entries: (SmallEntry & { avg: number })[] }> = ({ 
           selectText="Filter by tags:"
           noItemsText="No tags found matching your search"
 
-          styleInputGroup={styles.tagFilter}
-          styleItemsContainer={styles.tagFilter} 
-          styleDropdownMenuSubsection	={styles.tagFilter}
-          fontFamily={styles.whiteText.fontFamily}
-          itemFontFamily={styles.whiteText.fontFamily}
-          selectedItemFontFamily={styles.selectedTags.fontFamily}
+          styleInputGroup={styles.dropDownMenu}
+          styleItemsContainer={styles.dropDownMenu}
+          styleDropdownMenuSubsection={styles.dropDownMenu}
+          fontFamily={styles.fontType.fontFamily}
+          itemFontFamily={styles.fontType.fontFamily}
+          selectedItemFontFamily={styles.fontType.fontFamily}
           selectedItemTextColor={styles.selectedTags.color}
           selectedItemIconColor={styles.selectedTags.color}
-          searchInputStyle={styles.tagFilter} //search text
+          searchInputStyle={styles.searchInput} //search text
           itemTextColor={styles.tagFilter.color}
           itemFontSize={styles.tagFilter.fontSize}
-      
+
           tagBorderColor={styles.selectedTags.color}
           tagTextColor={styles.selectedTags.color}
           styleTextDropdown={styles.inputField}
           styleTextDropdownSelected={styles.inputField}
           hideSubmitButton={true}
           tagRemoveIconColor={styles.selectedTags.color}
-          styleIndicator={styles.pointer}      
-      
+          styleIndicator={styles.pointer}
 
 
 
-          // styleDropdownMenu={styles.dropdown}
-          // styleItemsContainer={styles.dropdown} // dropdown background
+
+        // styleDropdownMenu={styles.dropdown}
+        // styleItemsContainer={styles.dropdown} // dropdown background
 
 
 
-          // submitButtonColor={styles.selectedTags.color}
+        // submitButtonColor={styles.selectedTags.color}
 
-          // styleInputGroup={styles.dropdown}
-          // styleSelectorContainer={styles.blackText}
+        // styleInputGroup={styles.dropdown}
+        // styleSelectorContainer={styles.blackText}
         />
       </View>
       <View style={styles.filter}>
         {radioButtons.map((button) => (
           <Text
             key={button.id}
-            style={filter_preference === button.value ? styles.selectedFilter : styles.whiteText}
+            style={filter_preference === button.value ? styles.selectedFilter : styles.notSelected}
             onPress={() => userId != null && updatePrefrence(button.value!, dispatch, userId, token)}
           >
             {button.label}
@@ -125,7 +125,7 @@ const EntriesView: React.FC<{ entries: (SmallEntry & { avg: number })[] }> = ({ 
               b.avg - a.avg
           }).map((entry) => {
             return <EntryCard entry={entry} key={entry.id} />
-          }) : <Text style={styles.whiteText}> Waiting For Entries...</Text>
+          }) : <Text style={styles.notSelected}> Waiting For Entries...</Text>
         }
       </ScrollView>
     </View>
@@ -151,13 +151,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 10,
   },
-  whiteText: {
+  notSelected: {
     fontFamily: 'Gruppe_A',
     color: 'white',
     flex: 1,
     textAlign: 'center',
     padding: 15,
-    
+
   },
   selectedFilter: {
     fontFamily: 'Gruppe_A',
@@ -165,10 +165,22 @@ const styles = StyleSheet.create({
     color: 'white',
     flex: 1,
     textAlign: 'center',
-    padding: 15,  
+    padding: 15,
     fontSize: 16,
   },
+  dropDownMenu: {
+    backgroundColor: colors.basePurple,
+    borderColor: colors.basePurple,
+    padding: 8,
+  },
   tagFilter: {
+    color: colors.lighterPurple,
+    backgroundColor: colors.basePurple,
+    borderColor: colors.basePurple,
+    fontSize: 16,
+    padding: 8,
+  },
+  searchInput: {
     fontFamily: 'Gruppe_A',
     color: colors.lighterPurple,
     backgroundColor: colors.basePurple,
@@ -177,7 +189,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   inputField: {
-    fontFamily: 'Gruppe_A',
+    // fontFamily: 'Gruppe_A',
     color: colors.lighterPurple,
     backgroundColor: colors.basePurple,
     borderColor: colors.basePurple,
@@ -186,15 +198,20 @@ const styles = StyleSheet.create({
     left: 5,
   },
   pointer: {
-    color: colors.lighterPurple,
-    fontSize: 20,
+    height: 20,
     left: 10,
+    margin: 0,
+    padding: 0,
+    bottom: 3
   },
   dropdown: {
     backgroundColor: colors.basePurple,
   },
   selectedTags: {
-    fontFamily: 'Gruppe_A',
+    // fontFamily: 'Gruppe_A',
     color: colors.gunMetalGrey,
   },
+  fontType: {
+    fontFamily: 'Gruppe_A',
+  }
 });

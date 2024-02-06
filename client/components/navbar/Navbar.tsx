@@ -14,20 +14,20 @@ export default function Navbar() {
 
     return (
         <Tab.Navigator
-            screenOptions={{ headerShown: false,
-            tabBarActiveTintColor: colors.basePurple,
-            tabBarActiveBackgroundColor: colors.darkGrey,
-            tabBarInactiveBackgroundColor: colors.darkGrey,
-            tabBarShowLabel: false,
-            tabBarStyle: {
-                backgroundColor: colors.darkGrey,
-                height: 60,
-                borderTopWidth: 1,// Remove border on the top
-                borderTopWidth: colors.basePurple,
-                shadowOpacity: 0, // Remove shadow on iOS
-                elevation: 0, // Remove shadow on Android
-                
-            },
+            screenOptions={{
+                headerShown: false,
+                tabBarActiveTintColor: colors.basePurple,
+                tabBarActiveBackgroundColor: colors.darkGrey,
+                tabBarInactiveBackgroundColor: colors.darkGrey,
+                tabBarShowLabel: false,
+                tabBarStyle: {
+                    backgroundColor: colors.darkGrey,
+                    height: 60,
+                    borderTopWidth: 0,// Remove border on the top
+                    shadowOpacity: 0, // Remove shadow on iOS
+                    elevation: 0, // Remove shadow on Android
+
+                },
 
             }}
         >
