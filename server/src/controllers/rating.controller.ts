@@ -149,7 +149,35 @@ const setUserRating = async (ctx: Koa.Context) => {
   }
 };
 
+const getAverageRatingsForUsersEntries = async (ctx: Koa.Context) => {
+  try {
+    const entryIds = (
+      await prisma.entry.findMany({
+        where: {
+          authorId: Number(ctx.params.userId),
+        },
+      })
+    ).map(entry => entry.id);
+
+    const rating = await prisma.rating.aggregate({
+      where: {
+        entryId: { in: entryIds },
+      },
+      _avg: {
+        value: true,
+      },
+    });
+
+    ctx.body = rating._avg.value;
+  } catch (err) {
+    console.log(err);
+    ctx.status = 400;
+    ctx.body = 'Error.';
+  }
+}
+
 export {
+  getAverageRatingsForUsersEntries,
   getAvgEntryRating,
   getUserRating,
   setUserRating,
