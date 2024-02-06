@@ -13,7 +13,6 @@ SplashScreen.preventAutoHideAsync();
 
 const LoadingPage = ({ navigation }: any) => {
     const [appIsReady, setAppIsReady] = useState<boolean>(false);
-    console.log('loading')
     const fetchLocation = GeoLocation();
 
     useEffect(() => {
