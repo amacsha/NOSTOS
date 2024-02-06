@@ -12,9 +12,13 @@ import AddPlacesService from "../../service/AddPlacesService";
 
 const GOOGLE_KEY = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
+const image = { uri: "https://docs.expo.dev/static/images/tutorial/splash.png" };
+
 const GlobeView: React.FC = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
   const location = useSelector((state: RootState) => state.location);
+
+  
 
 //   useEffect(() => {
 //     axios
@@ -45,7 +49,7 @@ const GlobeView: React.FC = ({ navigation }: any) => {
     <SafeAreaProvider style={styles.container}>
       <Image
         style={styles.globe}
-        source={require("../../assets/globe-view.png")}
+        source={require("../../assets/spaceshipCloser.png")}
       />
 
       <Pressable
