@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { getValueFor } from "../../utils/secureStorage";
 import { deleteAccount, getLastVisited, getProfile, updatePassword, updateUsername } from "./DashboardsServices";
-import { SafeAreaView, Text, Button, View, ScrollView, StyleSheet, Pressable, TouchableHighlight, Alert, TextInput } from "react-native";
+import { SafeAreaView, Text, Button, View, ScrollView, StyleSheet, Pressable, TouchableHighlight, Alert, TextInput, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SmallEntry } from "../../client-types/SmallEntry";
 import { Rating } from "../../client-types/Rating";
@@ -133,7 +133,7 @@ export default function UserProfile () {
 
   useEffect( () => {
     userId != null && load();
-  }, [userId])
+  }, [userId, loading])
 
   function toggleSection(property: "showComments" | "showEntries" | "showRatings" | "showNewPassword" | "showNewUsername", value: boolean) {
     const update: SectionVisibility = {...sectionVisibility}
@@ -143,7 +143,7 @@ export default function UserProfile () {
     setSectionVisibility(update)
   }
 
-  if (loading) return <Text>Loading...</Text>
+  if (loading) return <ActivityIndicator />
 
   return (
     <SafeAreaView style={styles.mainContainer}>
