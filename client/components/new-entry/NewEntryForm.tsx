@@ -12,6 +12,7 @@ import { selectEntry } from '../../slices/entriesSlice';
 import { getValueFor } from '../../utils/secureStorage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '../styles/colors';
+import { wrap } from 'module';
 
 
 
@@ -78,7 +79,8 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
                                 <Text style={styles.error}>{errors.title}</Text>
                             )}
                             <TextInput
-                                style={styles.input}
+                                style={[styles.input, styles.content]}
+                                multiline
                                 value={values.content}
                                 onChangeText={handleChange('content')}
                                 onBlur={handleBlur('content')}
@@ -88,51 +90,56 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
                             {touched.content && errors.content && (
                                 <Text style={styles.error}>{errors.content}</Text>
                             )}
-                            <View style={styles.tag}>
-                                <TextInput
-                                    style={styles.tagInput}
-                                    value={tags}
-                                    onChangeText={text => setTags(text)}
-                                    onBlur={handleBlur('tag')}
-                                    placeholder='add 3 tags'
-                                    placeholderTextColor={colors.lighterPurple}
-                                />
-                                {touched.tag && errors.tag && (
-                                    <Text style={styles.error}>{errors.tag}</Text>
-                                )}
-                                <Pressable style={[styles.button, styles.add]}
-                                    onPress={() => {
-                                        if (tags !== '') values.tag.push(tags.trim().toLowerCase())
-                                        setTags("")
-                                    }}
-                                >
-                                    <Text style={styles.buttonText}>+</Text>
-                                </Pressable>
-                            </View>
-                            {values.tag.length > 0 && values.tag.map((oneTag, index) => {
-                                return (
-                                    <View style={styles.tag} key={index}>
-                                        <Text style={styles.tagText}>{oneTag}</Text>
-                                        <Pressable style={[styles.button, styles.delete]}
+                            <View style={styles.bottom}>
+                                <View style={styles.tag}>
+                                    <View style={styles.oneTag}>
+                                        <TextInput
+                                            style={styles.tagInput}
+                                            value={tags}
+                                            onChangeText={text => setTags(text)}
+                                            onBlur={handleBlur('tag')}
+                                            placeholder='add 3 tags'
+                                            placeholderTextColor={colors.lighterPurple}
+                                        />
+                                        {touched.tag && errors.tag && (
+                                            <Text style={styles.error}>{errors.tag}</Text>
+                                        )}
+                                        <Pressable style={styles.add}
                                             onPress={() => {
-                                                const newTagArray = [...values.tag];
-                                                newTagArray.splice(index, 1);
-                                                setFieldValue('tag', newTagArray);
+                                                if (tags !== '') values.tag.push(tags.trim().toLowerCase())
+                                                setTags("")
                                             }}
                                         >
-                                            <Text style={styles.buttonText} >-</Text>
+                                            <Text style={styles.buttonText}>+</Text>
                                         </Pressable>
                                     </View>
-                                )
-                            })}
-                            <Pressable style={styles.button} onPress={() => handleSubmit()} >
-                                <Text style={styles.buttonText}>Submit</Text>
-                            </Pressable>
+                                    <View style={styles.tag}>
+                                        {values.tag.length > 0 && values.tag.map((oneTag, index) => {
+                                            return (
+                                                <View style={styles.oneTag} key={index}>
+                                                    <Text style={styles.tagText}>{oneTag}</Text>
+                                                    <Pressable style={styles.delete}
+                                                        onPress={() => {
+                                                            const newTagArray = [...values.tag];
+                                                            newTagArray.splice(index, 1);
+                                                            setFieldValue('tag', newTagArray);
+                                                        }}
+                                                    >
+                                                        <Text style={styles.buttonText} >-</Text>
+                                                    </Pressable>
+                                                </View>
+                                            )
+                                        })}
+                                    </View>
+                                </View>
+                                <Pressable style={styles.submitButton} onPress={() => handleSubmit()} >
+                                    <Text style={styles.buttonText}>Submit</Text>
+                                </Pressable>
+                            </View>
                         </>
                     )}
                 </Formik >
             </View>
-            <Logout />
         </SafeAreaView >
     )
 }
@@ -144,23 +151,30 @@ const styles = StyleSheet.create({
         fontFamily: 'Gruppe_A',
     },
     head: {
+        textAlign: 'center',
+        padding: 10,
         fontSize: 20,
         color: colors.gunMetalGrey,
-        fontFamily: 'Gruppe_A',
-        marginHorizontal: 25,
+        fontFamily: "Gruppe_A",
+        textShadowColor: 'rgba(255, 255, 255, 0.75)',
+        textShadowOffset: { width: 0, height: 0 },
+        textShadowRadius: 10,
     },
     inputArea: {
-        marginTop: 100
+        marginTop: '15%',
     },
     input: {
-        backgroundColor: colors.gunMetalGrey,
-        color: colors.darkGrey,
+        backgroundColor: colors.darkGrey,
+        color: colors.gunMetalGrey,
         marginVertical: 5,
         marginHorizontal: 25,
         paddingLeft: 5,
         height: 50,
         fontSize: 20,
         fontFamily: 'Gruppe_A',
+    },
+    content: {
+        height: '50%',
     },
     error: {
         backgroundColor: colors.errorBackground,
@@ -174,12 +188,28 @@ const styles = StyleSheet.create({
         fontFamily: 'Gruppe_A',
         justifyContent: 'center'
     },
-    button: {
-        backgroundColor: colors.basePurple,
+    bottom: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: 40,
+    },
+    tag: {
+        backgroundColor: colors.darkGrey,
+        fontFamily: 'Gruppe_A',
+        justifyContent: 'space-between',
+        height: 30,
+        width: 120,
+        marginVertical: 5,
+    },
+    oneTag: {
+        flexDirection: 'row',
+    },
+    submitButton: {
+        borderColor: colors.lighterPurple,
+        borderWidth: 1,
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
-        marginTop: 20,
         margin: 5,
         padding: 5,
         height: 40,
@@ -187,48 +217,45 @@ const styles = StyleSheet.create({
         fontFamily: 'Gruppe_A',
     },
     buttonText: {
-        color: colors.gunMetalGrey,
+        color: colors.lighterPurple,
         fontSize: 20,
         fontFamily: 'Gruppe_A',
     },
-    tag: {
-        backgroundColor: colors.gunMetalGrey,
-        fontFamily: 'Gruppe_A',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        height: 30,
-        width: 120,
-        marginVertical: 5,
-        marginHorizontal: 25,
-        borderRadius: 25,
-        padding: 0
-    },
     add: {
         fontFamily: 'Gruppe_A',
-        height: 30,
-        width: 30,
+        borderColor: colors.lighterPurple,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 35,
+        width: 35,
+        borderWidth: 1,
         borderRadius: 25,
         // marginVertical: 5,
         // marginHorizontal: 25,
     },
     delete: {
         fontFamily: 'Gruppe_A',
-        height: 30,
-        width: 30,
+        borderColor: colors.lighterPurple,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 35,
+        width: 35,
+        borderWidth: 1,
         borderRadius: 25,
     },
     tagInput: {
         fontFamily: 'Gruppe_A',
-        backgroundColor: colors.gunMetalGrey,
-        paddingLeft: 5,
+        fontSize: 15,
+        color: colors.gunMetalGrey,
+        padding: 10,
         borderRadius: 25
-
     },
     tagText: {
         fontFamily: 'Gruppe_A',
-        backgroundColor: colors.gunMetalGrey,
-        paddingLeft: 5,
-        borderRadius: 25,
+        fontSize: 15,
+        color: colors.gunMetalGrey,
+        padding: 10,
+        borderRadius: 25
     }
 })
 
