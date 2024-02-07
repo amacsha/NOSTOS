@@ -33,7 +33,7 @@ const GlobeViewApp: React.FC = ({ navigation }: any) => {
     <SafeAreaProvider style={styles.container}>
       <Image
         style={styles.globe}
-        source={require("../../assets/spaceshipCloser.png")}
+        source={require("../../assets/spaceship.png")}
       />
 
       <Pressable
@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#010000",
   },
   globe: {
-    height: 800,
-    width: 420,
+    height: 1000,
+    width: 570,
   },
   locationButtonTopLeft: {
     position: "absolute",
