@@ -55,7 +55,7 @@ const Register: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.inputArea}>
-        <Text style={styles.head}>Register</Text>
+        
         <Formik
           initialValues={{ username: '', email: '', password: '' }}
           validationSchema={validationSchema}
@@ -66,7 +66,7 @@ const Register: React.FC = () => {
               <TextInput
                 style={styles.input}
                 placeholder='Username'
-                placeholderTextColor={colors.lighterPurple}
+                placeholderTextColor={'black'}
                 onChangeText={handleChange('username')}
                 onBlur={handleBlur('username')}
                 value={values.username}
@@ -77,7 +77,7 @@ const Register: React.FC = () => {
               <TextInput
                 style={styles.input}
                 placeholder='Email'
-                placeholderTextColor={colors.lighterPurple}
+                placeholderTextColor={'black'}
                 onChangeText={handleChange('email')}
                 onBlur={handleBlur('email')}
                 value={values.email}
@@ -88,7 +88,7 @@ const Register: React.FC = () => {
               <TextInput
                 style={styles.input}
                 placeholder="Password"
-                placeholderTextColor={colors.lighterPurple}
+                placeholderTextColor={'black'}
                 onChangeText={handleChange('password')}
                 onBlur={handleBlur('password')}
                 value={values.password}
@@ -110,8 +110,10 @@ const Register: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: colors.darkGrey,
-    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   head: {
     fontSize: 20,
@@ -120,7 +122,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
   },
   inputArea: {
-    marginTop: 200
+    backgroundColor: colors.basePurple,
+    paddingTop: 20,
+    paddingBottom: 5,
+    width: '90%',
   },
   input: {
     backgroundColor: colors.gunMetalGrey,

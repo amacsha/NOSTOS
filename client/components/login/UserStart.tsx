@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import FirstEntry from "./FirstEntry"
 import Login from "./Login";
 import Register from "../register/Register";
 import Main from "../dashboard/Main";
@@ -63,6 +64,7 @@ export default function UserStart() {
           </>
         ) : (
           <>
+            <Stack.Screen name="FirstEntry" component={FirstEntry} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
           </>
