@@ -102,6 +102,6 @@ const styles = StyleSheet.create({
   locationButtonText: {
     fontFamily: 'Gruppe_A',
     fontSize: 30,
-    fontWeight: "bold",
+
   },
 });

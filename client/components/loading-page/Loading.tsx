@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 40,
-        fontWeight: 'bold',
         fontFamily: 'Gruppe_A',
         color: colors.lighterPurple,
     }

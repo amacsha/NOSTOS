@@ -31,7 +31,7 @@ export default function UserStart() {
     let userId = Number(await getValueFor('userId'));
     let email = await getValueFor('email');
     let username = await getValueFor('username');
-
+    console.log(userId)
     if (token) {
       dispatch(setAuth({ isAuthenticated: true, token: token }));
       dispatch(updateUserDetails({ id: userId, email: email, username: username }));
@@ -51,9 +51,9 @@ export default function UserStart() {
         {isAuthenticated ? (
           <>
             <Stack.Screen name="LoadingPage" component={LoadingPage} />
-            <Stack.Screen name="GlobeView" component={GlobeView} options={{gestureEnabled: false}}/>
-            <Stack.Screen name="Navbar" component={Navbar} options={{gestureEnabled: false}}/>
-            <Stack.Screen name="Logs" component={Main} options={{gestureEnabled: false}}/>
+            <Stack.Screen name="GlobeView" component={GlobeView} options={{ gestureEnabled: false }} />
+            <Stack.Screen name="Navbar" component={Navbar} options={{ gestureEnabled: false }} />
+            <Stack.Screen name="Logs" component={Main} options={{ gestureEnabled: false }} />
             <Stack.Screen name="Mission" component={Mission} />
             <Stack.Screen name="Location" component={Location} />
             <Stack.Screen name="EntryView" component={EntryView} />

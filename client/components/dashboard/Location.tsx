@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   locationName: {
-    fontWeight: "bold",
     fontSize: 40,
     margin: 15,
     color: "white",
