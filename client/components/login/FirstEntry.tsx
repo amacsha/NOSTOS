@@ -21,7 +21,6 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
   const scrollY = new Animated.Value(0);
 
   React.useEffect(() => {
-    // Define the animation sequence
     const animation = Animated.timing(scrollY, {
       toValue: -screenHeight * 2.1, // Adjust based on your content size
       duration: 40000, // Duration of the animation
@@ -35,7 +34,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
       {
         // If you want the animation to run indefinitely, you don't need to set iterations
         // iterations: X, // Specify the number of times the animation should repeat
-        resetBeforeIteration: true, // Resets the animated value to its original value before each iteration
+        resetBeforeIteration: true, 
       }
     ).start();
   
