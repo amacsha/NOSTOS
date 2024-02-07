@@ -6,7 +6,7 @@ import {createOneUser, deleteUser, getOneUser, getProfile, getUserFilterPreferen
 import {authMiddleware} from './middlewares/auth'
 
 import {getEntry, postEntry, getCityEntries, getPlaceEntries, getManyEntries} from './controllers/entry.controller'
-import {getAvgEntryRating, getAvgInCity, getAvgInPlace, getUserRating, setUserRating} from './controllers/rating.controller'
+import {getAverageRatingsForUsersEntries, getAvgEntryRating, getAvgInCity, getAvgInPlace, getUserRating, setUserRating} from './controllers/rating.controller'
 import { addManyPlaces, addNewPlace, getAllPlaces, getCityNames, getPlacesForCity, getRecentPlaces, getSamplePlacesForCity } from './controllers/place.controller';
 import { addNewComment, deleteComment, getAllCommentsByEntry } from './controllers/comment.controller';
 import { confirmSQLConnection } from './models/db';
@@ -30,6 +30,7 @@ router.get('/rating/onEntry/:entryID/byUser/:userID', getUserRating)
 router.get('/rating/AverageEntryRating/:entryID', getAvgEntryRating)
 router.get('/rating/AveragesForCity/:cityName', getAvgInCity)
 router.get('/rating/AveragesForPlace/:placeID', getAvgInPlace)
+router.get('/rating/AverageForUser/:userId', getAverageRatingsForUsersEntries)
 
 // USER
 router.post('/user/profile', getProfile)

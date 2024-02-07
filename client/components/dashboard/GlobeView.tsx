@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../styles/colors";
 import { useAppDispatch } from "../../hooks";
 import { setLocation } from "../../slices/locationSlice";
@@ -30,7 +30,7 @@ const GlobeView: React.FC = ({ navigation }: any) => {
   };
 
   return (
-    <SafeAreaProvider style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Image
         style={styles.globe}
         source={require("../../assets/spaceship.png")}
@@ -38,7 +38,7 @@ const GlobeView: React.FC = ({ navigation }: any) => {
 
       <Pressable
         style={[
-          styles.locationButtonTopLeft,
+          styles.LondonButton,
           location.value?.cityName === "London" && {
             backgroundColor: colors.lighterPurple,
           },
@@ -50,7 +50,7 @@ const GlobeView: React.FC = ({ navigation }: any) => {
 
       <Pressable
         style={[
-          styles.locationButtonBottomRight,
+          styles.BerlinButton,
           location.value?.cityName === "Berlin" && {
             backgroundColor: colors.lighterPurple,
           },
@@ -59,7 +59,7 @@ const GlobeView: React.FC = ({ navigation }: any) => {
       >
         <Text style={styles.locationButtonText}>Berlin</Text>
       </Pressable>
-    </SafeAreaProvider>
+    </SafeAreaView>
   );
 };
 
@@ -76,16 +76,16 @@ const styles = StyleSheet.create({
     height: 1000,
     width: 570,
   },
-  locationButtonTopLeft: {
+  LondonButton: {
     position: "absolute",
-    top: 140,
+    bottom: 140,
     left: 40,
     padding: 10,
     height: 44,
     backgroundColor: "rgba(255, 255, 255, 0.7)",
     borderRadius: 8,
   },
-  locationButtonBottomRight: {
+  BerlinButton: {
     position: "absolute",
     bottom: 140,
     right: 40,

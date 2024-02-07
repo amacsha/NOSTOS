@@ -78,47 +78,54 @@ export default function NewComment({ route }: any) {
   }
 
   return (
-    <SafeAreaView style={styles.mainContainer}>
-      <View style={styles.formikContainer}>
-        <Formik
-          initialValues={
-            route.params?.defaultContent
-              ? { content: route.params.defaultContent }
-              : { content: "" }
-          }
-          onSubmit={(values) => handleSubmit(values)}
-        >
-          {({ handleChange, handleSubmit, values }) => (
-            <>
-              <TextInput
-                multiline
-                autoFocus
-                placeholder="Speak your mind..."
-                style={styles.textInput}
-                value={values.content}
-                onChangeText={handleChange("content")}
-              ></TextInput>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <SafeAreaView style={styles.mainContainer}>
+          <View style={styles.formikContainer}>
+            <Formik
+              initialValues={
+                route.params?.defaultContent
+                  ? { content: route.params.defaultContent }
+                  : { content: "" }
+              }
+              onSubmit={(values) => handleSubmit(values)}
+            >
+              {({ handleChange, handleSubmit, values }) => (
+                <>
+                  <TextInput
+                    multiline
+                    autoFocus
+                    placeholder="Speak your mind..."
+                    style={styles.textInput}
+                    value={values.content}
+                    onChangeText={handleChange("content")}
+                  ></TextInput>
 
-              <View style={styles.addCommentButtonContainer}>
-                <Pressable
-                  style={styles.addCommentButton}
-                  onPress={(event: GestureResponderEvent) => handleSubmit()}
-                >
-                  <Text style={styles.addCommentButtonText}>SAVE</Text>
-                </Pressable>
+                  <View style={styles.addCommentButtonContainer}>
+                    <Pressable
+                      style={styles.addCommentButton}
+                      onPress={(event: GestureResponderEvent) => handleSubmit()}
+                    >
+                      <Text style={styles.addCommentButtonText}>SAVE</Text>
+                    </Pressable>
 
-                <Pressable
-                  style={styles.addCommentButton}
-                  onPress={() => navigation.goBack()}
-                >
-                  <Text style={styles.addCommentButtonText}>CANCEL</Text>
-                </Pressable>
-              </View>
-            </>
-          )}
-        </Formik>
-      </View>
-    </SafeAreaView>
+                    <Pressable
+                      style={styles.addCommentButton}
+                      onPress={() => navigation.goBack()}
+                    >
+                      <Text style={styles.addCommentButtonText}>CANCEL</Text>
+                    </Pressable>
+                  </View>
+                </>
+              )}
+            </Formik>
+          </View>
+        </SafeAreaView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }
 

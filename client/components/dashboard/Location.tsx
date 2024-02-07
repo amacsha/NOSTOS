@@ -1,66 +1,76 @@
 import React from "react";
-import { View, Text, StyleSheet, Button, GestureResponderEvent, SafeAreaView, Pressable } from 'react-native';
-import GeoLocation from './GeoLocation';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  GestureResponderEvent,
+  Pressable,
+} from "react-native";
+import GeoLocation from "./GeoLocation";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 import { useState, useEffect } from "react";
-import { SmallEntry } from '../../client-types/SmallEntry';
-import EntriesView from './EntriesView';
-import { placeFetcher } from './DashboardsServices';
+import { SmallEntry } from "../../client-types/SmallEntry";
+import EntriesView from "./EntriesView";
+import { placeFetcher } from "./DashboardsServices";
 import { selectEntry } from "../../slices/entriesSlice";
-import { colors } from '../styles/colors';
-
-
+import { colors } from "../styles/colors";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Location: React.FC = ({ navigation }: any) => {
-  const placeId = useSelector((state: RootState) => state.places.selectedPlaceId);
-  const entryId = useSelector((state: RootState) => state.entries.selectedEntryID);
-  const userId = useSelector((state: RootState) => state.user.id);
-  const [placeEntries, setPlaceEntries] = useState<(SmallEntry & { avg: number })[]>([])
+  const locationName = useSelector((state: RootState) => state.places.selectedPlaceName);
 
-  console.log(placeId)
+  const placeId = useSelector(
+    (state: RootState) => state.places.selectedPlaceId
+  );
+  const entryId = useSelector(
+    (state: RootState) => state.entries.selectedEntryID
+  );
+  const userId = useSelector((state: RootState) => state.user.id);
+  const [placeEntries, setPlaceEntries] = useState<
+    (SmallEntry & { avg: number })[]
+  >([]);
 
   useEffect(() => {
-    placeId != null && placeFetcher(placeId, setPlaceEntries)
+    placeId != null && placeFetcher(placeId, setPlaceEntries);
   }, [placeId, entryId]);
 
-
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.locationName}>{locationName}</Text>
+      
       {placeId ? (
-        <View style={{paddingTop: 50}}>
+        <View>
           <EntriesView entries={placeEntries}></EntriesView>
-          <View>
-          <Pressable style={styles.entryBtn} onPress={() => navigation.navigate('NewEntryForm')}> 
-          <Text style={styles.entryTxt}> Write a new entry </Text> 
-          </Pressable>
-        </View>
+          <View style={styles.addEntryContainer}>
+            <Pressable
+              style={styles.addEntryButton}
+              onPress={() => navigation.navigate("NewEntryForm")}
+            >
+              <Text style={styles.addEntryButtonText}> Write a new entry </Text>
+            </Pressable>
+          </View>
         </View>
 
-        
       ) : (
-        <Text style={styles.fetchingText}>Sending position to the Mothership...</Text>
+        <Text style={styles.fetchingText}>
+          Sending position to the Mothership...
+        </Text>
       )}
-      {placeEntries.every((entry) => entry.authorId != userId) &&
-        <View style={styles.entryBtn}>
-          <Pressable style={styles.entryBtn} onPress={() => navigation.navigate('NewEntryForm')}> 
-          <Text style={styles.entryTxt}> Write a new entry </Text> 
-          </Pressable>
-        </View>
-      }
-    </View>
-  )
-}
+    </SafeAreaView>
+  );
+};
 
 export default Location;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.basePurple,
-    alignItems: 'stretch',
+    backgroundColor: colors.darkGrey,
+    alignItems: "stretch",
     padding: 10,
-    fontFamily: 'Gruppe_A',
+    fontFamily: "Gruppe_A",
   },
   fetchingText: {
     fontSize: 14,
@@ -69,8 +79,9 @@ const styles = StyleSheet.create({
   },
   entryBtn: {
     backgroundColor: colors.lighterPurple,
+    height: 60,
+    bottom: 30
   },
-
   entryTxt: {
     fontSize: 14,
     color: colors.gunMetalGrey,
@@ -78,21 +89,27 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 10,
   },
-
-  // locationText: {
-  //   fontSize: 16,
-  //   color: 'black',
-  //   marginBottom: 10,
-  //   fontFamily: 'Gruppe_A',
-  // },
-  // fetchingText: {
-  //   fontSize: 14,
-  //   color: 'gray',
-  //   fontFamily: 'Gruppe_A',
-  // },
-  // bottom: {
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   fontFamily: 'Gruppe_A',
-  // }
+  locationName: {
+    fontWeight: "bold",
+    fontSize: 40,
+    margin: 15,
+    color: "white",
+    fontFamily: "Gruppe_A",
+  },
+  addEntryContainer: {
+    alignItems: "center",
+  },
+  addEntryButton: {
+    borderWidth: 2,
+    borderRadius: 0,
+    borderColor: "white"
+  },
+  addEntryButtonText: {
+    margin: 5,
+    marginLeft: 10,
+    marginRight: 10,
+    fontFamily: "Gruppe_A",
+    fontSize: 20,
+    color: "white"
+  },
 });

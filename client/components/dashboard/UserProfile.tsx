@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { getValueFor } from "../../utils/secureStorage";
 import { deleteAccount, getLastVisited, getProfile, updatePassword, updateUsername } from "./DashboardsServices";
-import { SafeAreaView, Text, Button, View, ScrollView, StyleSheet, Pressable, TouchableHighlight, Alert, TextInput } from "react-native";
+import {Text, Button, View, ScrollView, StyleSheet, Pressable, TouchableHighlight, Alert, TextInput, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SmallEntry } from "../../client-types/SmallEntry";
 import { Rating } from "../../client-types/Rating";
@@ -22,7 +22,8 @@ import { setAuth, initialState } from '../../slices/authSlice';
 import { deleteItemAsync } from 'expo-secure-store';
 import { updateUserDetails, initialState as userInitials } from '../../slices/userSlice';
 import { title } from "process";
-
+import IDCard from "./IDCard";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type SectionVisibility = {
   showComments: boolean,
@@ -79,7 +80,6 @@ export default function UserProfile () {
       }
     )
 
-
       if (userEntries?.length > 0) {
         const entries: JSX.Element[] = userEntries.map((entry: Entry) => {
           return (
@@ -133,7 +133,7 @@ export default function UserProfile () {
 
   useEffect( () => {
     userId != null && load();
-  }, [userId])
+  }, [userId, loading])
 
   function toggleSection(property: "showComments" | "showEntries" | "showRatings" | "showNewPassword" | "showNewUsername", value: boolean) {
     const update: SectionVisibility = {...sectionVisibility}
@@ -143,10 +143,11 @@ export default function UserProfile () {
     setSectionVisibility(update)
   }
 
-  if (loading) return <Text>Loading...</Text>
+  if (loading) return <ActivityIndicator />
 
   return (
     <SafeAreaView style={styles.mainContainer}>
+      <ScrollView>
         <View>
 
           <View style={styles.controlsContainer}>
@@ -245,8 +246,9 @@ export default function UserProfile () {
           </>
           }
 
+          <IDCard profileData={profileData}/>
+
           <View style={styles.dataContainer}>
-            <ScrollView>
               <View style={styles.entriesContainer}>
                 <Pressable onPress={() => toggleSection('showEntries', !sectionVisibility.showEntries)}>
                   {sectionVisibility.showEntries ? <Text style={styles.sectionTitleText}>Hide Your Entries</Text> : <Text style={styles.sectionTitleText}>Display Your Entries ({profileEntries.length})</Text>}
@@ -267,10 +269,11 @@ export default function UserProfile () {
                 </Pressable>
                 {sectionVisibility.showRatings && profileRatings}
               </View>
-            </ScrollView>
           </View>
       </View>
+      </ScrollView>
     </SafeAreaView>
+
   )
 }
 

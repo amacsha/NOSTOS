@@ -1,58 +1,67 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button, TextInput, SafeAreaView } from 'react-native';
-import GeoLocation from './GeoLocation';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import MultiSelect from 'react-native-multiple-select';
-
-import { SmallEntry } from '../../client-types/SmallEntry';
-import EntriesView from './EntriesView';
-import { cityFetcher, getActiveMissions, getCities } from './DashboardsServices';
-import { Place } from '../../client-types/Place';
-import MissionView from './MissionView';
-import Logout from '../logout/Logout';
-import { useAppDispatch } from '../../hooks';
-import { setLocation } from '../../slices/locationSlice';
-import { colors } from '../styles/colors';
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Button, TextInput } from "react-native";
+import GeoLocation from "./GeoLocation";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import MultiSelect from "react-native-multiple-select";
+import { SmallEntry } from "../../client-types/SmallEntry";
+import EntriesView from "./EntriesView";
+import {
+  cityFetcher,
+  getActiveMissions,
+  getCities,
+} from "./DashboardsServices";
+import { Place } from "../../client-types/Place";
+import MissionView from "./MissionView";
+import Logout from "../logout/Logout";
+import { useAppDispatch } from "../../hooks";
+import { setLocation } from "../../slices/locationSlice";
+import { colors } from "../styles/colors";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Main: React.FC = ({ navigation }: any) => {
   const fetchLocation = GeoLocation();
   const location = useSelector((state: RootState) => state.location);
   const userId = useSelector((state: RootState) => state.user.id);
-  const [cityEntries, setCityEntries] = useState<(SmallEntry & { avg: number })[]>([])
-  const [activeMissions, setActiveMissions] = useState<Place[]>([])
-  const [cityNames, setCityNames] = useState<string[]>([])
+  const [cityEntries, setCityEntries] = useState<
+    (SmallEntry & { avg: number })[]
+  >([]);
+  const [activeMissions, setActiveMissions] = useState<Place[]>([]);
+  const [cityNames, setCityNames] = useState<string[]>([]);
 
   const dispatch = useAppDispatch();
 
   const asyncFetchLocation = async () => {
-    await fetchLocation()
-  }
+    await fetchLocation();
+  };
 
   useEffect(() => {
     // asyncFetchLocation();
-    getCities(setCityNames)
-  }, [])
+    getCities(setCityNames);
+  }, []);
 
   useEffect(() => {
-    location.value?.cityName != undefined && cityFetcher(location.value?.cityName, setCityEntries)
+    location.value?.cityName != undefined &&
+      cityFetcher(location.value?.cityName, setCityEntries);
   }, [location.value?.cityName]);
 
   useEffect(() => {
     setInterval(async () => {
-      userId && await getActiveMissions(userId, setActiveMissions);
-    }, 1000 * 60)
+      userId && (await getActiveMissions(userId, setActiveMissions));
+    }, 1000 * 60);
   }, [userId]);
 
   return (
     <SafeAreaView style={styles.container}>
       <View>
-      
-      <View style={styles.wrapper}> 
-          {activeMissions.length == 0 ?
-            <Text style={styles.locationText}>No active missions available</Text> :
+        <View style={styles.wrapper}>
+          {activeMissions.length == 0 ? (
+            <Text style={styles.locationText}>
+              No active missions available
+            </Text>
+          ) : (
             <MissionView places={activeMissions}></MissionView>
-          }
+          )}
         </View>
       </View>
       {location.value?.cityName ? (
@@ -64,7 +73,6 @@ const Main: React.FC = ({ navigation }: any) => {
           Sending position to the Mothership...
         </Text>
       )}
-      
     </SafeAreaView>
   );
 };
@@ -89,14 +97,14 @@ const styles = StyleSheet.create({
     fontFamily: "Gruppe_A",
   },
   locationText: {
-    textAlign: 'center',
+    textAlign: "center",
     padding: 40,
     fontSize: 16,
     color: colors.gunMetalGrey,
     fontFamily: "Gruppe_A",
-    textShadowColor: 'rgba(255, 255, 255, 0.75)', 
-    textShadowOffset: {width: 0, height: 0},
-    textShadowRadius: 10, 
+    textShadowColor: "rgba(255, 255, 255, 0.75)",
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 10,
   },
   fetchingText: {
     fontSize: 14,
@@ -104,25 +112,25 @@ const styles = StyleSheet.create({
     fontFamily: "Gruppe_A",
   },
   bottom: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontFamily: 'Gruppe_A'
+    alignItems: "center",
+    justifyContent: "center",
+    fontFamily: "Gruppe_A",
   },
   whiteText: {
-    color: 'white',
-    fontFamily: 'Gruppe_A',
+    color: "white",
+    fontFamily: "Gruppe_A",
   },
   blackText: {
     color: colors.black,
-    fontFamily: 'Gruppe_A',
+    fontFamily: "Gruppe_A",
   },
   dropdown: {
     backgroundColor: colors.black,
-    borderColor: 'white',
-    borderWidth: 1
+    borderColor: "white",
+    borderWidth: 1,
   },
   selectedTags: {
     color: colors.lighterPurple,
-    fontFamily: 'Gruppe_A',
+    fontFamily: "Gruppe_A",
   },
 });

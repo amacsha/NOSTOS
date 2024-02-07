@@ -19,7 +19,7 @@ import MapView, {
 } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { selectPlace, setPlaces } from "../../slices/placesSlice";
+import { selectPlace, setPlaceName, setPlaces } from "../../slices/placesSlice";
 import { GooglePlaceResponse, Place } from "../../client-types/Place";
 import AddPlacesService from "../../service/AddPlacesService";
 import { fetchNewMissions } from "../../service/NewMissionService";
@@ -69,19 +69,13 @@ const Mission: React.FC = ({ navigation }: any) => {
     }
   }, [city]);
 
-  function handleMarkerPress(
-    place: Place,
-    latitude: number,
-    longitude: number
-  ) {
-    axios
-      .get(
-        `https://maps.googleapis.com/maps/api/directions/json?destination=${latitude},${longitude}&origin=${lat},${lng}&key=${GOOGLE_KEY}`
-      )
+  function handleMarkerPress(place: Place, latitude: number, longitude: number) {
+    axios.get(`https://maps.googleapis.com/maps/api/directions/json?destination=${latitude},${longitude}&origin=${lat},${lng}&key=${GOOGLE_KEY}`)
       .then((response) => response)
       .catch((error) => console.log(error));
     setSelectedCoord([latitude, longitude]);
     dispatch(selectPlace(place.id));
+    dispatch(setPlaceName(place.name));
   }
 
   const verifyLocation = () => {
@@ -103,7 +97,8 @@ const Mission: React.FC = ({ navigation }: any) => {
   };
 
   return (
-    <SafeAreaProvider>
+    // <SafeAreaProvider>
+    <>
       <MapView
         style={styles.map}
         provider={PROVIDER_GOOGLE}
@@ -191,7 +186,8 @@ const Mission: React.FC = ({ navigation }: any) => {
           </Pressable>
         </View>
       )}
-    </SafeAreaProvider>
+      </>
+    // </SafeAreaProvider>
   );
 };
 

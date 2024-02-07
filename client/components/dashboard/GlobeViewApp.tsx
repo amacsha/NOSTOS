@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { ImageBackground, Pressable, StyleSheet, Text, View } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../styles/colors";
 import { useAppDispatch } from "../../hooks";
 import { setLocation } from "../../slices/locationSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import axios from "axios";
-import { GooglePlaceResponse, Place } from "../../client-types/Place";
-import AddPlacesService from "../../service/AddPlacesService";
-
-const GOOGLE_KEY = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
 const GlobeViewApp: React.FC = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
@@ -30,15 +25,16 @@ const GlobeViewApp: React.FC = ({ navigation }: any) => {
   };
 
   return (
-    <SafeAreaProvider style={styles.container}>
-      <Image
+    // <SafeAreaView style={styles.container}>
+    <>
+      <ImageBackground
         style={styles.globe}
         source={require("../../assets/spaceship.png")}
       />
 
       <Pressable
         style={[
-          styles.locationButtonTopLeft,
+          styles.LondonButton,
           location.value?.cityName === "London" && {
             backgroundColor: colors.lighterPurple,
           },
@@ -50,7 +46,7 @@ const GlobeViewApp: React.FC = ({ navigation }: any) => {
 
       <Pressable
         style={[
-          styles.locationButtonBottomRight,
+          styles.BerlinButton,
           location.value?.cityName === "Berlin" && {
             backgroundColor: colors.lighterPurple,
           },
@@ -59,7 +55,8 @@ const GlobeViewApp: React.FC = ({ navigation }: any) => {
       >
         <Text style={styles.locationButtonText}>Berlin</Text>
       </Pressable>
-    </SafeAreaProvider>
+    </>
+    // </SafeAreaView>
   );
 };
 
@@ -73,22 +70,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#010000",
   },
   globe: {
-    height: 1000,
-    width: 570,
+    height: "100%",
+    width: "100%"
   },
-  locationButtonTopLeft: {
+  LondonButton: {
     position: "absolute",
-    top: 140,
-    left: 40,
+    bottom: 120,
+    left: 20,
     padding: 10,
     height: 44,
     backgroundColor: "rgba(255, 255, 255, 0.7)",
     borderRadius: 8,
   },
-  locationButtonBottomRight: {
+  BerlinButton: {
     position: "absolute",
-    bottom: 140,
-    right: 40,
+    bottom: 120,
+    right: 20,
     padding: 10,
     height: 44,
     backgroundColor: "rgba(255, 255, 255, 0.7)",
