@@ -34,7 +34,9 @@ export default function UserStart() {
     let username = await getValueFor('username');
 
     if (token) {
+      dispatch(setAuth(initialState));
       dispatch(setAuth({ isAuthenticated: true, token: token }));
+
       dispatch(updateUserDetails({ id: userId, email: email, username: username }));
     }
   };
