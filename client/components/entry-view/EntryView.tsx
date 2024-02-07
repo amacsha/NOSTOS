@@ -9,7 +9,7 @@ import {
   ScrollView,
   Pressable,
 } from "react-native";
-import { getOneEntry, getComments } from "./EntryService";
+import { getOneEntry, getComments, getUsernameFromID } from "./EntryService";
 import { useSelector } from "react-redux";
 import UserRating from "./UserRating";
 import CommentView from "./CommentView";
@@ -29,6 +29,8 @@ const EntryView: React.FC = ({ navigation }: any) => {
   const id = useSelector((state: RootState) => state.entries.selectedEntryID);
   const user = useSelector((state: RootState) => state.user)
   const comments = useSelector((state: RootState) => state.comments);
+  const [author, setAuthor] = useState("")
+  const [loading, setLoading] = useState<boolean>(true)
   const dispatch = useAppDispatch();
 
   // TODO change to redux
@@ -42,9 +44,21 @@ const EntryView: React.FC = ({ navigation }: any) => {
     setEntryDetails(update);
   }
 
+  async function getAuthorname() {
+    if (entryDetails?.authorId) {
+      const auth = await getUsernameFromID(entryDetails.authorId)
+      setAuthor(auth)
+      setLoading(false)
+    }
+  }
+
   useEffect(() => {
     load();
   }, []);
+
+  useEffect(() => {
+    getAuthorname()
+  }, [entryDetails])
 
   if (!entryDetails) return <ActivityIndicator />;
   if (comments.length > 0) {
@@ -55,30 +69,34 @@ const EntryView: React.FC = ({ navigation }: any) => {
 
   const addCommentButton = usersExistingComment ? (
     <Pressable
-      style={styles.addCommentButton}
+      style={styles.button}
       onPress={() => {
         navigation.navigate("New Comment", {
           defaultContent: usersExistingComment,
         });
       }}
     >
-      <Text style={styles.addCommentButtonText}>EDIT YOUR COMMENT</Text>
+      <Text style={styles.buttonText}>EDIT YOUR COMMENT</Text>
     </Pressable>
   ) : (
     <Pressable
       onPress={() => navigation.navigate("New Comment")}
-      style={styles.addCommentButton}
+      style={styles.button}
     >
-      <Text style={styles.addCommentButtonText}>ADD COMMENT</Text>
+      <Text style={styles.buttonText}>ADD COMMENT</Text>
     </Pressable>
   );
+
+  if (loading) return <View style={styles.load}>
+    <ActivityIndicator />
+  </View> 
 
   return (
       <SafeAreaView style={styles.mainContainer}>
         <ScrollView style={styles.contentContainer}>
           <View>
             <Text style={styles.title}>{entryDetails.title}</Text>
-            <Text style={styles.title}>By {user.username}, {moment(entryDetails.creation_date).fromNow()}</Text>
+            <Text style={styles.sunheading}>By {author}, {moment(entryDetails.creation_date).fromNow()}</Text>
           </View>
 
           <View>
@@ -113,32 +131,54 @@ const styles = StyleSheet.create({
 
   },
   commentContainer: {
-    flex: 0.75,
+    flex: 1,
   },
   title: {
     fontSize: 28,
     margin: 15,
     fontFamily: "Gruppe_A",
+    color: 'white',
+    textAlign: 'center',
+    borderColor: 'white',
+    borderBottomWidth: 2,
+  },
+  sunheading: {
+    fontSize: 20,
+    margin: 15,
+    fontFamily: "Gruppe_A",
+    color: 'white',
   },
   content: {
     fontSize: 16,
     lineHeight: 30,
     margin: 35,
     fontFamily: "Gruppe_A",
+    color: 'white',
   },
   addCommentButtonContainer: {
     alignItems: "center",
   },
-  addCommentButton: {
-    borderWidth: 2,
-    borderRadius: 0,
+  button: {
+    backgroundColor: '#45417B',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    margin: 15,
+    padding: 5,
+    height: 30,
+    width: 200,
+    fontFamily: 'Gruppe_A',
   },
-  addCommentButtonText: {
-    margin: 5,
-    marginLeft: 10,
-    marginRight: 10,
-    fontFamily: "Gruppe_A",
-    fontSize: 20,
+  buttonText: {
+    color: '#9578F8',
+    fontSize: 17,
+    fontFamily: 'Gruppe_A',
+  },
+  load: {
+    backgroundColor: colors.lighterPurple,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
 });
 

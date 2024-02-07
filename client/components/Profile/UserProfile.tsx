@@ -152,7 +152,9 @@ export default function UserProfile () {
     setSectionVisibility(update)
   }
 
-  if (loading) return <ActivityIndicator />
+  if (loading) return <View style={styles.load}>
+    <ActivityIndicator />
+  </View> 
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -165,21 +167,21 @@ export default function UserProfile () {
           <View style={styles.dataContainer}>
               <View style={styles.contributonList}>
                 <Pressable onPress={() => toggleSection('showEntries', !sectionVisibility.showEntries)}>
-                  {sectionVisibility.showEntries ? <Text style={styles.mainTitleText}>Hide Your Entries</Text> : <Text style={styles.mainTitleText}>Display Your Entries ({profileEntries.length})</Text>}
+                  {sectionVisibility.showEntries ? <Text style={styles.text}>Hide Your Entries</Text> : <Text style={styles.text}>Display Your Entries ({profileEntries.length})</Text>}
                 </Pressable>
                 {sectionVisibility.showEntries && profileEntries}
               </View>
 
               <View style={styles.contributonList}>
                 <Pressable onPress={() => toggleSection('showComments', !sectionVisibility.showComments)}>
-                {sectionVisibility.showComments ? <Text style={styles.mainTitleText}>Hide Your Comments</Text> : <Text style={styles.mainTitleText}>Display Your Comments ({profileComments.length})</Text>}
+                {sectionVisibility.showComments ? <Text style={styles.text}>Hide Your Comments</Text> : <Text style={styles.text}>Display Your Comments ({profileComments.length})</Text>}
                 </Pressable>
                 {sectionVisibility.showComments && profileComments}
               </View>
 
               <View style={styles.contributonList}>
                 <Pressable onPress={() => toggleSection('showRatings', !sectionVisibility.showRatings)}>
-                {sectionVisibility.showRatings ? <Text style={styles.mainTitleText}>Hide Your Ratings</Text> : <Text style={styles.mainTitleText}>Display Your Ratings ({profileRatings.length})</Text>}
+                {sectionVisibility.showRatings ? <Text style={styles.text}>Hide Your Ratings</Text> : <Text style={styles.text}>Display Your Ratings ({profileRatings.length})</Text>}
                 </Pressable>
                 {sectionVisibility.showRatings && profileRatings}
               </View>
@@ -189,7 +191,7 @@ export default function UserProfile () {
                   toggleSection('showProfileActions', !sectionVisibility.showProfileActions);
                   myRef.current?.scrollToEnd({ animated: true })
                 }}>
-                {sectionVisibility.showProfileActions ? <Text style={styles.mainTitleText}>Hide Profile actions</Text> : <Text style={styles.mainTitleText}>Show Profile actions</Text>}
+                {sectionVisibility.showProfileActions ? <Text style={styles.text}>Hide Profile actions</Text> : <Text style={styles.text}>Show Profile actions</Text>}
                 </Pressable>
               </View>
           </View>
@@ -282,6 +284,7 @@ export default function UserProfile () {
                   Alert.alert('Error', 'New username must be different from the current username.');
                 } else {
                   updateUsername(newUsername, userId as number, dispatch, token);
+                  setLoading(true);
                 }
               }}>
                 <Text style={styles.buttonText}>Update Username</Text>
@@ -301,6 +304,12 @@ export default function UserProfile () {
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: colors.darkGrey,
+    flex: 1,
+  },
+  load: {
+    backgroundColor: colors.darkGrey,
+    alignItems: 'center',
+    justifyContent: 'center',
     flex: 1,
   },
   controlsContainer :{
@@ -324,11 +333,18 @@ const styles = StyleSheet.create({
   },
   mainTitleText: {
     fontFamily: "Gruppe_A",
-    fontSize: 23,
+    fontSize: 30,
     marginBottom: 25,
-    marginTop: 10,
+    marginTop: 50,
     textAlign: 'center',
     color: 'white'
+  },
+  text: {
+    fontFamily: "Gruppe_A",
+    fontSize: 25,
+    textAlign: 'center',
+    color: 'white',
+    marginTop: 30
   },
   dataContainer: {
     margin: 15,

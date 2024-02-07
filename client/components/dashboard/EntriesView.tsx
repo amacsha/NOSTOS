@@ -114,7 +114,7 @@ const EntriesView: React.FC<{ entries: (SmallEntry & { avg: number })[] }> = ({ 
           </Text>
         ))}
       </View>
-      <ScrollView contentContainerStyle={{ paddingBottom: 250 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 130 }}>
 
 
         {entries.length > 0 ?

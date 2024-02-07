@@ -7,6 +7,10 @@ import { startGlitch, glitchAnimation } from '../../utils/animatedGlitch';
 import { colors } from '../styles/colors';
 import TypewriterReverse from '../../utils/TypewriterLoadingReverse';
 import confirmDBIsConnected from '../../service/DBConnectedService';
+import { deleteItemAsync } from 'expo-secure-store';
+import { useAppDispatch } from '../../hooks';
+import { setAuth } from '../../slices/authSlice';
+import { updateUserDetails } from '../../slices/userSlice';
 
 
 SplashScreen.preventAutoHideAsync();
