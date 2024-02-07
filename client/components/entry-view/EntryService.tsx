@@ -4,7 +4,7 @@ const IP: string | undefined = process.env.EXPO_PUBLIC_IP_ADDRESS;
 export async function getOneEntry(entryId: number) {
   const url = `http://${IP}:3000/entry/getOne/${entryId}`;
 
-  return await axios.get(url);
+  return (await axios.get(url)).data;
 }
 
 export async function getAverageRating(entryId: number) {
