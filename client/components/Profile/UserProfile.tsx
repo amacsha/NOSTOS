@@ -152,7 +152,9 @@ export default function UserProfile () {
     setSectionVisibility(update)
   }
 
-  if (loading) return <ActivityIndicator />
+  if (loading) return <View style={styles.load}>
+    <ActivityIndicator />
+  </View> 
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -282,6 +284,7 @@ export default function UserProfile () {
                   Alert.alert('Error', 'New username must be different from the current username.');
                 } else {
                   updateUsername(newUsername, userId as number, dispatch, token);
+                  setLoading(true);
                 }
               }}>
                 <Text style={styles.buttonText}>Update Username</Text>
@@ -301,6 +304,12 @@ export default function UserProfile () {
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: colors.darkGrey,
+    flex: 1,
+  },
+  load: {
+    backgroundColor: colors.darkGrey,
+    alignItems: 'center',
+    justifyContent: 'center',
     flex: 1,
   },
   controlsContainer :{
