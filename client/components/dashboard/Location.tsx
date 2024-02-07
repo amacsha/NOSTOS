@@ -48,7 +48,7 @@ const Location: React.FC = ({ navigation }: any) => {
               style={styles.addEntryButton}
               onPress={() => navigation.navigate("NewEntryForm")}
             >
-              <Text style={styles.addEntryButtonText}> Write a new entry </Text>
+              <Text style={styles.addEntryButtonText}>Create a new entry</Text>
             </Pressable>
           </View>
         </View>
