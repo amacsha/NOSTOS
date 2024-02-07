@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, Button, TextInput } from "react-native";
 import GeoLocation from "./GeoLocation";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import MultiSelect from "react-native-multiple-select";
 import { SmallEntry } from "../../client-types/SmallEntry";
 import EntriesView from "./EntriesView";
 import {
@@ -13,9 +12,7 @@ import {
 } from "./DashboardsServices";
 import { Place } from "../../client-types/Place";
 import MissionView from "./MissionView";
-import Logout from "../logout/Logout";
 import { useAppDispatch } from "../../hooks";
-import { setLocation } from "../../slices/locationSlice";
 import { colors } from "../styles/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -48,13 +45,12 @@ const Main: React.FC = ({ navigation }: any) => {
   useEffect(() => {
     setInterval(async () => {
       userId && (await getActiveMissions(userId, setActiveMissions));
-    }, 1000 * 60);
+    }, 100 * 60);
   }, [userId]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <View style={styles.wrapper}>
+        <View>
           {activeMissions.length == 0 ? (
             <Text style={styles.locationText}>
               No active missions available
@@ -63,9 +59,8 @@ const Main: React.FC = ({ navigation }: any) => {
             <MissionView places={activeMissions}></MissionView>
           )}
         </View>
-      </View>
       {location.value?.cityName ? (
-        <View>
+        <View style={styles.wrapper}>
           <EntriesView entries={cityEntries}></EntriesView>
         </View>
       ) : (

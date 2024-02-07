@@ -7,7 +7,6 @@ import {
   StyleSheet,
   View,
   Linking,
-  SafeAreaView,
   Alert,
   Image,
 } from "react-native";
@@ -28,7 +27,7 @@ import mapStyle from "./MapStyle";
 import { GeofencingEventType } from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import * as Location from "expo-location";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../styles/colors";
 import { isPointWithinRadius } from "geolib";
 import { setLastVisited } from "../../service/MissionServices";
@@ -96,10 +95,11 @@ const Mission: React.FC = ({ navigation }: any) => {
     setZoomLevel(region.longitudeDelta);
   };
 
+  const selectedPlace = places.find((place) => place.id === placeId);
+
   return (
-    // <SafeAreaProvider>
     <>
-      <MapView
+    <MapView
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         showsUserLocation={true}
@@ -122,13 +122,16 @@ const Mission: React.FC = ({ navigation }: any) => {
             <Circle
               center={{ latitude: place.lat, longitude: place.lng }}
               radius={200}
-              fillColor="rgba(127, 17, 224, 0.3)"
+              fillColor={
+                selectedPlace && selectedPlace.id === place.id
+                  ? "rgba(0, 255, 0, 0.3)"
+                  : "rgba(127, 17, 224, 0.3)"
+              }
               strokeColor="rgba(255, 255, 255, 0.6)"
               strokeWidth={2}
             />
             <Marker
               coordinate={{ latitude: place.lat, longitude: place.lng }}
-              // title={place.name}
               anchor={{ x: 0.5, y: 0.5 }}
               style={{
                 transform: [{ scale: 1 + zoomLevel }],
@@ -182,12 +185,11 @@ const Mission: React.FC = ({ navigation }: any) => {
               )
             }
           >
-            <Text style={styles.text}>Get directions</Text>
+            <Image source={require('../../assets/direction.png')} style={styles.getDirections}/>
           </Pressable>
         </View>
       )}
-      </>
-    // </SafeAreaProvider>
+    </>
   );
 };
 
@@ -199,7 +201,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1.5,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     alignItems: "center",
     alignContent: "center",
     backgroundColor: colors.darkGrey,
@@ -217,12 +219,13 @@ const styles = StyleSheet.create({
     verticalAlign: "middle"
   },
   text: {
-    fontSize: 18,
+    fontSize: 23,
     color: "white",
     textAlign: "center",
-    backgroundColor: colors.basePurple,
     fontFamily: "Gruppe_A",
     padding: 5,
+    borderColor: "white",
+    borderWidth: 2
   },
   calloutContainer: {
     minWidth: 100,
@@ -230,6 +233,10 @@ const styles = StyleSheet.create({
   calloutText: {
     fontFamily: "Gruppe_A",
     textAlign: "auto"
+  },
+  getDirections: {
+    height: 40,
+    width: 40
   }
 });
 
