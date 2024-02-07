@@ -101,13 +101,8 @@ const styles = StyleSheet.create({
   },
   addEntryButton: {
     borderWidth: 2,
-<<<<<<< HEAD
-    borderRadius: 0,
-    borderColor: "white"
-=======
     borderColor: "white",
     padding: 5
->>>>>>> fix-new-entry
   },
   addEntryButtonText: {
     margin: 5,
