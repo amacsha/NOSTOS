@@ -17,15 +17,6 @@ export default function OneComment({ content, userName, date }: CommentProps) {
     const titleString: string = `${userName}, ${moment(date).fromNow()}:`;
     const contentWithQuotes = `"${content}"`;
     return (
-      // <>
-      //   <Text style={styles.userName}>
-      //     <Typewriter text={titleString} delay={5} />
-      //   </Text>
-
-      //   <Text style={styles.content}>
-      //     <Typewriter text={contentWithQuotes} delay={5} />
-      //   </Text>
-      // </>
       <>
         <Text style={styles.outsideText}>{userName}:</Text>
         <View style={styles.container}>
@@ -73,10 +64,11 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     borderTopRightRadius: 8,
     borderBottomLeftRadius: 8,
-    minWidth: 100,
+    minWidth: 50,
+    maxWidth: 300,
     marginBottom: 5,
     borderWidth: 2,
-    borderColor: 'black'
+    borderColor: 'black',
   },
   faceImage: {
     height: 50,
