@@ -9,11 +9,13 @@ import {
   Linking,
   Alert,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import MapView, {
   Callout,
   Circle,
   Marker,
+  Overlay,
   PROVIDER_GOOGLE,
 } from "react-native-maps";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,6 +33,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../styles/colors";
 import { isPointWithinRadius } from "geolib";
 import { setLastVisited } from "../../service/MissionServices";
+import GeoLocation from "../dashboard/GeoLocation";
 
 const GOOGLE_KEY = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 
@@ -48,16 +51,19 @@ const Mission: React.FC = ({ navigation }: any) => {
   const dispatch = useDispatch();
   const location = useSelector((state: RootState) => state.location);
   const places = useSelector((state: RootState) => state.places.places);
-  const city = useSelector(
-    (state: RootState) => state.location.value?.cityName
-  );
-  const placeId = useSelector(
-    (state: RootState) => state.places.selectedPlaceId
-  );
+  const city = useSelector((state: RootState) => state.location.value?.cityName);
+  const placeId = useSelector((state: RootState) => state.places.selectedPlaceId);
   const userId = useSelector((state: RootState) => state.user.id);
-  const radius = 100;
-
   const [selectedCoord, setSelectedCoord] = useState<number[]>([]);
+  const [updatingLocation, setUpdatingLocation] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(0);
+  
+  const selectedPlace = places.find((place) => place.id === placeId);
+  const radius = 200;
+
+  const handleRegionChange = (region: any) => {
+    setZoomLevel(region.longitudeDelta);
+  };
 
   const lat = location.value?.lat;
   const lng = location.value?.lng;
@@ -77,25 +83,27 @@ const Mission: React.FC = ({ navigation }: any) => {
     dispatch(setPlaceName(place.name));
   }
 
-  const verifyLocation = () => {
-    return (
-      lat &&
-      lng &&
-      isPointWithinRadius(
-        { latitude: lat, longitude: lng },
-        { latitude: selectedCoord[0], longitude: selectedCoord[1] },
-        radius
-      )
-    );
+  const getLocation = GeoLocation();
+
+  const verifyLocation = async () => {
+    try {
+      setUpdatingLocation(true);
+      await getLocation();
+      const result = lat &&
+        lng &&
+        isPointWithinRadius(
+          { latitude: lat, longitude: lng },
+          { latitude: selectedCoord[0], longitude: selectedCoord[1] },
+          radius
+        );
+      return result;
+    } catch (error) {
+      console.error("Error during location verification:", error);
+      return false;
+    } finally {
+      setUpdatingLocation(false);
+    }
   };
-
-  const [zoomLevel, setZoomLevel] = useState(0);
-
-  const handleRegionChange = (region: any) => {
-    setZoomLevel(region.longitudeDelta);
-  };
-
-  const selectedPlace = places.find((place) => place.id === placeId);
 
   return (
     <>
@@ -121,7 +129,7 @@ const Mission: React.FC = ({ navigation }: any) => {
           <React.Fragment key={index}>
             <Circle
               center={{ latitude: place.lat, longitude: place.lng }}
-              radius={200}
+              radius={radius}
               fillColor={
                 selectedPlace && selectedPlace.id === place.id
                   ? "rgba(0, 255, 0, 0.3)"
@@ -155,25 +163,25 @@ const Mission: React.FC = ({ navigation }: any) => {
           </React.Fragment>
         ))}
       </MapView>
-      {placeId !== null && (
+      {placeId !== null && !updatingLocation && (
         <View style={styles.buttonContainer}>
           <Pressable
             style={styles.button}
-            onPress={() => {
-              if (verifyLocation()) {
+            onPress={async () => {
+              if (await verifyLocation()) {
                 navigation.navigate("Location");
                 userId && setLastVisited(userId, placeId);
                 Haptics.notificationAsync(
                   Haptics.NotificationFeedbackType.Success
-                );
-              } else {
-                Haptics.notificationAsync(
-                  Haptics.NotificationFeedbackType.Error
-                );
-                Alert.alert("Not inside location radius");
-              }
-            }}
-          >
+                  );
+                } else {
+                  Haptics.notificationAsync(
+                    Haptics.NotificationFeedbackType.Error
+                    );
+                    Alert.alert("Not inside location radius");
+                  }
+                }}
+                >
             <Text style={styles.text}>Confirm location</Text>
           </Pressable>
 
@@ -182,12 +190,18 @@ const Mission: React.FC = ({ navigation }: any) => {
             onPress={() =>
               Linking.openURL(
                 `https://www.google.com/maps/dir/?api=1&origin=${lat},${lng}&destination=${selectedCoord[0]},${selectedCoord[1]}&travelmode=walking`
-              )
-            }
-          >
+                )
+              }
+              >
             <Image source={require('../../assets/direction.png')} style={styles.getDirections}/>
           </Pressable>
         </View>
+      )}
+      {updatingLocation && (
+        <View style={styles.activityIndicatorContainer}>
+          <ActivityIndicator size="large" color='green' />
+          <Text style={styles.activityIndicatorText}>Confirming location...</Text>
+      </View>
       )}
     </>
   );
@@ -197,6 +211,19 @@ const styles = StyleSheet.create({
   map: {
     flex: 15,
     fontFamily: "Gruppe_A",
+  },
+  activityIndicatorContainer: {
+    flex: 1.5,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    backgroundColor: colors.darkGrey,
+  },
+  activityIndicatorText: {
+    fontFamily: "Gruppe_A",
+    color: "white",
+    textAlign: "center",
+    fontSize: 25,
+    marginTop: 25
   },
   buttonContainer: {
     flex: 1.5,
