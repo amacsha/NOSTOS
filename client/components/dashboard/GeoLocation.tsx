@@ -1,6 +1,7 @@
 import * as Location from 'expo-location';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {setLocation} from '../../slices/locationSlice';
+import { RootState } from '../../store';
 
 const useCurrentLocation = () => {
   const dispatch = useDispatch();

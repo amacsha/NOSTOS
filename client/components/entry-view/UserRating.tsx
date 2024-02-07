@@ -133,12 +133,14 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     fontFamily: "Gruppe_A",
+    color: 'white',
   },
   stars: {
     flexDirection: "row",
     fontSize: 25,
-    // margin: 5,
     color: colors.basePurple,
+    textShadowColor: colors.basePurple,
+    textShadowRadius: 5
   },
   averageRatingOuter: {
     flex: 1,

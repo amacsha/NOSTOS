@@ -14,7 +14,6 @@ import {
 import { Formik } from "formik";
 import * as Yup from "yup";
 import NewEntryService from "../../service/NewEntryService";
-import Logout from "../logout/Logout";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { Entry } from "../../client-types/Entry";
@@ -22,7 +21,6 @@ import { selectEntry } from "../../slices/entriesSlice";
 import { getValueFor } from "../../utils/secureStorage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../styles/colors";
-import { wrap } from "module";
 
 const NewEntryForm: React.FC = ({ navigation }: any) => {
     const [tags, setTags] = useState<string | never>("");
@@ -40,7 +38,8 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("Entry title required"),
         content: Yup.string().required("Entry content cannot be void"),
-        tag: Yup.array().max(3, "You can add 3 tags max"),
+        tag: Yup.array()
+            .max(3, "You can add 3 tags max"),
     });
 
     const userIdState = useSelector((state: RootState) => state.user.id);
@@ -48,7 +47,7 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
     const handleSubmit = async (values: Entry) => {
         values.authorId = userId;
         values.placeId = placeId;
-        const res = await NewEntryService(values, token);
+        const res = await NewEntryService(values, token, userId as number);
         dispatch(selectEntry(res.data.id));
         values.tag = [];
     };
@@ -97,6 +96,9 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
                                         placeholder="entry title"
                                         placeholderTextColor={colors.darkGrey}
                                     />
+                                    {touched.title && errors.title && (
+                                        <Text style={styles.error}>{errors.title}</Text>
+                                    )}
                                     <View style={styles.tag}>
                                         {values.tag.length > 0 &&
                                             values.tag.map((oneTag, index) => {
@@ -117,9 +119,6 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
                                                 );
                                             })}
                                     </View>
-                                    {touched.title && errors.title && (
-                                        <Text style={styles.error}>{errors.title}</Text>
-                                    )}
                                     <TextInput
                                         style={[styles.input, styles.content]}
                                         multiline
@@ -141,14 +140,14 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
                                                     onBlur={handleBlur("tag")}
                                                     placeholder="add 3 tags"
                                                     placeholderTextColor={colors.black}
+                                                    maxLength={10}
                                                 />
-                                                {touched.tag && errors.tag && (
-                                                    <Text style={styles.error}>{errors.tag}</Text>
-                                                )}
                                                 <Pressable
                                                     style={styles.add}
                                                     onPress={() => {
-                                                        if (tags !== "")
+                                                        if (values.tag.length >= 3) {
+
+                                                        } else if (tags !== "")
                                                             values.tag.push(tags.trim().toLowerCase());
                                                         setTags("");
                                                     }}
@@ -216,21 +215,19 @@ const styles = StyleSheet.create({
     },
     bottom: {
         flexDirection: "row",
-        justifyContent: "space-between",
-        marginHorizontal: 40,
-        marginTop: 10,
+        justifyContent: "space-around",
     },
     tag: {
         fontFamily: "Gruppe_A",
-        justifyContent: "space-between",
-        height: 30,
-        width: 190,
-        marginVertical: 5,
-        marginHorizontal: 10,
+        justifyContent: "space-around",
+        alignItems: 'center',
         flexDirection: "row",
+
     },
     oneTag: {
         flexDirection: "row",
+        justifyContent: "space-between",
+        gap: 5,
     },
     submitButton: {
         borderColor: colors.darkGrey,
@@ -238,8 +235,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         alignSelf: "center",
-        margin: 5,
-        padding: 5,
+
         height: 40,
         width: 130,
         fontFamily: "Gruppe_A",
@@ -273,15 +269,12 @@ const styles = StyleSheet.create({
         fontFamily: "Gruppe_A",
         fontSize: 15,
         color: colors.darkGrey,
-        padding: 10,
-        borderRadius: 25,
     },
     tagText: {
         fontFamily: "Gruppe_A",
-        fontSize: 15,
+        fontSize: 13,
         color: colors.darkGrey,
-        padding: 10,
-        borderRadius: 25,
+        marginVertical: 10,
     },
 });
 

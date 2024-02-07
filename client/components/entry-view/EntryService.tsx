@@ -1,10 +1,11 @@
 import axios from "axios";
+import { Alert } from "react-native";
 const IP: string | undefined = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
 export async function getOneEntry(entryId: number) {
   const url = `http://${IP}:3000/entry/getOne/${entryId}`;
 
-  return await axios.get(url);
+  return (await axios.get(url)).data;
 }
 
 export async function getAverageRating(entryId: number) {
@@ -66,4 +67,11 @@ export async function getUsernameFromID(commenterId: number) {
   const url = `http://${IP}:3000/user/getUsername/${commenterId}`;
   const response = await axios.get(url);
   return response.data;
+}
+
+export async function deleteComment(userId: string, entryId: number) {
+  const url = `http://${IP}:3000/comment/delete/byAuthor/${userId}/forEntry/${entryId}`;
+  axios.delete(url).then(() => {
+    Alert.alert('Comment deleted!')
+  });
 }

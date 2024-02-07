@@ -15,6 +15,7 @@ import MissionView from "./MissionView";
 import { useAppDispatch } from "../../hooks";
 import { colors } from "../styles/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { setActiveMission } from "../../slices/entriesSlice";
 
 const Main: React.FC = ({ navigation }: any) => {
   const fetchLocation = GeoLocation();
@@ -23,19 +24,14 @@ const Main: React.FC = ({ navigation }: any) => {
   const [cityEntries, setCityEntries] = useState<
     (SmallEntry & { avg: number })[]
   >([]);
-  const [activeMissions, setActiveMissions] = useState<Place[]>([]);
+  // const [activeMissions, setActiveMissions] = useState<Place[]>([]);
   const [cityNames, setCityNames] = useState<string[]>([]);
 
   const dispatch = useAppDispatch();
 
-  const asyncFetchLocation = async () => {
-    await fetchLocation();
-  };
-
-  useEffect(() => {
-    // asyncFetchLocation();
-    getCities(setCityNames);
-  }, []);
+  const activeMissions = useSelector(
+    (state: RootState) => state.entries.activeMission
+  );
 
   useEffect(() => {
     location.value?.cityName != undefined &&
@@ -43,22 +39,20 @@ const Main: React.FC = ({ navigation }: any) => {
   }, [location.value?.cityName]);
 
   useEffect(() => {
-    setInterval(async () => {
-      userId && (await getActiveMissions(userId, setActiveMissions));
-    }, 100 * 60);
-  }, [userId]);
+    userId && getActiveMissions(userId, dispatch);
+  }, [activeMissions]);
 
   return (
     <SafeAreaView style={styles.container}>
-        <View>
-          {activeMissions.length == 0 ? (
-            <Text style={styles.locationText}>
-              No active missions available
-            </Text>
-          ) : (
-            <MissionView places={activeMissions}></MissionView>
-          )}
-        </View>
+      <View>
+        {activeMissions.length == 0 ? (
+          <Text style={styles.locationText}>
+            No active missions available
+          </Text>
+        ) : (
+          <MissionView places={activeMissions}></MissionView>
+        )}
+      </View>
       {location.value?.cityName ? (
         <View style={styles.wrapper}>
           <EntriesView entries={cityEntries}></EntriesView>
@@ -77,7 +71,7 @@ export default Main;
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    paddingBottom: 50,
+    // paddingBottom: 50,
   },
   container: {
     flex: 1,
@@ -85,7 +79,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "stretch",
     fontFamily: "Gruppe_A",
-    paddingBottom: 50,
+    // paddingBottom: 50,
   },
   textWrapper: {
     justifyContent: "center",
@@ -97,7 +91,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.gunMetalGrey,
     fontFamily: "Gruppe_A",
-    textShadowColor: "rgba(255, 255, 255, 0.75)",
+    textShadowColor: "rgba(255, 255, 255, 0.3)",
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 10,
   },

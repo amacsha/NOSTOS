@@ -5,6 +5,9 @@ export interface UserResponse {
         email: string,
         username: string,
         filter_preference: string,
+        placeId: string,
+        title: string,
+        content: string,
     };
     status: number;
     error: string;

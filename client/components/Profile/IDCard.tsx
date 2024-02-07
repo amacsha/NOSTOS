@@ -8,6 +8,11 @@ import { getAverageRatingsForUsersEntries } from "../dashboard/DashboardsService
 import { colors } from "../styles/colors";
 import Images from "../../assets/aliens/picIndexes";
 
+const mapNameToPic =  (name: string) => {
+  const alphabet = name.toLowerCase().match(/[a-z]/g)
+  return alphabet?.length ? alphabet[0] : "b"
+}
+
 export default function IDCard ({profileData}: {profileData: Profile}) {
   const userId = useSelector((state: RootState) => state.user.id);
   const [avg, setAvg] = useState<number | null>(null)
@@ -17,11 +22,6 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
     if (userId != null) {
       getAverageRatingsForUsersEntries(userId, setAvg)
     }
-  }
-
-  const emailToPic =  (email: string) => {
-    const alphabet = email.toLowerCase().match(/[a-z]/g)
-    return alphabet?.length ? alphabet[0] : "b"
   }
 
   useEffect( () => {
@@ -140,7 +140,7 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
         </View>
 
         <View>
-          <Image  style={styles.faceImage} source={Images[emailToPic(profileData.userName) as keyof typeof Images]}></Image>
+          <Image  style={styles.faceImage} source={Images[mapNameToPic(profileData.userName) as keyof typeof Images]}></Image>
         </View>
       </View>
 
@@ -193,9 +193,11 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
       fontFamily: "Gruppe_A",
       textDecorationLine: 'underline',
       fontSize: 20,
+      color: 'white',
     },
     detailsAlienText: {
       fontFamily: "Gruppe_A",
+      color: 'white',
     },
     faceImage: {
       height: 100,
@@ -214,3 +216,4 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
   })
 
 
+export {mapNameToPic}
