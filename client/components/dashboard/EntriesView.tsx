@@ -171,14 +171,14 @@ const styles = StyleSheet.create({
   dropDownMenu: {
     backgroundColor: colors.basePurple,
     borderColor: colors.basePurple,
-    padding: 8,
+    // padding: 8,
   },
   tagFilter: {
     color: colors.lighterPurple,
     backgroundColor: colors.basePurple,
     borderColor: colors.basePurple,
     fontSize: 16,
-    padding: 8,
+    // padding: 8,
   },
   searchInput: {
     fontFamily: 'Gruppe_A',
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.basePurple,
     borderColor: colors.basePurple,
     fontSize: 16,
-    padding: 8,
+    margin: 10,
   },
   inputField: {
     // fontFamily: 'Gruppe_A',
@@ -194,7 +194,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.basePurple,
     borderColor: colors.basePurple,
     fontSize: 14,
-    padding: 5,
     left: 5,
   },
   pointer: {

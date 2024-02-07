@@ -23,7 +23,6 @@ const MissionCard: React.FC<{ place: Place }> = ({ place }: { place: Place }) =>
 
 export default MissionCard;
 
-
 const styles = StyleSheet.create({
   card: {
     fontFamily: 'Gruppe_A',
