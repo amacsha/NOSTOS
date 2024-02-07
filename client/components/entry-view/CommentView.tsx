@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     fontSize: 20,
     fontFamily: "Gruppe_A",
+    color: 'white'
   },
   comment: {
     fontFamily: "Gruppe_A",

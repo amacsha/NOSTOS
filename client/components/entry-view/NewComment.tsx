@@ -1,5 +1,3 @@
-import { Formik } from "formik";
-import * as yup from "yup";
 import {
   View,
   KeyboardAvoidingView,
@@ -8,17 +6,14 @@ import {
   Text,
   Platform,
   TouchableWithoutFeedback,
-  Button,
   Keyboard,
   Alert,
-  GestureResponderEvent,
-  SafeAreaView,
   Pressable,
 } from "react-native";
 import { postComment } from "./EntryService";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useAppDispatch } from "../../hooks";
 import { setComments } from "../../slices/commentsSlice";
@@ -29,7 +24,15 @@ import { colors } from "../styles/colors";
 export default function NewComment({ route }: any) {
   const token: string = getValueFor("accessToken") || "";
 
+  const [newMsg, setNewMsg] = useState("")
+
+  useEffect(() => {
+    route.params?.defaultContent
+    && setNewMsg(route.params.defaultContent)
+  }, [route])
+
   const navigation = useNavigation();
+
   const entryId = useSelector(
     (state: RootState) => state.entries.selectedEntryID
   );
@@ -38,13 +41,13 @@ export default function NewComment({ route }: any) {
 
   const dispatch = useAppDispatch();
 
-  async function handleSubmit(values: { content: string }) {
-    if (values.content) {
+  async function handleSubmit() {
+    if (newMsg.length) {
       let newState;
       await postComment(
         entryId as number,
         userId as number,
-        values.content,
+        newMsg,
         token
       );
 
@@ -54,7 +57,7 @@ export default function NewComment({ route }: any) {
       );
       let newObject: Comment = {
         commenterId: userId as number,
-        content: values.content,
+        content: newMsg,
         entryId: entryId as number,
       };
 
@@ -72,91 +75,90 @@ export default function NewComment({ route }: any) {
       }
 
       dispatch(setComments(newState));
+      navigation.goBack();
+    } else {
+      Alert.alert('Message can\'t be empty')
     }
-
-    navigation.goBack();
   }
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
-    >
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <SafeAreaView style={styles.mainContainer}>
-          <View style={styles.formikContainer}>
-            <Formik
-              initialValues={
-                route.params?.defaultContent
-                  ? { content: route.params.defaultContent }
-                  : { content: "" }
-              }
-              onSubmit={(values) => handleSubmit(values)}
+        <View style={styles.inner}>
+          <Text style={styles.header}>Write a comment</Text>
+          <TextInput 
+            placeholder="speak your mind..." 
+            multiline 
+            style={styles.textInput} 
+            defaultValue={newMsg} 
+            onChangeText={setNewMsg}
+            autoFocus={true}
+          />
+          <View style={styles.btnContainer}>
+            <Pressable
+              style={styles.button}
+              onPress={() => navigation.goBack()}
             >
-              {({ handleChange, handleSubmit, values }) => (
-                <>
-                  <TextInput
-                    multiline
-                    autoFocus
-                    placeholder="Speak your mind..."
-                    style={styles.textInput}
-                    value={values.content}
-                    onChangeText={handleChange("content")}
-                  ></TextInput>
-
-                  <View style={styles.addCommentButtonContainer}>
-                    <Pressable
-                      style={styles.addCommentButton}
-                      onPress={(event: GestureResponderEvent) => handleSubmit()}
-                    >
-                      <Text style={styles.addCommentButtonText}>SAVE</Text>
-                    </Pressable>
-
-                    <Pressable
-                      style={styles.addCommentButton}
-                      onPress={() => navigation.goBack()}
-                    >
-                      <Text style={styles.addCommentButtonText}>CANCEL</Text>
-                    </Pressable>
-                  </View>
-                </>
-              )}
-            </Formik>
-          </View>
-        </SafeAreaView>
+              <Text style={styles.buttonText}>CANCEL</Text>
+            </Pressable>
+            <Pressable
+              style={styles.button}
+              onPress={handleSubmit}
+            >
+              <Text style={styles.buttonText}>SAVE</Text>
+            </Pressable>
+            </View>
+        </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
 
+
 const styles = StyleSheet.create({
-  mainContainer: {
+  container: {
     flex: 1,
-    backgroundColor: colors.lighterPurple,
+    backgroundColor: colors.lighterPurple
   },
-  formikContainer: {},
+  inner: {
+    padding: 30,
+    flex: 1,
+  },
+  header: {
+    paddingTop: 40,
+    paddingBottom: 25,
+    fontSize: 30,
+    textAlign: 'center',
+    color: 'white',
+    fontFamily: "Gruppe_A",
+  },
   textInput: {
-    // borderWidth: 2,
-    height: 400, // NOT IDEAL!!
-    margin: 25,
-    fontFamily: "Gruppe_A",
-    fontSize: 25,
+    color: 'white',
+    fontFamily: 'Gruppe_A',
+    flex: 1,
+    textAlignVertical: 'top',
+    padding: 10
   },
-  addCommentButtonContainer: {
-    gap: 5,
-    alignItems: "center",
+  btnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around'
   },
-  addCommentButton: {
-    width: 125,
-    alignItems: "center",
-    borderWidth: 2,
-    borderRadius: 15,
+  button: {
+    backgroundColor: '#45417B',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    margin: 15,
+    padding: 5,
+    height: 30,
+    width: 150,
+    fontFamily: 'Gruppe_A',
   },
-  addCommentButtonText: {
-    margin: 5,
-    marginLeft: 10,
-    marginRight: 10,
-    fontFamily: "Gruppe_A",
-    fontSize: 20,
+  buttonText: {
+    color: '#9578F8',
+    fontSize: 17,
+    fontFamily: 'Gruppe_A',
   },
 });
