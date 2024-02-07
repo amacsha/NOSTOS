@@ -5,5 +5,5 @@ export const colors = {
   black: '#010101',
   darkGrey: '#1f1f1f',
   errorBackground: '#341717',
-  errorFont: '#DD7272'
+  errorFont: '#c62828'
 }

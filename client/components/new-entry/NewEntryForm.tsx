@@ -72,6 +72,24 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
                         >
                             {({ handleChange, handleSubmit, handleBlur, setFieldValue, values, touched, errors }) => (
                                 <>
+                                            <View style={styles.tag}>
+                                                {values.tag.length > 0 && values.tag.map((oneTag, index) => {
+                                                    return (
+                                                        <View style={styles.oneTag} key={index}>
+                                                            <Text style={styles.tagText}>{oneTag}</Text>
+                                                            <Pressable style={styles.delete}
+                                                                onPress={() => {
+                                                                    const newTagArray = [...values.tag];
+                                                                    newTagArray.splice(index, 1);
+                                                                    setFieldValue('tag', newTagArray);
+                                                                }}
+                                                            >
+                                                                <Text style={styles.buttonText} >-</Text>
+                                                            </Pressable>
+                                                        </View>
+                                                    )
+                                                })}
+                                            </View>
                                     <TextInput
                                         style={styles.input}
                                         value={values.title}
@@ -118,24 +136,6 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
                                                     <Text style={styles.buttonText}>+</Text>
                                                 </Pressable>
                                             </View>
-                                            <View style={styles.tag}>
-                                                {values.tag.length > 0 && values.tag.map((oneTag, index) => {
-                                                    return (
-                                                        <View style={styles.oneTag} key={index}>
-                                                            <Text style={styles.tagText}>{oneTag}</Text>
-                                                            <Pressable style={styles.delete}
-                                                                onPress={() => {
-                                                                    const newTagArray = [...values.tag];
-                                                                    newTagArray.splice(index, 1);
-                                                                    setFieldValue('tag', newTagArray);
-                                                                }}
-                                                            >
-                                                                <Text style={styles.buttonText} >-</Text>
-                                                            </Pressable>
-                                                        </View>
-                                                    )
-                                                })}
-                                            </View>
                                         </View>
                                         <Pressable style={styles.submitButton} onPress={() => handleSubmit()} >
                                             <Text style={styles.buttonText}>Submit</Text>
@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.lighterPurple,
         height: '100%',
         fontFamily: 'Gruppe_A',
+        flex: 1,
     },
     head: {
         padding: 10,
@@ -169,6 +170,7 @@ const styles = StyleSheet.create({
     },
     inputArea: {
         marginTop: '10%',
+        flex: 1,
     },
     input: {
         backgroundColor: colors.darkGrey,
