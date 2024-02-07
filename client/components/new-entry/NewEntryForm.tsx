@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
         fontFamily: "Gruppe_A",
         justifyContent: "space-between",
         height: 30,
-        width: 120,
+        width: 190,
         marginVertical: 5,
         marginHorizontal: 10,
         flexDirection: "row",
