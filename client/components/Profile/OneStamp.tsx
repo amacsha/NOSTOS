@@ -9,7 +9,7 @@ export default function OneStamp ({image, description}: {image: any, description
     <Image source={image} style={styles.stamp}/>
     <Text style={styles.text}>
         {description}
-      </Text>
+    </Text>
 
   </View>
  )
@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
     fontFamily: "Gruppe_A",
     fontSize: 10,
     maxWidth: 100,
-    textAlign: 'center'
+    textAlign: 'center',
+    color: 'white',
   },
   stamp: {
     height: 100,

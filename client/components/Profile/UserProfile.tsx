@@ -3,7 +3,7 @@ import { RootState } from "../../store";
 import { getValueFor } from "../../utils/secureStorage";
 import { deleteAccount, getLastVisited, getProfile, updatePassword, updateUsername } from "../dashboard/DashboardsServices";
 import {Text, Button, View, ScrollView, StyleSheet, Pressable, TouchableHighlight, Alert, TextInput, ActivityIndicator } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SmallEntry } from "../../client-types/SmallEntry";
 import { Rating } from "../../client-types/Rating";
 import { Comment } from "../../client-types/Comment";
@@ -30,7 +30,8 @@ type SectionVisibility = {
   showEntries: boolean,
   showRatings: boolean,
   showNewPassword: boolean,
-  showNewUsername: boolean
+  showNewUsername: boolean,
+  showProfileActions: boolean,
 }
 
 export default function UserProfile () {
@@ -48,7 +49,8 @@ export default function UserProfile () {
     showEntries: false,
     showRatings: false,
     showNewPassword: false,
-    showNewUsername: false
+    showNewUsername: false,
+    showProfileActions: false,
   })
 
   const [oldPassword, setOldPassword] = useState<string>("");
@@ -56,6 +58,7 @@ export default function UserProfile () {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const [newUsername, setNewUsername] = useState<string>("");
+  const myRef = React.createRef<ScrollView>()
 
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
@@ -69,6 +72,8 @@ export default function UserProfile () {
 
     const {userName, userEntries, userComments, userRatings }: any = (await getProfile(userId as number, token));
     const userLastVisited: any = await getLastVisited(userId as number)
+
+    
 
     setProfileData(
        {
@@ -99,7 +104,11 @@ export default function UserProfile () {
         const entries: Entry[] = await getManyEntries(entryIds) || [];
 
         const commentsWithEntryTitle: JSX.Element[] = []
-        userComments.forEach( (comment: Comment, index:number) => {
+        userComments.sort((a: Comment, b: Comment) => { 
+          return a.creation_date && b.creation_date ? 
+            new Date(b.creation_date).getTime() - new Date(a.creation_date).getTime() :
+            0;
+        }).forEach( (comment: Comment, index:number) => {
           const matchingEntry = entries.find((entry: Entry) => entry.id === comment.entryId)
             commentsWithEntryTitle.push(
               <TouchableHighlight underlayColor="#322F58" style={styles.contributionListItem} key={index} onPress={() => {matchingEntry && dispatch(selectEntry(matchingEntry.id as number));navigation.navigate("EntryView" as never)}}>
@@ -135,7 +144,7 @@ export default function UserProfile () {
     userId != null && load();
   }, [userId, loading])
 
-  function toggleSection(property: "showComments" | "showEntries" | "showRatings" | "showNewPassword" | "showNewUsername", value: boolean) {
+  function toggleSection(property: "showComments" | "showEntries" | "showRatings" | "showNewPassword" | "showNewUsername" | "showProfileActions", value: boolean) {
     const update: SectionVisibility = {...sectionVisibility}
     update[property] = value;
     if (property == 'showNewPassword') update['showNewUsername'] = false
@@ -147,10 +156,10 @@ export default function UserProfile () {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <ScrollView>
+      <ScrollView ref={myRef}>
         <View>
-        <Text style={styles.mainTitleText}>Manage your profile.</Text>
-        
+        <Text style={styles.mainTitleText}>Manage your profile</Text>
+
           <IDCard profileData={profileData}/>
 
           <View style={styles.dataContainer}>
@@ -174,100 +183,114 @@ export default function UserProfile () {
                 </Pressable>
                 {sectionVisibility.showRatings && profileRatings}
               </View>
+
+              <View style={styles.contributonList}>
+                <Pressable onPress={() => {
+                  toggleSection('showProfileActions', !sectionVisibility.showProfileActions);
+                  myRef.current?.scrollToEnd({ animated: true })
+                }}>
+                {sectionVisibility.showProfileActions ? <Text style={styles.mainTitleText}>Hide Profile actions</Text> : <Text style={styles.mainTitleText}>Show Profile actions</Text>}
+                </Pressable>
+              </View>
           </View>
 
-          <View style={styles.controlsContainer}>
-            <Logout />
-            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
-              Alert.alert('Account Deletion', 'Are you sure you want to delete the account?', [
-                {
-                  text: 'Delete',
-                  onPress: async () => {
-                    await deleteAccount(userId as number, token);
-                    await Promise.all([
-                      deleteItemAsync('accessToken'),
-                      deleteItemAsync('userId'),
-                      deleteItemAsync('email'),
-                      deleteItemAsync('username'),
-                      deleteItemAsync('filter_preference'),
-                  ])
-                  dispatch(setAuth(initialState));
-                  dispatch(updateUserDetails(userInitials))
+          {sectionVisibility.showProfileActions && <>
+            <View style={styles.controlsContainer}>
+              <Logout />
+              <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
+                Alert.alert('Account Deletion', 'Are you sure you want to delete the account?', [
+                  {
+                    text: 'Delete',
+                    onPress: async () => {
+                      await deleteAccount(userId as number, token);
+                      await Promise.all([
+                        deleteItemAsync('accessToken'),
+                        deleteItemAsync('userId'),
+                        deleteItemAsync('email'),
+                        deleteItemAsync('username'),
+                        deleteItemAsync('filter_preference'),
+                    ])
+                    dispatch(setAuth(initialState));
+                    dispatch(updateUserDetails(userInitials))
 
-                  navigation.navigate('Register' as never);
+                    navigation.navigate('Register' as never);
+                    }
+                  },
+                  {
+                    text: 'Cancel',
+                    onPress: () => {}
                   }
-                },
-                {
-                  text: 'Cancel',
-                  onPress: () => {}
+                ])
+              }}>
+                <Text style={styles.buttonText}>
+                  Delete Account
+                </Text>
+              </TouchableHighlight>
+              <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
+                toggleSection('showNewPassword', !sectionVisibility.showNewPassword);
+                myRef.current?.scrollToEnd({ animated: true })
+              }}>
+                <Text style={styles.buttonText}>
+                  Change Password
+                </Text>
+              </TouchableHighlight>
+              <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
+                toggleSection('showNewUsername', !sectionVisibility.showNewUsername);
+                myRef.current?.scrollToEnd({ animated: true })
+              }}>
+                <Text style={styles.buttonText}>
+                  Change Username
+                </Text>
+              </TouchableHighlight>
+            </View>
+
+            {sectionVisibility.showNewPassword &&
+            <>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputTitle}>Enter your old password:</Text>
+              <TextInput style={styles.inputField} secureTextEntry={true} placeholder="Current Password" onChangeText={setOldPassword}></TextInput>
+              <Text style={styles.inputTitle}>Enter your new password:</Text>
+              <TextInput style={styles.inputField} secureTextEntry={true} placeholder="New Password" onChangeText={setNewPassword}></TextInput>
+              <Text style={styles.inputTitle}>Confirm your new password:</Text>
+              <TextInput style={styles.inputField} secureTextEntry={true} placeholder="Confirm New Password" onChangeText={setConfirmPassword}></TextInput>
+
+              <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
+                if (newPassword.length == 0) {
+                  Alert.alert('Error', 'Password must be entered.')
+                } else if (newPassword.length < 6) {
+                  Alert.alert('Error', 'Password must be at least six characters long.')
+                } else if (newPassword !== confirmPassword) {
+                  Alert.alert('Error', 'Passwords don\'t match!');
+                } else {
+                  updatePassword(newPassword, oldPassword, userId as number, dispatch, token)
                 }
-              ])
-            }}>
-              <Text style={styles.buttonText}>
-                Delete Account
-              </Text>
-            </TouchableHighlight>
-            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
-              toggleSection('showNewPassword', !sectionVisibility.showNewPassword)
-            }}>
-              <Text style={styles.buttonText}>
-                Change Password
-              </Text>
-            </TouchableHighlight>
-            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
-              toggleSection('showNewUsername', !sectionVisibility.showNewUsername);
-            }}>
-              <Text style={styles.buttonText}>
-                Change Username
-              </Text>
-            </TouchableHighlight>
-          </View>
+              }}>
+                <Text style={styles.buttonText}>Update Password</Text>
+              </TouchableHighlight>
+            </View>
+            </>}
 
-          {sectionVisibility.showNewPassword &&
-          <>
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputTitle}>Enter your old password:</Text>
-            <TextInput style={styles.inputField} secureTextEntry={true} placeholder="Current Password" onChangeText={setOldPassword}></TextInput>
-            <Text style={styles.inputTitle}>Enter your new password:</Text>
-            <TextInput style={styles.inputField} secureTextEntry={true} placeholder="New Password" onChangeText={setNewPassword}></TextInput>
-            <Text style={styles.inputTitle}>Confirm your new password:</Text>
-            <TextInput style={styles.inputField} secureTextEntry={true} placeholder="Confirm New Password" onChangeText={setConfirmPassword}></TextInput>
-
-            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
-              if (newPassword.length == 0) {
-                Alert.alert('Error', 'Password must be entered.')
-              } else if (newPassword.length < 6) {
-                Alert.alert('Error', 'Password must be at least six characters long.')
-              } else if (newPassword !== confirmPassword) {
-                Alert.alert('Error', 'Passwords don\'t match!');
-              } else {
-                updatePassword(newPassword, oldPassword, userId as number, dispatch, token)
-              }
-            }}>
-              <Text style={styles.buttonText}>Update Password</Text>
-            </TouchableHighlight>
-          </View>
+            {sectionVisibility.showNewUsername &&
+            <>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputTitle}>Enter new username:</Text>
+              <TextInput style={styles.inputField} placeholder={profileData.userName} onChangeText={setNewUsername} />
+              <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
+                if (newUsername === "") {
+                  Alert.alert('Error', "New username cannot be empty.")
+                } else if (newUsername === profileData.userName) {
+                  Alert.alert('Error', 'New username must be different from the current username.');
+                } else {
+                  updateUsername(newUsername, userId as number, dispatch, token);
+                }
+              }}>
+                <Text style={styles.buttonText}>Update Username</Text>
+              </TouchableHighlight>
+            </View>
+            </>
+            }
           </>}
 
-          {sectionVisibility.showNewUsername &&
-          <>
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputTitle}>Enter new username:</Text>
-            <TextInput style={styles.inputField} placeholder={profileData.userName} onChangeText={setNewUsername} />
-            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
-              if (newUsername === "") {
-                Alert.alert('Error', "New username cannot be empty.")
-              } else if (newUsername === profileData.userName) {
-                Alert.alert('Error', 'New username must be different from the current username.');
-              } else {
-                updateUsername(newUsername, userId as number, dispatch, token);
-              }
-            }}>
-              <Text style={styles.buttonText}>Update Username</Text>
-            </TouchableHighlight>
-          </View>
-          </>
-          }
       </View>
       </ScrollView>
     </SafeAreaView>

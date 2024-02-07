@@ -193,9 +193,11 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
       fontFamily: "Gruppe_A",
       textDecorationLine: 'underline',
       fontSize: 20,
+      color: 'white',
     },
     detailsAlienText: {
       fontFamily: "Gruppe_A",
+      color: 'white',
     },
     faceImage: {
       height: 100,
