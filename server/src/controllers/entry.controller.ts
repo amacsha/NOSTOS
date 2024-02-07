@@ -4,8 +4,9 @@ import Koa from 'koa'
 import { Place, newEntry, SmallEntry, entry } from '../../server-types/types'
 import { verifyUser } from './user.controller';
 
-const postEntry = async (ctx : Koa.Context) => {
-    if (verifyUser(ctx.request.body.token, ctx.request.body.authorId)) {
+const postEntry = async (ctx: Koa.Context) => {
+    console.log(ctx.request.body.userId)
+    if (verifyUser(ctx.request.body.token, ctx.request.body.userId)) {
         try {
             let data: newEntry = {
                 placeId: ctx.request.body.newEntry.placeId,
@@ -13,7 +14,6 @@ const postEntry = async (ctx : Koa.Context) => {
                 title: ctx.request.body.newEntry.title,
                 content: ctx.request.body.newEntry.content
             }
-
             const newEntry = await prisma.entry.create({
                 data
             });
@@ -26,12 +26,13 @@ const postEntry = async (ctx : Koa.Context) => {
             ctx.body = 'Error: could not create new entry'
         }
     } else {
+        console.log('auth error')
         ctx.response.status = 401;
         ctx.response.body = "Access denied."
     }
 }
 
-const getManyEntries = async (ctx : Koa.Context) => {
+const getManyEntries = async (ctx: Koa.Context) => {
     try {
         const entryIds: number[] = ctx.request.body;
         const entries = await Promise.all(entryIds.map(async id => await prisma.entry.findFirst({ where: { id } })));
@@ -45,11 +46,11 @@ const getManyEntries = async (ctx : Koa.Context) => {
     }
 }
 
-const getEntry = async (ctx : Koa.Context) => {
+const getEntry = async (ctx: Koa.Context) => {
     try {
-        const entry =  await prisma.entry.findUnique({
+        const entry = await prisma.entry.findUnique({
             where: {
-              id: Number(ctx.params.entryID),
+                id: Number(ctx.params.entryID),
             },
         });
         ctx.body = entry;
@@ -73,11 +74,11 @@ const sortByRatings = async (entries: SmallEntry[]) => {
     })
 }
 
-const getPlaceEntries= async (ctx : Koa.Context) => {
+const getPlaceEntries = async (ctx: Koa.Context) => {
     try {
-        let entries = <SmallEntry[]> await prisma.entry.findMany({
+        let entries = <SmallEntry[]>await prisma.entry.findMany({
             where: {
-              placeId: ctx.params.placeID,
+                placeId: ctx.params.placeID,
             },
             select: {
                 "authorId": true,
@@ -86,10 +87,10 @@ const getPlaceEntries= async (ctx : Koa.Context) => {
                 "tag": true,
                 "id": true,
             },
-            orderBy: ctx.params.sortPrefrence == 'recent'? {creation_date: 'desc'} : undefined
+            orderBy: ctx.params.sortPrefrence == 'recent' ? { creation_date: 'desc' } : undefined
         })
 
-        ctx.body = ctx.params.sortPrefrence == 'top rated'? await sortByRatings(entries) : entries;
+        ctx.body = ctx.params.sortPrefrence == 'top rated' ? await sortByRatings(entries) : entries;
 
     } catch (err) {
         console.log(err)
@@ -98,18 +99,18 @@ const getPlaceEntries= async (ctx : Koa.Context) => {
     }
 }
 
-const getCityEntries= async (ctx : Koa.Context) => {
+const getCityEntries = async (ctx: Koa.Context) => {
     try {
-        const cityPlaces = <Place[]> await prisma.place.findMany({
+        const cityPlaces = <Place[]>await prisma.place.findMany({
             where: {
                 city: ctx.params.cityName
             }
         });
         const placesIds = cityPlaces.map((place: Place) => place.id)
-        const entries = <SmallEntry[]> await prisma.entry.findMany({
+        const entries = <SmallEntry[]>await prisma.entry.findMany({
             where: {
                 placeId: {
-                    in : placesIds
+                    in: placesIds
                 }
             },
             select: {
@@ -119,7 +120,7 @@ const getCityEntries= async (ctx : Koa.Context) => {
                 "tag": true,
                 "id": true,
             },
-            orderBy: ctx.params.sortPrefrence == 'recent'? {creation_date: 'desc'} : undefined
+            orderBy: ctx.params.sortPrefrence == 'recent' ? { creation_date: 'desc' } : undefined
         });
         ctx.body = ctx.params.sortPrefrence == 'top rated' ? await sortByRatings(entries) : entries;
 
@@ -135,8 +136,8 @@ const deleteEntry = async (ctx: Koa.Context) => {
         try {
             const deleteEntry = await prisma.entry.delete({
                 where: {
-                id: ctx.params.entryID,
-                authorId: ctx.request.body.userId
+                    id: ctx.params.entryID,
+                    authorId: ctx.request.body.userId
                 },
             })
             ctx.body = deleteEntry;
@@ -151,4 +152,4 @@ const deleteEntry = async (ctx: Koa.Context) => {
     }
 }
 
-export {getEntry, getManyEntries, postEntry, getCityEntries, getPlaceEntries, deleteEntry}
+export { getEntry, getManyEntries, postEntry, getCityEntries, getPlaceEntries, deleteEntry }

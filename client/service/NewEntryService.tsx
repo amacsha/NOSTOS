@@ -5,11 +5,12 @@ import { RootState } from "../store";
 
 const IP: string | undefined = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
-const NewEntryService = async (newEntry: Entry, token: string) => {
-  console.log(IP);
-  const res = await axios.post(`http://${IP}:3000/entry/addOne`, {
+const NewEntryService = (newEntry: Entry, token: string, userId: number) => {
+  console.log(newEntry);
+  const res = axios.post(`http://${IP}:3000/entry/addOne`, {
     newEntry,
     token,
+    userId
   });
   return res;
 };

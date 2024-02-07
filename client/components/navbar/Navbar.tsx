@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Mission from '../mission/Mission';
 import Main from '../dashboard/Main';
-import UserProfile from '../dashboard/UserProfile';
+import UserProfile from '../Profile/UserProfile';
 import Home from '../Home/Home';
 import GlobeView from '../dashboard/GlobeView';
 import NewEntryForm from '../new-entry/NewEntryForm';

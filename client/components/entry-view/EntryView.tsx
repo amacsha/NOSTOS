@@ -21,20 +21,23 @@ import { setComments } from "../../slices/commentsSlice";
 import Typewriter from "../../utils/TypewriterLoading";
 import { colors } from "../styles/colors";
 import { SafeAreaView } from 'react-native-safe-area-context';
+import moment from "moment";
+import { Entry } from "../../client-types/Entry";
+import { Comment } from "../../client-types/Comment";
 
 const EntryView: React.FC = ({ navigation }: any) => {
   const id = useSelector((state: RootState) => state.entries.selectedEntryID);
-  const userId = useSelector((state: RootState) => state.user.id);
+  const user = useSelector((state: RootState) => state.user)
   const comments = useSelector((state: RootState) => state.comments);
   const dispatch = useAppDispatch();
 
   // TODO change to redux
-  const [entryDetails, setEntryDetails] = useState<any>(undefined);
+  const [entryDetails, setEntryDetails] = useState<Entry | undefined>(undefined);
   let usersExistingComment: string | undefined = "";
 
   async function load() {
-    const update = await getOneEntry(id as number);
-    const commentsFromAPI: [] = await getComments(id as number);
+    const update: Entry = await getOneEntry(id as number);
+    const commentsFromAPI: Comment[] = await getComments(id as number);
     dispatch(setComments(commentsFromAPI));
     setEntryDetails(update);
   }
@@ -46,7 +49,7 @@ const EntryView: React.FC = ({ navigation }: any) => {
   if (!entryDetails) return <ActivityIndicator />;
   if (comments.length > 0) {
     usersExistingComment = comments.find(
-      (comment) => comment.commenterId === userId
+      (comment) => comment.commenterId === user.id
     )?.content;
   }
 
@@ -74,17 +77,18 @@ const EntryView: React.FC = ({ navigation }: any) => {
       <SafeAreaView style={styles.mainContainer}>
         <ScrollView style={styles.contentContainer}>
           <View>
-            <Text style={styles.title}>{entryDetails.data.title}</Text>
+            <Text style={styles.title}>{entryDetails.title}</Text>
+            <Text style={styles.title}>By {user.username}, {moment(entryDetails.creation_date).fromNow()}</Text>
           </View>
 
           <View>
-            <Text style={styles.content}><Typewriter text={entryDetails.data.content} delay={5} /></Text>
+            <Text style={styles.content}><Typewriter text={entryDetails.content} delay={5} /></Text>
           </View>
         </ScrollView>
 
         <View style={styles.commentContainer}>
           <View style={styles.ratingContainer}>
-            <UserRating userId={userId} entryId={id} />
+            <UserRating userId={user.id} entryId={id} />
           </View>
 
           <CommentView></CommentView>
@@ -104,17 +108,14 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    // borderWidth: 3,
   },
   ratingContainer: {
-    // borderWidth: 1,
+
   },
   commentContainer: {
     flex: 0.75,
-    // borderWidth: 1,
   },
   title: {
-    fontWeight: "bold",
     fontSize: 28,
     margin: 15,
     fontFamily: "Gruppe_A",
