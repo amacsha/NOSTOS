@@ -71,7 +71,7 @@ export default Main;
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    paddingBottom: 50,
+    // paddingBottom: 50,
   },
   container: {
     flex: 1,
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "stretch",
     fontFamily: "Gruppe_A",
-    paddingBottom: 50,
+    // paddingBottom: 50,
   },
   textWrapper: {
     justifyContent: "center",
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.gunMetalGrey,
     fontFamily: "Gruppe_A",
-    textShadowColor: "rgba(255, 255, 255, 0.75)",
+    textShadowColor: "rgba(255, 255, 255, 0.3)",
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 10,
   },
