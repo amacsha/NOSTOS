@@ -41,6 +41,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
         dispatch(setAuth(initialState));
       } else {
         // Alert.alert('login 👍')
+        dispatch(updateUserDetails({ id: res.data.userId, email: res.data.email, username: res.data.username }));
         dispatch(setAuth({ isAuthenticated: true, token: res.data.accessToken }))
         save('accessToken', res.data.accessToken);
         save('userId', res.data.userId.toString());
@@ -65,7 +66,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
       <View style={styles.inputArea}>
         <Text style={styles.head}>Login</Text>
         <Formik
-          initialValues={{ email: 'admin@nostos.com', password: 'adminadmin' }}
+          initialValues={{ email: '', password: '' }}
           validationSchema={validationSchema}
           onSubmit={values => handleSubmit(values)}
         >

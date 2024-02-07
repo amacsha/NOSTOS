@@ -21,6 +21,7 @@ const Main: React.FC = ({ navigation }: any) => {
   const fetchLocation = GeoLocation();
   const location = useSelector((state: RootState) => state.location);
   const userId = useSelector((state: RootState) => state.user.id);
+  console.log(userId)
   const [cityEntries, setCityEntries] = useState<
     (SmallEntry & { avg: number })[]
   >([]);

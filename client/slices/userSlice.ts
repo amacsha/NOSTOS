@@ -33,7 +33,7 @@ export const userSlice = createSlice({
       state.isAuthenticated = false;
     },
     updateUserDetails: (state, action: PayloadAction<Partial<UserState>>) => {
-      state.id = action.payload.id ?? state.id;
+      state.id = action.payload.id || null
       state.email = action.payload.email ?? state.email;
       state.username = action.payload.username ?? state.username;
       state.filter_preference =
