@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { getValueFor } from "../../utils/secureStorage";
-import { deleteAccount, getLastVisited, getProfile, updatePassword, updateUsername } from "./DashboardsServices";
+import { deleteAccount, getLastVisited, getProfile, updatePassword, updateUsername } from "../dashboard/DashboardsServices";
 import {Text, Button, View, ScrollView, StyleSheet, Pressable, TouchableHighlight, Alert, TextInput, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SmallEntry } from "../../client-types/SmallEntry";
@@ -11,7 +11,7 @@ import { LastVisited } from "../../client-types/LastVisited";
 import { Profile } from "../../client-types/Profile";
 import { Entry } from "../../client-types/Entry";
 import moment from "moment";
-import { getManyEntries } from "./DashboardsServices";
+import { getManyEntries } from "../dashboard/DashboardsServices";
 import { colors } from "../styles/colors";
 import { useAppDispatch } from "../../hooks";
 import { selectEntry } from '../../slices/entriesSlice';
@@ -83,10 +83,10 @@ export default function UserProfile () {
       if (userEntries?.length > 0) {
         const entries: JSX.Element[] = userEntries.map((entry: Entry) => {
           return (
-            <View style={styles.singleEntryContainer}>
-              <Pressable onPress={() => {entry.id && dispatch(selectEntry(entry.id));navigation.navigate("EntryView" as never)}}>
-                <Text style={styles.singleEntryText}>{entry.title}, {moment(entry.creation_date).fromNow()}</Text>
-              </Pressable>
+            <View key={entry.id}>
+              <TouchableHighlight underlayColor="#322F58" style={styles.contributionListItem} onPress={() => {entry.id && dispatch(selectEntry(entry.id));navigation.navigate("EntryView" as never)}}>
+                <Text style={styles.buttonText}>{entry.title}, {moment(entry.creation_date).fromNow()}</Text>
+              </TouchableHighlight>
             </View>
           )
         });
@@ -102,9 +102,9 @@ export default function UserProfile () {
         userComments.forEach( (comment: Comment, index:number) => {
           const matchingEntry = entries.find((entry: Entry) => entry.id === comment.entryId)
             commentsWithEntryTitle.push(
-              <Pressable onPress={() => {matchingEntry && dispatch(selectEntry(matchingEntry.id as number));navigation.navigate("EntryView" as never)}}>
-                <Text style={styles.singleCommentText}>"{comment.content}" on {matchingEntry?.title}</Text>
-              </Pressable>
+              <TouchableHighlight underlayColor="#322F58" style={styles.contributionListItem} key={index} onPress={() => {matchingEntry && dispatch(selectEntry(matchingEntry.id as number));navigation.navigate("EntryView" as never)}}>
+                <Text style={styles.buttonText}>"{comment.content}" on {matchingEntry?.title}</Text>
+              </TouchableHighlight>
             )
         })
 
@@ -119,9 +119,9 @@ export default function UserProfile () {
       userRatings.forEach( (rating: Rating, index: number) => {
         const matchingEntry = entries.find((entry: Entry) => entry.id === rating.entryId)
         ratingsWithEntryTitle.push(
-          <Pressable onPress={() => {matchingEntry && dispatch(selectEntry(matchingEntry.id as number));navigation.navigate("EntryView" as never)}}>
-            <Text style={styles.singleRatingText}>You rated {matchingEntry?.title} {Array(rating.value).fill('★')}</Text>
-          </Pressable>
+          <TouchableHighlight underlayColor="#322F58" key={index} style={styles.contributionListItem} onPress={() => {matchingEntry && dispatch(selectEntry(matchingEntry.id as number));navigation.navigate("EntryView" as never)}}>
+            <Text style={styles.buttonText}>You rated "{matchingEntry?.title}" {Array(rating.value).fill('★')}</Text>
+          </TouchableHighlight>
         )
       })
 
@@ -149,12 +149,35 @@ export default function UserProfile () {
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView>
         <View>
+        <Text style={styles.mainTitleText}>Manage your profile.</Text>
+        
+          <IDCard profileData={profileData}/>
+
+          <View style={styles.dataContainer}>
+              <View style={styles.contributonList}>
+                <Pressable onPress={() => toggleSection('showEntries', !sectionVisibility.showEntries)}>
+                  {sectionVisibility.showEntries ? <Text style={styles.mainTitleText}>Hide Your Entries</Text> : <Text style={styles.mainTitleText}>Display Your Entries ({profileEntries.length})</Text>}
+                </Pressable>
+                {sectionVisibility.showEntries && profileEntries}
+              </View>
+
+              <View style={styles.contributonList}>
+                <Pressable onPress={() => toggleSection('showComments', !sectionVisibility.showComments)}>
+                {sectionVisibility.showComments ? <Text style={styles.mainTitleText}>Hide Your Comments</Text> : <Text style={styles.mainTitleText}>Display Your Comments ({profileComments.length})</Text>}
+                </Pressable>
+                {sectionVisibility.showComments && profileComments}
+              </View>
+
+              <View style={styles.contributonList}>
+                <Pressable onPress={() => toggleSection('showRatings', !sectionVisibility.showRatings)}>
+                {sectionVisibility.showRatings ? <Text style={styles.mainTitleText}>Hide Your Ratings</Text> : <Text style={styles.mainTitleText}>Display Your Ratings ({profileRatings.length})</Text>}
+                </Pressable>
+                {sectionVisibility.showRatings && profileRatings}
+              </View>
+          </View>
 
           <View style={styles.controlsContainer}>
-            <Text style={styles.mainTitleText}>Manage your profile.</Text>
-            <Text style={styles.mainTitleText}>You are logged in as {profileData.userName}.</Text>
             <Logout />
-
             <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
               Alert.alert('Account Deletion', 'Are you sure you want to delete the account?', [
                 {
@@ -202,15 +225,15 @@ export default function UserProfile () {
 
           {sectionVisibility.showNewPassword &&
           <>
-          <View style={styles.newPasswordContainer}>
-            <Text>Enter your old password:</Text>
-            <TextInput secureTextEntry={true} placeholder="Current Password" onChangeText={setOldPassword}></TextInput>
-            <Text>Enter your new password:</Text>
-            <TextInput secureTextEntry={true} placeholder="New Password" onChangeText={setNewPassword}></TextInput>
-            <Text>Confirm your new password:</Text>
-            <TextInput secureTextEntry={true} placeholder="Confirm New Password" onChangeText={setConfirmPassword}></TextInput>
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputTitle}>Enter your old password:</Text>
+            <TextInput style={styles.inputField} secureTextEntry={true} placeholder="Current Password" onChangeText={setOldPassword}></TextInput>
+            <Text style={styles.inputTitle}>Enter your new password:</Text>
+            <TextInput style={styles.inputField} secureTextEntry={true} placeholder="New Password" onChangeText={setNewPassword}></TextInput>
+            <Text style={styles.inputTitle}>Confirm your new password:</Text>
+            <TextInput style={styles.inputField} secureTextEntry={true} placeholder="Confirm New Password" onChangeText={setConfirmPassword}></TextInput>
 
-            <Pressable onPress={() => {
+            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
               if (newPassword.length == 0) {
                 Alert.alert('Error', 'Password must be entered.')
               } else if (newPassword.length < 6) {
@@ -221,17 +244,17 @@ export default function UserProfile () {
                 updatePassword(newPassword, oldPassword, userId as number, dispatch, token)
               }
             }}>
-              <Text>Update Password</Text>
-            </Pressable>
+              <Text style={styles.buttonText}>Update Password</Text>
+            </TouchableHighlight>
           </View>
           </>}
 
           {sectionVisibility.showNewUsername &&
           <>
-          <View style={styles.controlsContainer}>
-            <Text>Enter new username:</Text>
-            <TextInput placeholder={profileData.userName} onChangeText={setNewUsername} />
-            <Pressable onPress={() => {
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputTitle}>Enter new username:</Text>
+            <TextInput style={styles.inputField} placeholder={profileData.userName} onChangeText={setNewUsername} />
+            <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => {
               if (newUsername === "") {
                 Alert.alert('Error', "New username cannot be empty.")
               } else if (newUsername === profileData.userName) {
@@ -240,36 +263,11 @@ export default function UserProfile () {
                 updateUsername(newUsername, userId as number, dispatch, token);
               }
             }}>
-              <Text>Update Username</Text>
-            </Pressable>
+              <Text style={styles.buttonText}>Update Username</Text>
+            </TouchableHighlight>
           </View>
           </>
           }
-
-          <IDCard profileData={profileData}/>
-
-          <View style={styles.dataContainer}>
-              <View style={styles.entriesContainer}>
-                <Pressable onPress={() => toggleSection('showEntries', !sectionVisibility.showEntries)}>
-                  {sectionVisibility.showEntries ? <Text style={styles.sectionTitleText}>Hide Your Entries</Text> : <Text style={styles.sectionTitleText}>Display Your Entries ({profileEntries.length})</Text>}
-                </Pressable>
-                {sectionVisibility.showEntries && profileEntries}
-              </View>
-
-              <View style={styles.commentsContainer}>
-                <Pressable onPress={() => toggleSection('showComments', !sectionVisibility.showComments)}>
-                {sectionVisibility.showComments ? <Text style={styles.sectionTitleText}>Hide Your Comments</Text> : <Text style={styles.sectionTitleText}>Display Your Comments ({profileComments.length})</Text>}
-                </Pressable>
-                {sectionVisibility.showComments && profileComments}
-              </View>
-
-              <View style={styles.ratingsContainer}>
-                <Pressable onPress={() => toggleSection('showRatings', !sectionVisibility.showRatings)}>
-                {sectionVisibility.showRatings ? <Text style={styles.sectionTitleText}>Hide Your Ratings</Text> : <Text style={styles.sectionTitleText}>Display Your Ratings ({profileRatings.length})</Text>}
-                </Pressable>
-                {sectionVisibility.showRatings && profileRatings}
-              </View>
-          </View>
       </View>
       </ScrollView>
     </SafeAreaView>
@@ -279,7 +277,7 @@ export default function UserProfile () {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    backgroundColor: colors.lighterPurple,
+    backgroundColor: colors.darkGrey,
     flex: 1,
   },
   controlsContainer :{
@@ -304,46 +302,48 @@ const styles = StyleSheet.create({
   mainTitleText: {
     fontFamily: "Gruppe_A",
     fontSize: 23,
-    marginBottom: 30
+    marginBottom: 25,
+    marginTop: 10,
+    textAlign: 'center',
+    color: 'white'
   },
   dataContainer: {
     margin: 15,
-    alignItems: 'center'
+    alignItems: 'center',
+    gap: 20,
   },
-  sectionTitleText: {
-    fontSize: 23,
+  contributionListItem: {
+    backgroundColor: '#45417B',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    margin: 3,
+    padding: 3,
     fontFamily: 'Gruppe_A',
+    width: 350,
   },
-  entriesContainer: {
+  contributonList: {
+    alignItems: 'center',
   },
-  singleEntryContainer: {
+  inputField: {
+    backgroundColor: colors.gunMetalGrey,
+    color: colors.darkGrey,
+    marginVertical: 5,
+    marginHorizontal: 25,
+    paddingLeft: 5,
+    fontSize: 15,
+    fontFamily: 'Gruppe_A',
+    width: 350,
   },
-  singleEntryText: {
-    fontFamily: "Gruppe_A",
-    fontSize: 12,
-    paddingLeft: 30,
-    margin: 3
+  inputTitle: {
+    fontSize: 15,
+    fontFamily: 'Gruppe_A',
+    marginHorizontal: 25,
+    color: 'white',
   },
-  commentsContainer: {
+  inputContainer: {
+    marginTop: 30,
+    gap: 3,
+    padding: 10
   },
-  singleCommentContainer: {
-    // margin: 5
-  },
-  singleCommentText: {
-    fontFamily: "Gruppe_A",
-    fontSize: 12,
-    paddingLeft: 30,
-    margin: 3
-  },
-  ratingsContainer: {
-  },
-  singleRatingContainer: {
-  },
-  singleRatingText: {
-    fontFamily: "Gruppe_A",
-    fontSize: 12,
-    paddingLeft: 30,
-    margin: 3
-  },
-  newPasswordContainer: {}
 })

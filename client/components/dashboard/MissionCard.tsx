@@ -14,7 +14,7 @@ const MissionCard: React.FC<{ place: Place }> = ({ place }: { place: Place }) =>
 
   return (
     <Pressable onPress={() => { dispatch(selectPlace(place.id)); navigation.navigate("Location" as never) }} style={styles.card}>
-      <View>
+      <View style={styles.textBorder}>
         <Text style={styles.entryTitle}>{place.name}</Text>
       </View>
     </Pressable>
@@ -27,7 +27,6 @@ export default MissionCard;
 const styles = StyleSheet.create({
   card: {
     fontFamily: 'Gruppe_A',
-    backgroundColor: colors.basePurple,
     justifyContent: 'center',
     padding: 10,
     marginHorizontal: 7,
@@ -39,4 +38,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Gruppe_A',
   },
+  textBorder: {
+    borderBottomColor: colors.basePurple,
+    borderBottomWidth: 2,
+    padding: 5
+  }
 });

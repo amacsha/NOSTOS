@@ -48,7 +48,7 @@ const Location: React.FC = ({ navigation }: any) => {
               style={styles.addEntryButton}
               onPress={() => navigation.navigate("NewEntryForm")}
             >
-              <Text style={styles.addEntryButtonText}> Write a new entry </Text>
+              <Text style={styles.addEntryButtonText}>Create a new entry</Text>
             </Pressable>
           </View>
         </View>
@@ -101,8 +101,8 @@ const styles = StyleSheet.create({
   },
   addEntryButton: {
     borderWidth: 2,
-    borderRadius: 0,
-    borderColor: "white"
+    borderColor: "white",
+    padding: 5
   },
   addEntryButtonText: {
     margin: 5,
