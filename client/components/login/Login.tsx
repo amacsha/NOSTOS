@@ -64,7 +64,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.inputArea}>
-        <Text style={styles.head}>Login</Text>
+        
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={validationSchema}
@@ -98,9 +98,6 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
               <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => handleSubmit()}>
                 <Text style={styles.buttonText} >Login</Text>
               </TouchableHighlight>
-              <TouchableHighlight style={styles.button} underlayColor="#322F58" onPress={() => navigation.navigate('Register')}>
-                <Text style={styles.buttonText}>Register</Text>
-              </TouchableHighlight>
             </>
           )}
         </Formik>
@@ -111,18 +108,28 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: colors.basePurple,
+    fontFamily: 'Gruppe_A',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  credentialContainer: {
     backgroundColor: colors.darkGrey,
-    height: '100%',
+    height: '50%',
     fontFamily: 'Gruppe_A',
   },
   head: {
     fontSize: 20,
     color: colors.gunMetalGrey,
     fontFamily: 'Gruppe_A',
-    marginHorizontal: 25,
+    // marginHorizontal: 25,
   },
   inputArea: {
-    marginTop: 200
+    backgroundColor: colors.basePurple,
+    paddingTop: 20,
+    paddingBottom: 5,
+    width: '90%',
   },
   input: {
     backgroundColor: colors.gunMetalGrey,

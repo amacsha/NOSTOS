@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import FirstEntry from "./FirstEntry"
 import Login from "./Login";
 import Register from "../register/Register";
 import Main from "../dashboard/Main";
@@ -33,7 +34,9 @@ export default function UserStart() {
     let username = await getValueFor('username');
     console.log(userId)
     if (token) {
+      dispatch(setAuth(initialState));
       dispatch(setAuth({ isAuthenticated: true, token: token }));
+
       dispatch(updateUserDetails({ id: userId, email: email, username: username }));
     }
   };
@@ -63,6 +66,7 @@ export default function UserStart() {
           </>
         ) : (
           <>
+            <Stack.Screen name="FirstEntry" component={FirstEntry} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
           </>
