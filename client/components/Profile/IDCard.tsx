@@ -1,34 +1,27 @@
 import React, { useEffect, useState } from "react";
 import OneStamp from "./OneStamp";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Profile } from "../../client-types/Profile";
-import { profile } from "console";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { getAverageRatingsForUsersEntries } from "./DashboardsServices";
-import Typewriter from "../../utils/TypewriterLoading";
+import { getAverageRatingsForUsersEntries } from "../dashboard/DashboardsServices";
+import { colors } from "../styles/colors";
+import Images from "../../assets/aliens/picIndexes";
 
 export default function IDCard ({profileData}: {profileData: Profile}) {
   const userId = useSelector((state: RootState) => state.user.id);
   const [avg, setAvg] = useState<number | null>(null)
   const [badges, setBadges] = useState<BadgeType[]>([])
 
-  // Point for commenting, making entries, giving ratings
-  // Average
-
-  // Harsh Critic - Giving low ratings
-  // Normal distribution - 2.5 ratings
-  // Easily pleased? - Giving high ratings
-
-  // Popular - your entries are highly rated
-
-  // Expert Researcher - Making lots of entries
-  // An alien of few words - short entries
-
   const load =  () => {
     if (userId != null) {
       getAverageRatingsForUsersEntries(userId, setAvg)
     }
+  }
+
+  const emailToPic =  (email: string) => {
+    const alphabet = email.toLowerCase().match(/[a-z]/g)
+    return alphabet?.length ? alphabet[0] : "b"
   }
 
   useEffect( () => {
@@ -81,7 +74,7 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
           const avg: number = profileData.userRatings.reduce( (acc: number ,current) => {
            return acc += current.value / profileData.userRatings.length
           }, 0)
-          if (avg < 2) {return true}
+          if (0 < avg && avg < 2) {return true}
           return false
         }
       },
@@ -120,44 +113,41 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
     ])
   }, [avg])
 
-//Fresh out of the academy - 1st entry
-
-  // Opinionated - Lots of comments
   type BadgeType = {
-      image: string
-      description: string
-      condition: (profileData: Profile) => boolean
-    }
+    image: string
+    description: string
+    condition: (profileData: Profile) => boolean
+  }
 
 
 
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer, styles.elevation]}>
       <View style={styles.mainTitleContainer}>
         <Text style={styles.mainTitleText}>RESEARCHER I.D.</Text>
       </View>
 
       <View style={styles.topHalfContainer}>
         <View style={styles.detailsContainer}>
-          <Text style={styles.detailsNameText}><Typewriter text={profileData.userName} delay={50}/></Text>
-          <Text style={styles.detailsAlienText}><Typewriter text="Max Height: 32 ⍙" delay={50}/></Text>
-          <Text style={styles.detailsAlienText}><Typewriter text="Timespace: 900 ⊬⋉" delay={50}/></Text>
-          <Text style={styles.detailsAlienText}><Typewriter text="Low-Grav Authorized ⏚" delay={50}/></Text>
+          <Text style={styles.detailsNameText}>{profileData.userName}</Text>
+          <Text style={styles.detailsAlienText}>Max Height: 32 ⍙</Text>
+          <Text style={styles.detailsAlienText}>Timespace: 900 ⊬⋉</Text>
+          <Text style={styles.detailsAlienText}>Low-Grav Authorized ⏚</Text>
         </View>
 
         <View style={styles.topHalfSpacer}>
 
         </View>
 
-        <View style={styles.faceImage}>
-          <Text>TEST</Text>
+        <View>
+          <Image  style={styles.faceImage} source={Images[emailToPic(profileData.userName) as keyof typeof Images]}></Image>
         </View>
       </View>
 
       <ScrollView horizontal style={styles.bottomHalfContainer}>
-        {badges.map(badge => {
+        {badges.map((badge, i) => {
           if (badge.condition(profileData)) {
-            return <OneStamp image={badge.image} description={badge.description} />
+            return <OneStamp key={i} image={badge.image} description={badge.description} />
           }
         })}
       </ScrollView>
@@ -168,33 +158,36 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
   const styles = StyleSheet.create({
     mainContainer: {
       margin: 20,
+      backgroundColor: "#45417B",
+      borderRadius: 5,
     },
     mainTitleContainer: {
+      borderTopLeftRadius: 5,
+      borderTopRightRadius: 5,
       alignItems: "center",
-      borderWidth: 1
+      backgroundColor: colors.black
     },
     mainTitleText: {
       fontFamily: "Gruppe_A",
       fontSize: 24,
       margin: 5,
+      color: "#9578F8",
     },
     topHalfContainer: {
       // borderWidth: 1,
-      borderLeftWidth: 1,
-      borderRightWidth: 1,
       flexDirection: "row",
       // flex: 1,
       justifyContent: "space-between"
     },
     detailsContainer: {
       fontFamily: "Gruppe_A",
-      margin: 5,
+      margin: 10,
+      gap: 5,
     },
     topHalfSpacer:{
       flex: 1
     },
     bottomHalfContainer: {
-      borderWidth: 1,
     },
     detailsNameText: {
       fontFamily: "Gruppe_A",
@@ -205,10 +198,19 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
       fontFamily: "Gruppe_A",
     },
     faceImage: {
-      flex: 1,
-      borderLeftWidth: 1
-    }
-
+      height: 100,
+      width: 100,
+      margin: 5,
+      borderColor: colors.black,
+      borderWidth: 1,
+    },
+    elevation: {
+      elevation: 13,
+      shadowColor: 'white',
+      shadowOffset: {width: 5, height: 5},
+      shadowOpacity: 0.2,
+      shadowRadius: 3,
+    },
   })
 
 
