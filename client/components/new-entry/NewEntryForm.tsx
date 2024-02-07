@@ -38,8 +38,8 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
   const token: string = getValueFor("accessToken") || "";
 
   const validationSchema = Yup.object().shape({
-    title: Yup.string().required("Choose a nice title to your story"),
-    content: Yup.string().required("Tell us about your experience"),
+    title: Yup.string().required("Entry title required"),
+    content: Yup.string().required("Entry content cannot be void"),
     tag: Yup.array().max(3, "You can add 3 tags max"),
   });
 
@@ -54,12 +54,12 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.inputArea}>
             <Text style={styles.head}>Create a new Entry</Text>
             <Formik<Entry>
@@ -94,8 +94,8 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
                     value={values.title}
                     onChangeText={handleChange("title")}
                     onBlur={handleBlur("title")}
-                    placeholder="title"
-                    placeholderTextColor={colors.black}
+                    placeholder="entry title"
+                    placeholderTextColor={colors.darkGrey}
                   />
                   {touched.title && errors.title && (
                     <Text style={styles.error}>{errors.title}</Text>
@@ -106,7 +106,7 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
                     value={values.content}
                     onChangeText={handleChange("content")}
                     onBlur={handleBlur("content")}
-                    placeholder="what do you see? what do you smell? what do you feel?"
+                    placeholder="what do you see? what do you hear? what do you feel?"
                   />
                   {touched.content && errors.content && (
                     <Text style={styles.error}>{errors.content}</Text>
@@ -168,9 +168,9 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
               )}
             </Formik>
           </View>
-        </SafeAreaView>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
@@ -189,6 +189,7 @@ const styles = StyleSheet.create({
   },
   inputArea: {
     marginTop: "10%",
+    flex: 1
   },
   input: {
     backgroundColor: colors.lighterPurple,
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
     fontFamily: "Gruppe_A",
   },
   content: {
-    height: "70%",
+    height: "50%",
   },
   error: {
     color: "#c62828",
@@ -231,7 +232,7 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     borderColor: colors.darkGrey,
-    borderWidth: 1,
+    borderWidth: 2,
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
@@ -255,8 +256,6 @@ const styles = StyleSheet.create({
     width: 35,
     borderWidth: 1,
     borderRadius: 25,
-    // marginVertical: 5,
-    // marginHorizontal: 25,
   },
   delete: {
     fontFamily: "Gruppe_A",
@@ -278,7 +277,7 @@ const styles = StyleSheet.create({
   tagText: {
     fontFamily: "Gruppe_A",
     fontSize: 15,
-    color: colors.black,
+    color: colors.darkGrey,
     padding: 10,
     borderRadius: 25,
   },
