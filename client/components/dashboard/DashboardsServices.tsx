@@ -7,6 +7,7 @@ import { Entry } from '../../client-types/Entry';
 import { Alert } from 'react-native';
 import { setAuth } from '../../slices/authSlice';
 import { save } from '../../utils/secureStorage';
+import { setActiveMission } from '../../slices/entriesSlice';
 
 
 const base_url = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000`
@@ -57,9 +58,9 @@ const getPrefrence = async (dispatch: any, userId: number) => {
   })
 }
 
-const getActiveMissions = async (userId: number, setter: any) => {
+const getActiveMissions = async (userId: number, dispatch: any) => {
   await axios.get(`${base_url}/place/getRecent/${userId}`).then((res) => {
-    setter(res.data)
+    dispatch(setActiveMission(res.data))
   }).catch((err) => {
     console.log("getActiveMissions")
     console.log(err)
@@ -78,7 +79,7 @@ const getCities = async (setter: React.Dispatch<React.SetStateAction<string[]>>)
 const getProfile = async (userId: number, token: string) => {
   // POST so that we can send a body, even though it's really a GET..
   try {
-    const response = await axios.post<Profile>(`${base_url}/user/profile`, {userId, token});
+    const response = await axios.post<Profile>(`${base_url}/user/profile`, { userId, token });
     if (response.status === 200) {
       return response.data;
     }
@@ -106,34 +107,34 @@ const getManyEntries = async (entryIds: number[]) => {
   }
 }
 
-const updatePassword =  (newPassword: string, oldPassword: string, userId: number, dispatch: any, token: string) => {
-    axios.post(`${base_url}/user/updatePassword/${userId}`, {newPassword, oldPassword, token})
-       .then((res) => {
-        dispatch(setAuth({ isAuthenticated: true, token: res.data }))
-        save('accessToken', res.data);
-        Alert.alert('Success', 'Password was updated successfully.')
-       })
-       .catch((err) => {Alert.alert(err)})
+const updatePassword = (newPassword: string, oldPassword: string, userId: number, dispatch: any, token: string) => {
+  axios.post(`${base_url}/user/updatePassword/${userId}`, { newPassword, oldPassword, token })
+    .then((res) => {
+      dispatch(setAuth({ isAuthenticated: true, token: res.data }))
+      save('accessToken', res.data);
+      Alert.alert('Success', 'Password was updated successfully.')
+    })
+    .catch((err) => { Alert.alert(err) })
 }
 
 const updateUsername = (newUsername: string, userId: number, dispatch: any, token: string) => {
-axios.post(`${base_url}/user/updateUsername/${userId}`, {newUsername, token})
-.then( (res) => {
-  dispatch(updateUserDetails({username: newUsername}))
-  save('username', newUsername);
-  Alert.alert('Success', 'Username was updated successfully.');
-})
-.catch((err) => Alert.alert('Error updating username.'))
+  axios.post(`${base_url}/user/updateUsername/${userId}`, { newUsername, token })
+    .then((res) => {
+      dispatch(updateUserDetails({ username: newUsername }))
+      save('username', newUsername);
+      Alert.alert('Success', 'Username was updated successfully.');
+    })
+    .catch((err) => Alert.alert('Error updating username.'))
 }
 
 const deleteAccount = async (userId: number, token: string) => {
-  await axios.post(`${base_url}/user/deleteUser/${userId}`, {token});
+  await axios.post(`${base_url}/user/deleteUser/${userId}`, { token });
 }
 
 const getAverageRatingsForUsersEntries = (userId: number, setAvg: React.Dispatch<React.SetStateAction<number | null>>) => {
- axios.get<number | null>(`${base_url}/rating/AverageForUser/${userId}`)
-             .then(res => setAvg(res.data))
-             .catch(err => console.log(err))
+  axios.get<number | null>(`${base_url}/rating/AverageForUser/${userId}`)
+    .then(res => setAvg(res.data))
+    .catch(err => console.log(err))
 }
 export {
   getAverageRatingsForUsersEntries,
