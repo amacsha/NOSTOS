@@ -47,7 +47,7 @@ const NewEntryForm: React.FC = ({ navigation }: any) => {
     const handleSubmit = async (values: Entry) => {
         values.authorId = userId;
         values.placeId = placeId;
-        const res = await NewEntryService(values, token);
+        const res = await NewEntryService(values, token, userId as number);
         dispatch(selectEntry(res.data.id));
         values.tag = [];
     };
