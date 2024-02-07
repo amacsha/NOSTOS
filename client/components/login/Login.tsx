@@ -108,7 +108,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.darkGrey,
+    backgroundColor: colors.basePurple,
     fontFamily: 'Gruppe_A',
     alignItems: 'center',
     justifyContent: 'center',

@@ -111,7 +111,7 @@ const Register: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.darkGrey,
+    backgroundColor: colors.basePurple,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -159,7 +159,6 @@ const styles = StyleSheet.create({
     padding: 5,
     height: 40,
     width: 130,
-    fontFamily: 'Gruppe_A',
   },
   buttonText: {
     color: colors.gunMetalGrey,
