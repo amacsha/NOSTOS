@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import FirstEntry from "./FirstEntry"
 import Login from "./Login";
 import Register from "../register/Register";
 import Main from "../dashboard/Main";
@@ -31,9 +32,11 @@ export default function UserStart() {
     let userId = Number(await getValueFor('userId'));
     let email = await getValueFor('email');
     let username = await getValueFor('username');
-
+    console.log(userId)
     if (token) {
+      dispatch(setAuth(initialState));
       dispatch(setAuth({ isAuthenticated: true, token: token }));
+
       dispatch(updateUserDetails({ id: userId, email: email, username: username }));
     }
   };
@@ -51,9 +54,9 @@ export default function UserStart() {
         {isAuthenticated ? (
           <>
             <Stack.Screen name="LoadingPage" component={LoadingPage} />
-            <Stack.Screen name="GlobeView" component={GlobeView} options={{gestureEnabled: false}}/>
-            <Stack.Screen name="Navbar" component={Navbar} options={{gestureEnabled: false}}/>
-            <Stack.Screen name="Logs" component={Main} options={{gestureEnabled: false}}/>
+            <Stack.Screen name="GlobeView" component={GlobeView} options={{ gestureEnabled: false }} />
+            <Stack.Screen name="Navbar" component={Navbar} options={{ gestureEnabled: false }} />
+            <Stack.Screen name="Logs" component={Main} options={{ gestureEnabled: false }} />
             <Stack.Screen name="Mission" component={Mission} />
             <Stack.Screen name="Location" component={Location} />
             <Stack.Screen name="EntryView" component={EntryView} />
@@ -63,6 +66,7 @@ export default function UserStart() {
           </>
         ) : (
           <>
+            <Stack.Screen name="FirstEntry" component={FirstEntry} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
           </>

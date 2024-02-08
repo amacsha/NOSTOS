@@ -5,14 +5,15 @@ import { Place, newEntry, SmallEntry, entry } from '../../server-types/types'
 import { verifyUser } from './user.controller';
 
 const postEntry = async (ctx: Koa.Context) => {
-    console.log(ctx.request.body.userId)
+    console.log(ctx.request.body)
     if (verifyUser(ctx.request.body.token, ctx.request.body.userId)) {
         try {
             let data: newEntry = {
                 placeId: ctx.request.body.newEntry.placeId,
                 authorId: ctx.request.body.newEntry.authorId,
                 title: ctx.request.body.newEntry.title,
-                content: ctx.request.body.newEntry.content
+                content: ctx.request.body.newEntry.content,
+                tag: ctx.request.body.newEntry.tag
             }
             const newEntry = await prisma.entry.create({
                 data

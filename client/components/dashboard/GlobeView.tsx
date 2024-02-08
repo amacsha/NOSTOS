@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Animated, Image, Pressable, StyleSheet, Text, View, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../styles/colors";
 import { useAppDispatch } from "../../hooks";
 import { setLocation } from "../../slices/locationSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import {backstory} from "../../assets/backstory/bs";
 import axios from "axios";
 import { GooglePlaceResponse, Place } from "../../client-types/Place";
 import AddPlacesService from "../../service/AddPlacesService";
@@ -15,6 +16,30 @@ const GOOGLE_KEY = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
 const GlobeView: React.FC = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
   const location = useSelector((state: RootState) => state.location);
+  const [showLogPopup, setShowLogPopup] = useState(false);
+  const [fadeAnim] = useState(new Animated.Value(0.5)); 
+
+
+  useEffect(() => {
+    if (showLogPopup) {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 2000,
+            useNativeDriver: true, 
+          }),
+          Animated.timing(fadeAnim, {
+            toValue: 0.5,
+            duration: 2000,
+            useNativeDriver: true, 
+          }),
+        ])
+      ).start();
+    } else {
+      fadeAnim.setValue(0.5);
+    }
+  }, [showLogPopup]);
 
   const handlePress = (cityName: string) => {
     if (location.value?.lat && location.value.lng) {
@@ -29,36 +54,68 @@ const GlobeView: React.FC = ({ navigation }: any) => {
     }
   };
 
+  const toggleLogPopup = () => {
+    setShowLogPopup(!showLogPopup); 
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Image
         style={styles.globe}
-        source={require("../../assets/spaceshipCloser.png")}
+        source={require("../../assets/spspsp.png")}
       />
 
-      <Pressable
-        style={[
-          styles.LondonButton,
-          location.value?.cityName === "London" && {
-            backgroundColor: colors.lighterPurple,
-          },
-        ]}
-        onPress={() => handlePress("London")}
-      >
-        <Text style={styles.locationButtonText}>London</Text>
+
+  
+<Pressable style={styles.logButton} onPress={toggleLogPopup}>
+        <Text style={styles.locationButtonText}>logs</Text>
       </Pressable>
 
+      {showLogPopup && (
+        <Animated.View 
+          style={[
+            styles.logPopUp,
+            { opacity: fadeAnim }, 
+          ]}
+        >
+          <ScrollView>
+            <Text style={styles.locationButtonText}>{backstory.bs}</Text>
+          </ScrollView>
+        </Animated.View>
+      )}
+   
+
+  <View style={styles.locationButtonWrapper}>
       <Pressable
-        style={[
-          styles.BerlinButton,
-          location.value?.cityName === "Berlin" && {
-            backgroundColor: colors.lighterPurple,
-          },
-        ]}
-        onPress={() => handlePress("Berlin")}
-      >
-        <Text style={styles.locationButtonText}>Berlin</Text>
-      </Pressable>
+        style={styles.LondonButton}
+        onPress={() => handlePress("London")}
+        >
+      
+      <Text style={[
+              styles.locationButtonText,
+              location.value?.cityName === "London" && {
+              color: colors.lighterPurple,
+             },
+          ]}>
+            London
+          </Text>
+</Pressable>
+
+      <Pressable
+  style={styles.BerlinButton}
+  onPress={() => handlePress("Berlin")}
+>
+  <Text style={[
+    styles.locationButtonText,
+    location.value?.cityName === "Berlin" && {
+      color: colors.lighterPurple,
+    },
+  ]}>
+    Berlin
+  </Text>
+</Pressable>
+
+  </View>
     </SafeAreaView>
   );
 };
@@ -73,35 +130,71 @@ const styles = StyleSheet.create({
     backgroundColor: "#010000",
   },
   globe: {
-    height: 800,
-    width: 420,
+    height: "100%",
+    width: "100%"
+  },
+  logButton: {
+    position: "absolute",
+    fontFamily: "Gruppe_A",
+    bottom: 88,
+    left: 169,
+    height: 44,
+  },
+  popUpContainer: {
+    position: "absolute",
+    bottom: '14%', // Adjust this value to place it higher or lower
+    left: '20%', // Left padding percentage of the screen width
+    right: '20%', // Right padding percentage of the screen width
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: 44,
+  },
+  logPopUp: {
+    position: "absolute",
+    left: '50%',
+    top: '50%',
+    transform: [{ translateX: -150 }, { translateY: -250 }],
+    width: 300,
+    height: 400,
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    shadowColor: "#0ff",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    elevation: 10,
+  },
+  locationButtonWrapper:{
+    position: "absolute",
+    bottom: '18%', // Adjust this value to place it higher or lower
+    left: '18%', // Left padding percentage of the screen width
+    right: '18%', // Right padding percentage of the screen width
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: 44,
   },
   LondonButton: {
-    position: "absolute",
-    bottom: 140,
-    left: 40,
-    height: 44,
-    width: 120,
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
-    borderRadius: 8,
+    padding: 10,
+    color: "rgba(255, 255, 255, 0.7)",
   },
   BerlinButton: {
-    position: "absolute",
-    bottom: 140,
-    right: 40,
-    height: 44,
-    width: 120,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: "rgba(255, 255, 255, 0.7)",
-    borderRadius: 8,
+    padding: 10,
+    color: "rgba(255, 255, 255, 0.7)",
   },
   locationButtonText: {
-    fontFamily: 'Gruppe_A',
-    fontSize: 30,
-    fontWeight: "bold",
+    fontSize: 22,
+    fontFamily: "Gruppe_A",
+    color: "rgba(255, 255, 255, 0.7)",
+  },
+  selectedLocationText: {
+    color: colors.lighterPurple,
   },
 });

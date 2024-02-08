@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.darkGrey,
     borderBottomColor: colors.basePurple,
-    borderBottomWidth: 2, 
+    borderBottomWidth: 2,
     padding: 10,
     marginVertical: 7,
     marginHorizontal: 10,
@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
   entryTitle: {
     fontSize: 15,
     color: '#ffffff',
-    fontWeight: 'bold',
     flex: 1,
     fontFamily: 'Gruppe_A',
   },

@@ -3,7 +3,7 @@ import { Alert, Pressable, StyleSheet, Text, TouchableHighlight } from 'react-na
 import { useAppDispatch } from '../../hooks';
 import { setAuth, initialState } from '../../slices/authSlice';
 import { deleteItemAsync } from 'expo-secure-store';
-import { updateUserDetails, initialState as userInitials } from '../../slices/userSlice';
+import { updateUserDetails, initialState as userInitials, logout as LG } from '../../slices/userSlice';
 
 
 const Logout: React.FC = () => {
@@ -19,6 +19,7 @@ const Logout: React.FC = () => {
             deleteItemAsync('filter_preference'),
         ])
         dispatch(setAuth(initialState));
+        dispatch(LG())
         dispatch(updateUserDetails(userInitials))
         // Alert.alert('token destroyed');
     }

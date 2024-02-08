@@ -18,6 +18,7 @@ interface newEntry {
   authorId: number,
   title: string,
   content: string,
+  tag: string[]
 }
 
 interface SmallEntry {
