@@ -185,6 +185,10 @@ const Mission: React.FC = ({ navigation }: any) => {
             <Text style={styles.text}>Confirm location</Text>
           </Pressable>
 
+          <Pressable onPress={() => fetchNewMissions(city!, dispatch)}>
+            <Image source={require('../../assets/reload.png')} style={styles.reloadPlaces}/>
+          </Pressable>
+
           <Pressable
             style={styles.button}
             onPress={() =>
@@ -262,8 +266,12 @@ const styles = StyleSheet.create({
     textAlign: "auto"
   },
   getDirections: {
-    height: 40,
-    width: 40
+    height: 30,
+    width: 30
+  },
+  reloadPlaces: {
+    height: 30,
+    width: 30
   }
 });
 

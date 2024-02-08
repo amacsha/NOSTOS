@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         margin: 3,
         padding: 3,
         height: 30,
-        width: 80,
+        width: 200,
         fontFamily: 'Gruppe_A',
     },
     buttonText: {

@@ -17,7 +17,9 @@ export default function OneStamp ({image, description}: {image: any, description
 
 const styles = StyleSheet.create({
   mainContainer: {
-    margin: 5,
+    marginTop: 10,
+    marginBottom: 20,
+    marginLeft: 20
   },
   stampContainer: {
     alignItems: 'center',
