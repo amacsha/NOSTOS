@@ -18,8 +18,6 @@ describe('Comments', () => {
   beforeAll(async () => {
     await clearDatabase();
 
-    // Comments rely on a User and an Entry (which relies on a Place), so create one of each first.
-
     await prisma.user.createMany({
       data: [
         {

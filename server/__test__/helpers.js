@@ -1,7 +1,6 @@
 const {prisma} = require('../src/models/db')
 
 async function clearDatabase () {
-  // The order is important! Do not change!
   await prisma.comment.deleteMany({});
   await prisma.rating.deleteMany({});
   await prisma.lastVisited.deleteMany({});

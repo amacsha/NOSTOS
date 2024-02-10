@@ -142,9 +142,9 @@ const styles = StyleSheet.create({
   },
   popUpContainer: {
     position: "absolute",
-    bottom: '14%', // Adjust this value to place it higher or lower
-    left: '20%', // Left padding percentage of the screen width
-    right: '20%', // Right padding percentage of the screen width
+    bottom: '14%', 
+    left: '20%', 
+    right: '20%', 
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -169,9 +169,9 @@ const styles = StyleSheet.create({
   },
   locationButtonWrapper:{
     position: "absolute",
-    bottom: '18%', // Adjust this value to place it higher or lower
-    left: '18%', // Left padding percentage of the screen width
-    right: '18%', // Right padding percentage of the screen width
+    bottom: '18%', 
+    left: '18%', 
+    right: '18%', 
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

@@ -19,8 +19,6 @@ describe('Last visited', () => {
 
   beforeAll(async () => {
     await clearDatabase();
-
-    //adding mock data
     await prisma.user.create({data:
       {
         id: 1,

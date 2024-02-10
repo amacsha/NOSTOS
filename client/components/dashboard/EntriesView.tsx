@@ -77,7 +77,7 @@ const EntriesView: React.FC<{ entries: (SmallEntry & { avg: number })[] }> = ({ 
           selectedItemFontFamily={styles.fontType.fontFamily}
           selectedItemTextColor={styles.selectedTags.color}
           selectedItemIconColor={styles.selectedTags.color}
-          searchInputStyle={styles.searchInput} //search text
+          searchInputStyle={styles.searchInput}
           itemTextColor={styles.tagFilter.color}
           itemFontSize={styles.tagFilter.fontSize}
 
@@ -88,19 +88,6 @@ const EntriesView: React.FC<{ entries: (SmallEntry & { avg: number })[] }> = ({ 
           hideSubmitButton={true}
           tagRemoveIconColor={styles.selectedTags.color}
           styleIndicator={styles.pointer}
-
-
-
-
-        // styleDropdownMenu={styles.dropdown}
-        // styleItemsContainer={styles.dropdown} // dropdown background
-
-
-
-        // submitButtonColor={styles.selectedTags.color}
-
-        // styleInputGroup={styles.dropdown}
-        // styleSelectorContainer={styles.blackText}
         />
       </View>
       <View style={styles.filter}>
@@ -139,7 +126,6 @@ export default EntriesView;
 const styles = StyleSheet.create({
   entryView: {
     fontFamily: 'Gruppe_A',
-    // backgroundColor: colors.lighterPurple,
     marginHorizontal: 10,
     alignItems: 'stretch',
     gap: 5,
@@ -171,14 +157,12 @@ const styles = StyleSheet.create({
   dropDownMenu: {
     backgroundColor: colors.basePurple,
     borderColor: colors.basePurple,
-    // padding: 8,
   },
   tagFilter: {
     color: colors.lighterPurple,
     backgroundColor: colors.basePurple,
     borderColor: colors.basePurple,
     fontSize: 16,
-    // padding: 8,
   },
   searchInput: {
     fontFamily: 'Gruppe_A',
@@ -189,7 +173,6 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   inputField: {
-    // fontFamily: 'Gruppe_A',
     color: colors.lighterPurple,
     backgroundColor: colors.basePurple,
     borderColor: colors.basePurple,
@@ -207,7 +190,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.basePurple,
   },
   selectedTags: {
-    // fontFamily: 'Gruppe_A',
     color: colors.gunMetalGrey,
   },
   fontType: {

@@ -6,7 +6,6 @@ import jwt from 'jsonwebtoken';
 import { getLastVisits } from './lastVisited.controller';
 import json from 'koa-json';
 
-//TODO update tests for getUsernamefromID
 const createOneUser = async (ctx: Koa.Context) => {
   const body = <UserType>ctx.request.body;
 
@@ -133,7 +132,6 @@ const deleteUser = async (ctx: Koa.Context) => {
 const getProfile = async (ctx: Koa.Context) => {
   const userId: number = ctx.request.body.userId;
   if (verifyUser(ctx.request.body.token, userId)) {
-    //Retrieve all user content
     try {
       const userName = (await prisma.user.findUnique({
         where: {id: userId}
@@ -151,12 +149,8 @@ const getProfile = async (ctx: Koa.Context) => {
         where: {raterId: userId}
       });
 
-      // const userLastVisited = await prisma.lastVisited.findMany({
-      //   where: {userId}
-      // });
-
       ctx.response.status = 200;
-      ctx.response.body = {userName, userEntries, userComments, userRatings} //, userLastVisited};
+      ctx.response.body = {userName, userEntries, userComments, userRatings} 
     } catch (error) {
       console.log('Error retrieving user data (getProfile)', error);
       ctx.response.status = 500;

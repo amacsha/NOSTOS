@@ -5,7 +5,6 @@ import db from '../models/db';
 import {Place, NewPlace} from '../../server-types/types'
 
 export async function addNewPlace(ctx: Context): Promise<void> {
-    // console.log('Creating new place.');
     const { id, lat, lng, name, city } = <NewPlace> ctx.request.body;
     try {
         await db.place.create({
@@ -19,7 +18,6 @@ export async function addNewPlace(ctx: Context): Promise<void> {
 }
 
 export async function addManyPlaces(ctx: Context): Promise<void> {
-    // console.log('Creating multiple places.');
     const newPlaces = <NewPlace[]> ctx.request.body;
 
     try {
@@ -34,7 +32,6 @@ export async function addManyPlaces(ctx: Context): Promise<void> {
 }
 
 export async function getAllPlaces(ctx: Context): Promise<void> {
-    // console.log('Getting all places.');
     try {
         const places = await db.place.findMany();
         ctx.response.status = 200;

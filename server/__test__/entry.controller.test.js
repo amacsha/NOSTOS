@@ -20,8 +20,6 @@ describe('Entry', () => {
   let entries = []
   beforeAll(async () => {
     await clearDatabase();
-
-    //adding mock data
     await prisma.user.createMany({data: [
       {
         email: 'test@test',
@@ -103,18 +101,4 @@ describe('Entry', () => {
 
     expect(response.body.length).toBe(3);
   })
-
-  // it ('should optionally sort by date', async () => {
-  //   const response = await request
-  //   .get(`/entry/getMany/byCity/London/sortBy/recent`)
-
-  //   expect(response.body[0].id).toEqual(entries[2].id);
-  // })
-
-  // it ('should optionally sort by rating', async () => {
-  //   await prisma.rating.create({data: {raterId: users[0].id, entryId: entries[1].id, value: 5}})
-  //   const response = await request
-  //   .get(`/entry/getMany/byCity/London/sortBy/top-rated`)
-  //   expect(response.body[0].id).toEqual(entries[1].id);
-  // })
 })

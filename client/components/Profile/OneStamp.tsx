@@ -1,9 +1,7 @@
 import React from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
-// import 1 from '../../assets/badges/'
 
 export default function OneStamp ({image, description}: {image: any, description: string}) {
-  // const path = '../../assets/badges' + image;
  return (
   <View style={styles.mainContainer}>
     <Image source={image} style={styles.stamp}/>

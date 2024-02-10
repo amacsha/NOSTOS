@@ -77,7 +77,6 @@ const getCities = async (setter: React.Dispatch<React.SetStateAction<string[]>>)
 }
 
 const getProfile = async (userId: number, token: string) => {
-  // POST so that we can send a body, even though it's really a GET..
   try {
     const response = await axios.post<Profile>(`${base_url}/user/profile`, { userId, token });
     if (response.status === 200) {

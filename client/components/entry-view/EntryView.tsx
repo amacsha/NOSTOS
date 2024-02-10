@@ -33,7 +33,6 @@ const EntryView: React.FC = ({ navigation }: any) => {
   const [loading, setLoading] = useState<boolean>(true)
   const dispatch = useAppDispatch();
 
-  // TODO change to redux
   const [entryDetails, setEntryDetails] = useState<Entry | undefined>(undefined);
   let usersExistingComment: string | undefined = "";
 

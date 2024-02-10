@@ -25,12 +25,6 @@ const Typewriter = ({ text, delay }: { text: string; delay: number }) => {
   return <Text style={styles.content}>{currentText}</Text>;
 };
 const styles = StyleSheet.create({
-  // content: {
-  //   fontSize: 16,
-  //   lineHeight: 30,
-  //   margin: 15,
-  //   fontFamily: "Gruppe_A",
-  // },
   content:{}
 });
 export default Typewriter;
