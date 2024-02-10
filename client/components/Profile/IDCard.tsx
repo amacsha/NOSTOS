@@ -102,7 +102,8 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
           return false
         }
       },
-      { // Highly Esteemed
+      {
+      // Highly Esteemed
         image: require('../../assets/badges/highly-esteemed.png'),
         description: 'People like your entries!',
         condition: (profileData) => {
@@ -174,9 +175,7 @@ export default function IDCard ({profileData}: {profileData: Profile}) {
       color: "#9578F8",
     },
     topHalfContainer: {
-      // borderWidth: 1,
       flexDirection: "row",
-      // flex: 1,
       justifyContent: "space-between"
     },
     detailsContainer: {

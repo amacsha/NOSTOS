@@ -42,8 +42,6 @@ const LoadingPage = ({ navigation }: any) => {
     }, [appIsReady]);
 
 
-    // if (!appIsReady) return null
-
     return (
         <View
             style={styles.container}

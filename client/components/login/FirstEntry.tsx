@@ -22,18 +22,15 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
 
   React.useEffect(() => {
     const animation = Animated.timing(scrollY, {
-      toValue: -screenHeight * 2.1, // Adjust based on your content size
-      duration: 40000, // Duration of the animation
-      useNativeDriver: true, // Use native driver for better performance
+      toValue: -screenHeight * 2.1, 
+      duration: 40000,
+      useNativeDriver: true,
       easing: Easing.linear,
     });
   
-    // Start the animation in a loop
     Animated.loop(
       animation,
       {
-        // If you want the animation to run indefinitely, you don't need to set iterations
-        // iterations: X, // Specify the number of times the animation should repeat
         resetBeforeIteration: true, 
       }
     ).start();
@@ -49,7 +46,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
      <Animated.View style={{
         transform: [{ translateY: scrollY }],
         position: 'absolute',
-        top: 720, // Start at the bottom of the container
+        top: 720,
         width: '100%',
       }}>
           <Text style={styles.backstoryText}>

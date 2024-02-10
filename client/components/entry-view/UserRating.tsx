@@ -12,7 +12,6 @@ import { getValueFor } from "../../utils/secureStorage";
 import { colors } from "../styles/colors";
 
 export default function UserRating({ userId, entryId }: any) {
-  //TODO CHANGE TO REDUX?
   const [rating, setRating] = useState<number | undefined>(0);
   const [avgRating, setAvgRating] = useState<number | undefined>(0);
 
@@ -67,10 +66,6 @@ export default function UserRating({ userId, entryId }: any) {
     updateUserRatingStars(value);
     updateRating(entryId, userId, value + 1, token);
 
-    //Fake the average rating updating if there are no current ratings.
-    //Re-loading the true value from the DB causes
-    //a nasty re-render, and with enough ratings the average wouldn't shift much
-    //from just a single update
     if (avgRating === 0) {
       setAvgRating(value);
       updateAverageRatingStars(value);
@@ -95,8 +90,6 @@ export default function UserRating({ userId, entryId }: any) {
       </Text>
     );
   }
-  // ⭐️☆★✦✦✧
-  //◐ ○ ●
 
   return (
     <>

@@ -21,7 +21,6 @@ const Logout: React.FC = () => {
         dispatch(setAuth(initialState));
         dispatch(LG())
         dispatch(updateUserDetails(userInitials))
-        // Alert.alert('token destroyed');
     }
 
     return (

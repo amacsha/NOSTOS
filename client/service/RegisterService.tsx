@@ -2,8 +2,6 @@ import axios from 'axios';
 import { RegisterValues } from '../client-types/RegisterValues';
 import { UserResponse } from '../client-types/UserResponse';
 
-
-
 const IP: string | undefined = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
 const RegisterService = (registerForm: RegisterValues): Promise<UserResponse> => {

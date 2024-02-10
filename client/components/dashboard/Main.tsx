@@ -24,11 +24,8 @@ const Main: React.FC = ({ navigation }: any) => {
   const [cityEntries, setCityEntries] = useState<
     (SmallEntry & { avg: number })[]
   >([]);
-  // const [activeMissions, setActiveMissions] = useState<Place[]>([]);
   const [cityNames, setCityNames] = useState<string[]>([]);
-
   const dispatch = useAppDispatch();
-
   const activeMissions = useSelector(
     (state: RootState) => state.entries.activeMission
   );
@@ -71,7 +68,6 @@ export default Main;
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    // paddingBottom: 50,
   },
   container: {
     flex: 1,
@@ -79,7 +75,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "stretch",
     fontFamily: "Gruppe_A",
-    // paddingBottom: 50,
   },
   textWrapper: {
     justifyContent: "center",

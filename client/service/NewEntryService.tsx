@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Entry } from "../client-types/Entry";
-import { useSelector } from "react-redux";
-import { RootState } from "../store";
+
 
 const IP: string | undefined = process.env.EXPO_PUBLIC_IP_ADDRESS;
 

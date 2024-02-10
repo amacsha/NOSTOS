@@ -64,12 +64,6 @@ export default function UserProfile () {
   const navigation = useNavigation();
 
   async function load () {
-    // const profileResponse = (await getProfile(userId as number, token));
-    // const {userEntries, userComments, userRatings }: Profile = profileResponse
-
-    // // const {userEntries, userComments, userRatings } = (await getProfile(userId as number, token));
-    // const userLastVisited: LastVisited[] = await getLastVisited(userId as number)
-
     const {userName, userEntries, userComments, userRatings }: any = (await getProfile(userId as number, token));
     const userLastVisited: any = await getLastVisited(userId as number)
 

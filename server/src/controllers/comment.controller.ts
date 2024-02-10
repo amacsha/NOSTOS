@@ -39,7 +39,6 @@ export async function addNewComment(ctx: Context): Promise<void> {
 }
 
 export async function getAllCommentsByEntry(ctx: Context): Promise<void> {
-  // console.log('Getting all comments for entry.');
   try {
     const comments = await db.comment.findMany({
       where: {

@@ -1,4 +1,3 @@
-// const Router = require('@koa/router');
 import Router from '@koa/router';
 const router = new Router();
 import { getLastVisits, setLastVisit } from './controllers/lastVisited.controller';
@@ -19,7 +18,6 @@ router.get('/entry/getOne/:entryID', getEntry)
 router.post('/entry/getMany', getManyEntries);
 router.get('/entry/getMany/byPlace/:placeID/sortBy/:sortPrefrence', getPlaceEntries)
 router.get('/entry/getMany/byPlace/:placeID', getPlaceEntries)
-// router.get('/entry/getMany/byCity/:cityName/sortBy/:sortPrefrence', getCityEntries)
 router.get('/entry/getMany/byCity/:cityName', getCityEntries)
 router.delete('/entry/delete/:entryID')
 

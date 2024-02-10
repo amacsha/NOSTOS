@@ -10,9 +10,7 @@ const authMiddleware = async (ctx: Koa.Context, next: any) => {
   }
   const token = authHeaders.split(" ")[1];
   try {
-    // verify & decode token payload,
     const { _id } = jwt.verify(token, SECRET_KEY);
-    // attempt to find user object and set to req
     const user = await auth_client.findOne({ _id });
     if (!user) {
       ctx.status = 401;

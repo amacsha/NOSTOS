@@ -23,19 +23,6 @@ export const entriesSlice = createSlice({
     setActiveMission: (state, action: PayloadAction<Place[]>) => {
       state.activeMission = action.payload
     }
-    // addRatingToEntry: (state, action: PayloadAction<{ entryId: number; rating: Rating }>) => {
-    //   const entry = state.entries[action.payload.entryId];
-    //   if (entry) {
-    //     entry.ratingIds = [...entry.ratingIds, action.payload.rating.raterId];
-    //   }
-    // },
-    // addCommentToEntry: (state, action: PayloadAction<{ entryId: number; comment: Comment }>) => {
-    //   const entry = state.entries[action.payload.entryId];
-    //   if (entry) {
-    //     entry.commentIds = [...entry.commentIds, action.payload.comment.commenterId];
-    //   }
-    // },
-
   },
 });
 

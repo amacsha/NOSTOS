@@ -8,8 +8,6 @@ const {describe, it, test, expect, beforeEach, beforeAll, afterAll} = require('@
 const {clearDatabase} = require('./helpers')
 const {prisma} = require('../src/models/db')
 
-
-//TODO update tests to account for count ratings controller
 describe('Rating', () => {
   const app = new Koa();
   app.use(bodyParser());
@@ -21,8 +19,6 @@ describe('Rating', () => {
   let entry = {}
   beforeAll(async () => {
     await clearDatabase();
-
-    //adding mock data
     await prisma.user.createMany({data: [
       {
         email: 'test@test',

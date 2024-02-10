@@ -40,7 +40,6 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
         Alert.alert(`${res.error}`);
         dispatch(setAuth(initialState));
       } else {
-        // Alert.alert('login 👍')
         dispatch(updateUserDetails({ id: res.data.userId, email: res.data.email, username: res.data.username }));
         dispatch(setAuth({ isAuthenticated: true, token: res.data.accessToken }))
         save('accessToken', res.data.accessToken);
@@ -64,7 +63,7 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.inputArea}>
-        
+
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={validationSchema}
@@ -123,7 +122,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.gunMetalGrey,
     fontFamily: 'Gruppe_A',
-    // marginHorizontal: 25,
   },
   inputArea: {
     backgroundColor: colors.basePurple,

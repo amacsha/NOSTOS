@@ -12,9 +12,6 @@ export const commentsSlice = createSlice({
     setComments: (state, action: PayloadAction<Comment[]>) => {
       return action.payload
     },
-    // addOneComment: (state, action: PayloadAction<Comment>) => {
-    //   return action.payload;
-    // }
   }
 })
 

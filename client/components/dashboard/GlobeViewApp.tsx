@@ -6,7 +6,7 @@ import { useAppDispatch } from "../../hooks";
 import { setLocation } from "../../slices/locationSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import {backstory} from "../../assets/backstory/bs";
+import { backstory } from "../../assets/backstory/bs";
 
 const bs = backstory
 
@@ -14,7 +14,7 @@ const GlobeViewApp: React.FC = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
   const location = useSelector((state: RootState) => state.location);
   const [showLogPopup, setShowLogPopup] = useState(false);
-  const [fadeAnim] = useState(new Animated.Value(0.5)); 
+  const [fadeAnim] = useState(new Animated.Value(0.5));
 
   useEffect(() => {
     if (showLogPopup) {
@@ -23,12 +23,12 @@ const GlobeViewApp: React.FC = ({ navigation }: any) => {
           Animated.timing(fadeAnim, {
             toValue: 1,
             duration: 2000,
-            useNativeDriver: true, 
+            useNativeDriver: true,
           }),
           Animated.timing(fadeAnim, {
             toValue: 0.99,
             duration: 2000,
-            useNativeDriver: true, 
+            useNativeDriver: true,
           }),
         ])
       ).start();
@@ -52,11 +52,10 @@ const GlobeViewApp: React.FC = ({ navigation }: any) => {
   };
 
   const toggleLogPopup = () => {
-    setShowLogPopup(!showLogPopup); 
+    setShowLogPopup(!showLogPopup);
   };
 
   return (
-    // <SafeAreaView style={styles.container}>
     <>
       <ImageBackground
         style={styles.globe}
@@ -68,10 +67,10 @@ const GlobeViewApp: React.FC = ({ navigation }: any) => {
       </Pressable>
 
       {showLogPopup && (
-        <Animated.View 
+        <Animated.View
           style={[
             styles.logPopUp,
-            { opacity: fadeAnim }, 
+            { opacity: fadeAnim },
           ]}
         >
           <ScrollView>
@@ -80,41 +79,37 @@ const GlobeViewApp: React.FC = ({ navigation }: any) => {
         </Animated.View>
       )}
 
-  <View style={styles.locationButtonWrapper}>
-      <Pressable
-        style={styles.LondonButton}
-        onPress={() => handlePress("London")}
+      <View style={styles.locationButtonWrapper}>
+        <Pressable
+          style={styles.LondonButton}
+          onPress={() => handlePress("London")}
         >
-      
-      <Text style={[
-              styles.locationButtonText,
-              location.value?.cityName === "London" && {
+
+          <Text style={[
+            styles.locationButtonText,
+            location.value?.cityName === "London" && {
               color: colors.lighterPurple,
-             },
+            },
           ]}>
             London
           </Text>
-</Pressable>
+        </Pressable>
 
-      <Pressable
-  style={styles.BerlinButton}
-  onPress={() => handlePress("Berlin")}
->
-  <Text style={[
-    styles.locationButtonText,
-    location.value?.cityName === "Berlin" && {
-      color: colors.lighterPurple,
-    },
-  ]}>
-    Berlin
-  </Text>
-</Pressable>
-
-</View>
-
-      
+        <Pressable
+          style={styles.BerlinButton}
+          onPress={() => handlePress("Berlin")}
+        >
+          <Text style={[
+            styles.locationButtonText,
+            location.value?.cityName === "Berlin" && {
+              color: colors.lighterPurple,
+            },
+          ]}>
+            Berlin
+          </Text>
+        </Pressable>
+      </View>
     </>
-    // </SafeAreaView>
   );
 };
 
@@ -140,9 +135,9 @@ const styles = StyleSheet.create({
   },
   popUpContainer: {
     position: "absolute",
-    bottom: '14%', // Adjust this value to place it higher or lower
-    left: '20%', // Left padding percentage of the screen width
-    right: '20%', // Right padding percentage of the screen width
+    bottom: '14%', 
+    left: '20%', 
+    right: '20%', 
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -165,11 +160,11 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 10,
   },
-  locationButtonWrapper:{
+  locationButtonWrapper: {
     position: "absolute",
-    bottom: '14%', // Adjust this value to place it higher or lower
-    left: '18%', // Left padding percentage of the screen width
-    right: '18%', // Right padding percentage of the screen width
+    bottom: '14%', 
+    left: '18%', 
+    right: '18%', 
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
