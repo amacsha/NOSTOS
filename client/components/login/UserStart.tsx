@@ -15,12 +15,11 @@ import { getValueFor } from "../../utils/secureStorage";
 import Logout from "../logout/Logout";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { setAuth } from "../../slices/authSlice";
+import { initialState, setAuth } from "../../slices/authSlice";
 import { updateUserDetails } from "../../slices/userSlice";
 import LoadingPage from "../loading-page/Loading";
 import Navbar from "../navbar/Navbar";
 import GlobeView from "../dashboard/GlobeView";
-import Home from "../Home/Home";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,11 +31,8 @@ export default function UserStart() {
     let userId = Number(await getValueFor('userId'));
     let email = await getValueFor('email');
     let username = await getValueFor('username');
-    console.log(userId)
     if (token) {
-      // dispatch(setAuth(initialState));
       dispatch(setAuth({ isAuthenticated: true, token: token }));
-
       dispatch(updateUserDetails({ id: userId, email: email, username: username }));
     }
   };

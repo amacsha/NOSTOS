@@ -87,7 +87,6 @@ describe('Comments', () => {
       });
       expect(response.status).toBe(404);
     } catch (error) {
-      console.log('🙅🏼DENY LOGIN ERROR')
       expect(error).toBeDefined();
     }
   })
@@ -98,15 +97,10 @@ describe('Comments', () => {
       const response = await request.post('/login').send(userData)
       expect(response.status).toBe(404);
     } catch (error) {
-      console.log('🙅🏼DENY LOGIN ERROR')
       expect(error).toBeDefined();
     }
     userData.password = '123456'
   })
-
-  // it('should log-out a user', () => {
-
-  // })
 
   it('should retrieve one user', async () => {
     const user = (await prisma.user.findUnique({where: {username: 'gabriel'}}));
@@ -133,15 +127,4 @@ describe('Comments', () => {
     expect(response.status).toBe(201);
     expect(user.filter_preference).toBe('most recent');
   });
-
-  // it('should delete a user', async () => {
-  //   const response = await request.delete(`user/deleteUser/${userData.id}`);
-  //   const user = (await prisma.user.findUnique({where: {username: 'gabriel'}}));
-
-  //   console.log(user)
-  //   expect(response.status).toBe(200);
-  //   expect(user).toBeNull();
-  // })
-
-
 })
