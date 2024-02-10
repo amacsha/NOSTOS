@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import 'dotenv/config'
 import { Context } from 'koa';
+import { Context } from 'koa';
 
 let url = process.env.ENV === 'test' ? process.env.TEST_DATABASE_URL : process.env.DATABASE_URL;
 
