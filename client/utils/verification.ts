@@ -2,7 +2,7 @@ import axios from "axios";
 import { getValueFor } from "./secureStorage";
 
 export default async function verifyUser(): Promise<boolean> {
-  const base_url = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000`;
+  const base_url = `${process.env.EXPO_PUBLIC_IP_ADDRESS}`;
   try {
     const data = { data: getValueFor("accessToken") };
     const response = await axios.post(base_url + "/user/verify", data);

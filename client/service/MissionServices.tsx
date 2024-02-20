@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Place } from "../client-types/Place";
 
-const base_url = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000`;
+const base_url = `${process.env.EXPO_PUBLIC_IP_ADDRESS}`;
 
 const setLastVisited = async (userId: number, placeId: string) => {
     try {

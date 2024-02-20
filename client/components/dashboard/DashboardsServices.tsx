@@ -10,7 +10,7 @@ import { save } from '../../utils/secureStorage';
 import { setActiveMission } from '../../slices/entriesSlice';
 
 
-const base_url = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000`
+const base_url = `${process.env.EXPO_PUBLIC_IP_ADDRESS}`
 
 const cityFetcher = async (cityName: string, setter: React.Dispatch<React.SetStateAction<(SmallEntry & { avg: number })[]>>) => {
   const rawentries = axios.get<SmallEntry[]>(`${base_url}/entry/getMany/byCity/${cityName}`)

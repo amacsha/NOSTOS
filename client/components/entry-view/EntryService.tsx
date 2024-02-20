@@ -3,24 +3,24 @@ import { Alert } from "react-native";
 const IP: string | undefined = process.env.EXPO_PUBLIC_IP_ADDRESS;
 
 export async function getOneEntry(entryId: number) {
-  const url = `http://${IP}:3000/entry/getOne/${entryId}`;
+  const url = `${IP}/entry/getOne/${entryId}`;
 
   return (await axios.get(url)).data;
 }
 
 export async function getAverageRating(entryId: number) {
-  const url = `http://${IP}:3000/rating/AverageEntryRating/${entryId}`;
+  const url = `${IP}/rating/AverageEntryRating/${entryId}`;
   const response = await axios.get(url);
   return response.data._avg.value;
 }
 
 export async function getRating(entryId: number, userId: number) {
-  const url = `http://${IP}:3000/rating/onEntry/${entryId}/byUser/${userId}`;
+  const url = `${IP}/rating/onEntry/${entryId}/byUser/${userId}`;
   return await axios.get(url);
 }
 
 export async function countRatings(entryId: number) {
-  const url = `http://${IP}:3000/rating/count/${entryId}`;
+  const url = `${IP}/rating/count/${entryId}`;
   const response = await axios.get(url);
   return response.data;
 }
@@ -31,7 +31,7 @@ export async function updateRating(
   value: number,
   token: string
 ) {
-  const url = `http://${IP}:3000/rating/setUserRating`;
+  const url = `${IP}/rating/setUserRating`;
   const data = {
     raterId: userId,
     entryId: entryId,
@@ -43,7 +43,7 @@ export async function updateRating(
 }
 
 export async function getComments(entryId: number) {
-  const url = `http://${IP}:3000/comment/getAll/${entryId}`;
+  const url = `${IP}/comment/getAll/${entryId}`;
   const response = await axios.get(url);
   return response.data;
 }
@@ -59,18 +59,18 @@ export async function postComment(
     content,
     token,
   };
-  const url = `http://${IP}:3000/comment/addNew/${entryId}`;
+  const url = `${IP}/comment/addNew/${entryId}`;
   const response = axios.post(url, data);
 }
 
 export async function getUsernameFromID(commenterId: number) {
-  const url = `http://${IP}:3000/user/getUsername/${commenterId}`;
+  const url = `${IP}/user/getUsername/${commenterId}`;
   const response = await axios.get(url);
   return response.data;
 }
 
 export async function deleteComment(userId: string, entryId: number) {
-  const url = `http://${IP}:3000/comment/delete/byAuthor/${userId}/forEntry/${entryId}`;
+  const url = `${IP}/comment/delete/byAuthor/${userId}/forEntry/${entryId}`;
   axios.delete(url).then(() => {
     Alert.alert('Comment deleted!')
   });

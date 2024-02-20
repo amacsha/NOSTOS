@@ -25,7 +25,7 @@ Back-end:
 This project was created in two-weeks by the following contributors:
 
 [Andre Pangoni](https://github.com/andreeeeh),  
-[Diego Saborido](https://github.com/diegoss-github),  
+[Diego Saborido](https://github.com/diegosarkissian),  
 [Dana Yachini](https://github.com/DanaYachini),  
 [Andrew MacShane](https://github.com/amacsha),  
 [Dominic Stewart-Smith](https://github.com/dominicstewartsmith).  
@@ -53,4 +53,3 @@ In ./client you will also need an .env file containing your local IP address.
 Then run `npm i`
 
 Finally from ./server you can run `npm run dev` to create the server, and simultaneously from ./client run `npm run start` to build the app and open it on Expo.
-# nostos
